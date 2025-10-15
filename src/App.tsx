@@ -1,4 +1,8 @@
+import { useState } from 'react';
+
 export default function App() {
+  const [started, setStarted] = useState(false);
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800">
       <main className="mx-auto max-w-3xl p-4">
@@ -9,10 +13,24 @@ export default function App() {
             steg för steg. Vi börjar superenkelt och bygger på efterhand. Aktivera timern om du vill
             tävla mot klockan, annars ta det lugn och lär dig i din egen takt.
           </p>
+
+          <div>
+            {started ? (
+              <button onClick={() => setStarted(false)}>Återställ</button>
+            ) : (
+              <button onClick={() => setStarted(true)}>Starta</button>
+            )}
+          </div>
         </header>
 
-        <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="h-56 grid place-items-center text-slate-400">Spelyta (kommer efter)</div>
+        <section
+          aria-label="Spelyta"
+          style={{ marginTop: 24, border: '1px solid #ddd', borderRadius: 12, padding: 24 }}
+        >
+          <div style={{ marginTop: 8 }}>
+            {started && <p>Spelet är igång 🎮</p>}
+            {!started && <p>Tryck Start för att börja</p>}
+          </div>
         </section>
       </main>
     </div>
