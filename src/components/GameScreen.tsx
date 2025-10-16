@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { LEVELS } from '../data/levels';
+import GameButtons from './GameButtons';
 
 type Props = {
   onExit: () => void;
@@ -7,13 +8,37 @@ type Props = {
 
 export default function GameScreen({ onExit }: Props) {
   const [levelIndex, setLevelIndex] = useState(0);
+  const [input, setInput] = useState('');
+  const [showHint, setShowHint] = useState(false);
+
   const level = LEVELS[levelIndex];
 
   function prevLevel() {
     setLevelIndex((prevIndex) => Math.max(0, prevIndex - 1));
+    setInput('');
+    setShowHint(false);
   }
+
   function nextLevel() {
     setLevelIndex((prevIndex) => Math.min(LEVELS.length - 1, prevIndex + 1));
+    setInput('');
+    setShowHint(false);
+  }
+
+  const firstHint = useMemo(() => {
+    const firstTask = level.tasks[0] ?? '';
+    const m = firstTask.match(/`([^`]+)`/);
+    return m ? m[1] : null;
+  }, [level]);
+
+  function run() {
+    console.log('RUN: ', input);
+    setInput('');
+  }
+
+  function resetCurrent() {
+    setInput('');
+    setShowHint(false);
   }
 
   return (
@@ -49,14 +74,32 @@ export default function GameScreen({ onExit }: Props) {
         ))}
       </ol>
 
-      <div className="mt-4 flex items-center gap-2">
-        <button
-          onClick={onExit}
-          className="mt-3 rounded-lg bg-red-600 text-white px-4 py-2 hover:bg-red-700 active:bg-red-800 transition"
-        >
-          Avsluta
-        </button>
+      <div className="mt-4">
+        <label className="block text-xs uppercase tracking-wide text-slate-500 mb-1">
+          Skriv kommandot
+        </label>
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="> t.ex. git add ."
+          className="w-full rounded-lg border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-600"
+        />
       </div>
+
+      <GameButtons
+        onRun={run}
+        onReset={resetCurrent}
+        onHint={() => setShowHint((v) => !v)}
+        onExit={onExit}
+        canGoNext={levelIndex < LEVELS.length - 1}
+        onNext={nextLevel}
+      />
+
+      {showHint && firstHint && (
+        <p className="mt-2 text-sm text-slate-600">
+          Hint: <code className="px-1 py-0.5 bg-slate-100 rounded">{firstHint}</code>
+        </p>
+      )}
     </section>
   );
 }
