@@ -11,7 +11,12 @@ export default function HomeScreen({ onStart }: Props) {
         för steg. Vi börjar superenkelt och bygger på efterhand. Aktivera timern om du vill tävla
         mot klockan, annars ta det lugn och lär dig i din egen takt.
       </p>
-      <button onClick={onStart}>Starta</button>
+      <button
+        onClick={onStart}
+        className="mt-3 rounded-lg bg-green-600 text-white px-4 py-2 hover:bg-green-700 active:bg-green-800 transition"
+      >
+        Starta
+      </button>
     </header>
   );
 }
