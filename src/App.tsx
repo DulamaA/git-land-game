@@ -6,7 +6,7 @@ export default function App() {
   const [started, setStarted] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800">
+    <div className="min-h-screen bg-[#d8e8b6] text-slate-800">
       <main className="mx-auto max-w-3xl p-4">
         {!started ? (
           <HomeScreen onStart={() => setStarted(true)} />

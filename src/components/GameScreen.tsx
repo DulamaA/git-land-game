@@ -6,7 +6,7 @@ export default function GameScreen({ onExit }: Props) {
   return (
     <section
       aria-label="Spelyta"
-      style={{ marginTop: 24, border: '1px solid #ddd', borderRadius: 12, padding: 24 }}
+      className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
     >
       <p>🎮 Spelet är igång</p>
       <button
