@@ -4,10 +4,11 @@ import TaskList from './Game/TaskList';
 import CommandInput from './Game/CommandInput';
 import Hint from './Game/Hint';
 import { useGame } from '../hooks/useGame';
+import { useNavigate } from 'react-router-dom';
 
-type Props = { onExit: () => void };
+export default function GameScreen() {
+  const navigate = useNavigate();
 
-export default function GameScreen({ onExit }: Props) {
   const {
     levelIndex,
     level,
@@ -25,6 +26,8 @@ export default function GameScreen({ onExit }: Props) {
     resetCurrent,
     toggle,
   } = useGame();
+
+  const handleExit = () => navigate('/');
 
   return (
     <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -48,7 +51,7 @@ export default function GameScreen({ onExit }: Props) {
         onRun={run}
         onReset={resetCurrent}
         onHint={() => setShowHint((v) => !v)}
-        onExit={onExit}
+        onExit={handleExit}
       />
 
       <Hint visible={showHint} hint={firstHint} />

@@ -1,8 +1,8 @@
-type Props = {
-  onStart: () => void;
-};
+import { useNavigate } from 'react-router-dom';
 
-export default function HomeScreen({ onStart }: Props) {
+export default function HomeScreen() {
+  const navigate = useNavigate();
+
   return (
     <header className="md:flex md:items-start md:justify-between gap-6">
       <div className="max-w-prose">
@@ -13,7 +13,7 @@ export default function HomeScreen({ onStart }: Props) {
           tävla mot klockan, annars ta det lugn och lär dig i din egen takt.
         </p>
         <button
-          onClick={onStart}
+          onClick={() => navigate('/game')}
           className="mt-3 rounded-lg bg-green-600 text-white px-4 py-2 hover:bg-green-700 active:bg-green-800 transition"
         >
           Starta
