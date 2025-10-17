@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { LEVELS } from '../data/levels';
 import GameButtons from './GameButtons';
+import { useTimer, formatTime } from '../hooks/useTimer';
 
 type Props = {
   onExit: () => void;
@@ -10,6 +11,8 @@ export default function GameScreen({ onExit }: Props) {
   const [levelIndex, setLevelIndex] = useState(0);
   const [input, setInput] = useState('');
   const [showHint, setShowHint] = useState(false);
+
+  const { seconds, running, toggle, reset: resetTimer } = useTimer(false);
 
   const level = LEVELS[levelIndex];
 
@@ -39,15 +42,39 @@ export default function GameScreen({ onExit }: Props) {
   function resetCurrent() {
     setInput('');
     setShowHint(false);
+    resetTimer();
   }
 
   return (
     <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      {/*Header + nivå navigering + timer */}
       <div className="flex items-center justify-between gap-3">
         <h2 className="text-lg font-semibold">
           Level {level.id}: {level.title}
         </h2>
+
         <div className="flex items-center gap-2">
+          {/*Timer badge + toggle */}
+          <span
+            className={`px-2 py-1 rounded-full text-xs font-medium border
+            ${running ? 'bg-violet-600 text-white border-violet-700' : 'bg-slate-100 text-slate-700 border-slate-300'}`}
+          >
+            ⏱ {formatTime(seconds)}
+          </span>
+          
+          <button
+            onClick={toggle}
+            className={`rounded-lg px-2 py-1 text-sm border transition
+              ${
+                running
+                  ? 'bg-violet-50 border-violet-300 text-violet-700 hover:bg-violet-100'
+                  : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50'
+              }`}
+            title="Slå på/av timer"
+          >
+            {running ? 'Pausa' : 'Timer på'}
+          </button>
+
           <button
             onClick={prevLevel}
             disabled={levelIndex === 0}
