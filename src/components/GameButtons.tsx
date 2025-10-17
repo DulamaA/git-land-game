@@ -3,11 +3,9 @@ type Props = {
   onReset: () => void;
   onHint: () => void;
   onExit: () => void;
-  canGoNext?: boolean;
-  onNext?: () => void;
 };
 
-export default function GameButtons({ onRun, onReset, onHint, onExit, canGoNext, onNext }: Props) {
+export default function GameButtons({ onRun, onReset, onHint, onExit }: Props) {
   return (
     <div className="mt-2 flex flex-wrap items-center gap-2">
       <button
@@ -33,16 +31,6 @@ export default function GameButtons({ onRun, onReset, onHint, onExit, canGoNext,
       >
         Hint
       </button>
-
-      {canGoNext && onNext && (
-        <button
-          type="button"
-          onClick={onNext}
-          className="rounded-full bg-emerald-600 text-white px-4 py-1.5 text-sm font-medium shadow hover:bg-emerald-700 active:bg-emerald-800 transition"
-        >
-          Nästa ▶
-        </button>
-      )}
 
       <button
         type="button"

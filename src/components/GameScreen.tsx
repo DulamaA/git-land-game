@@ -91,8 +91,6 @@ export default function GameScreen({ onExit }: Props) {
         onReset={resetCurrent}
         onHint={() => setShowHint((v) => !v)}
         onExit={onExit}
-        canGoNext={levelIndex < LEVELS.length - 1}
-        onNext={nextLevel}
       />
 
       {showHint && firstHint && (
