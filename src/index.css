@@ -7,6 +7,9 @@ body,
 #root {
   height: 100%;
 }
-body {
-  @apply bg-slate-50 text-slate-900;
+
+@layer base {
+  body {
+     @apply min-h-screen bg-[#d9e9b6] text-slate-800;
+  }
 }
