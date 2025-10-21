@@ -12,12 +12,15 @@ export default function HomeScreen() {
           steg för steg. Vi börjar superenkelt och bygger på efterhand. Aktivera timern om du vill
           tävla mot klockan, annars ta det lugn och lär dig i din egen takt.
         </p>
-        <button
-          onClick={() => navigate('/game')}
-          className="mt-3 rounded-lg bg-green-600 text-white px-4 py-2 hover:bg-green-700 active:bg-green-800 transition"
-        >
-          Starta
-        </button>
+
+        <div className="mt-3 flex items-center gap-3">
+          <button
+            onClick={() => navigate('/game')}
+            className="rounded-lg bg-green-600 text-white px-4 py-2 hover:bg-green-700 active:bg-green-800 transition"
+          >
+            Starta
+          </button>
+        </div>
       </div>
 
       <div className="mt-4 md:mt-0 shrink-0">
