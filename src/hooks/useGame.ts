@@ -2,6 +2,7 @@ import { useMemo, useState, useCallback } from 'react';
 import { LEVELS } from '../data/levels';
 import { useTimer } from './useTimer';
 import { getFirstHint } from '../utils/getFirstHint';
+import { applyEffect, initialRepoState, type RepoState, type StatusMsg } from '../models/repo';
 
 // Trim and convert all whitespace sequences to single spaces
 function normalizeSpaces(s: string) {
@@ -34,6 +35,12 @@ export function useGame() {
   const [showHint, setShowHint] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [repo, setRepo] = useState<RepoState>(initialRepoState);
+  const [StatusMsg, setStatusMsg] = useState<StatusMsg | null>({
+    type: 'info',
+    text: 'Väntar på kommando...',
+  });
+
   // Timer state
   const { seconds, running, toggle, reset: resetTimer } = useTimer(false);
 
@@ -58,6 +65,11 @@ export function useGame() {
     setInput('');
     setShowHint(false);
     setError(null);
+    setRepo(initialRepoState);
+    setStatusMsg({
+      type: 'info',
+      text: 'Väntar på kommando...',
+    });
     resetTimer();
   }, [resetTimer]);
 
@@ -68,6 +80,11 @@ export function useGame() {
     setInput('');
     setShowHint(false);
     setError(null);
+    setRepo(initialRepoState);
+    setStatusMsg({
+      type: 'info',
+      text: 'Väntar på kommando...',
+    });
     resetTimer();
   }, [resetTimer]);
 
@@ -78,16 +95,26 @@ export function useGame() {
       setInput('');
       setShowHint(false);
       setError(null);
+      setStatusMsg({ type: 'info', text: 'Inga kommandon att köra för denna uppgift.' });
       return;
     }
 
     // Check if input matches any expected command
     const user = normalizeSpaces(input);
-    const ok = expectedList.some((exp) => patternFromExpected(exp).test(user));
 
-    // If correct, move to next task; otherwise, show hint
-    if (ok) {
-      // Advance to next task
+    let matched: string | null = null;
+    for (const exp of expectedList) {
+      if (patternFromExpected(exp).test(user)) {
+        matched = exp;
+        break;
+      }
+    }
+
+    if (matched) {
+      const { repo: nextRepo, message } = applyEffect(repo, matched, input);
+      setRepo(nextRepo);
+      setStatusMsg(message);
+
       setTaskIndex((t) => Math.min(t + 1, tasks.length - 1));
       setInput('');
       setShowHint(false);
@@ -96,8 +123,9 @@ export function useGame() {
       setError('Fel kommando. Kolla mellanslag/flagga och försök igen.');
       // Show hint on incorrect input
       setShowHint(true);
+      setStatusMsg({ type: 'error', text: `Fel: "${input || 'tomt'}"` });
     }
-  }, [input, expectedList, tasks.length]);
+  }, [input, expectedList, tasks.length, repo]);
 
   // Reset current task state
   const resetCurrent = useCallback(() => {
@@ -105,6 +133,11 @@ export function useGame() {
     setShowHint(false);
     setTaskIndex(0);
     setError(null);
+    setRepo(initialRepoState);
+    setStatusMsg({
+      type: 'info',
+      text: 'Återställd nivå',
+    });
     resetTimer();
   }, [resetTimer]);
 
@@ -117,6 +150,8 @@ export function useGame() {
     showHint,
     firstHint,
     error,
+    repo,
+    StatusMsg,
     seconds,
     running,
     totalLevels,

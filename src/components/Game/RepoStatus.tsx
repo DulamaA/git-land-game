@@ -1,5 +1,6 @@
 import type { RepoState, StatusMsg } from '../../models/repo';
 
+// Component to display the current status of the repository
 export default function RepoStatus({
   repo,
   message,
@@ -7,9 +8,11 @@ export default function RepoStatus({
   repo: RepoState;
   message: StatusMsg | null;
 }) {
+    // Get the list of branches and the current branch
   const branches = Object.keys(repo.branches);
   const currentBranch = repo.current;
 
+  // Determine the color based on the message type
   const color =
     message?.type === 'ok'
       ? 'text-emerald-700'
@@ -18,6 +21,7 @@ export default function RepoStatus({
         : 'text-slate-600';
 
   return (
+    // Render the repository status panel
     <aside className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm text-sm">
       <div className="mb-2 font-semibold">Repo-status</div>
 
