@@ -41,10 +41,10 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
-export function useProgress() {
+export function useProgress(): ProgressCtx {
   const ctx = useContext(Ctx);
   if (!ctx) {
     throw new Error('useProgress must be used within a ProgressProvider');
-    return ctx;
   }
+  return ctx;
 }

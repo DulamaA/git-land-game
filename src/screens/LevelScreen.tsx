@@ -7,7 +7,7 @@ export default function LevelScreen() {
   const id = Number(levelId);
   const level = LEVELS.find((level) => level.id === id);
   const nav = useNavigate();
-  const { markDone } = useProgress()!;
+  const { markDone } = useProgress();
 
   if (!level) {
     return (

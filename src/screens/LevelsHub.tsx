@@ -3,7 +3,7 @@ import { LEVELS } from '../data/levels';
 import { useProgress } from '../state/progress';
 
 export default function LevelsHub() {
-  const { state, reset } = useProgress()!;
+  const { state, reset } = useProgress();
   const done = new Set(state.completed);
 
   const isUnlocked = (id: number) => id === 1 || done.has(id) || done.has(id - 1);
