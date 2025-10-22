@@ -1,5 +1,6 @@
 import { createContext } from 'react';
 
+// Define types for progress state and context
 export type ProgressState = {
   completed: number[];
   loading: boolean;
@@ -12,4 +13,5 @@ export type ProgressCtx = {
   reset: () => void;
 };
 
+// Create context for progress state
 export const Ctx = createContext<ProgressCtx | null>(null);

@@ -5,6 +5,7 @@ type Props = {
   onExit: () => void;
 };
 
+
 export default function GameButtons({ onRun, onReset, onHint, onExit }: Props) {
   return (
     <div className="mt-2 flex flex-wrap items-center gap-2">

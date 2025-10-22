@@ -2,12 +2,15 @@ import { Link } from 'react-router-dom';
 import { LEVELS } from '../data/levels';
 import { useProgress } from '../state/progress';
 
+// Screen component to display the levels hub
 export default function LevelsHub() {
   const { state, reset } = useProgress();
   const done = new Set(state.completed);
 
+  // Determine if a level is unlocked based on progress
   const isUnlocked = (id: number) => id === 1 || done.has(id) || done.has(id - 1);
 
+  // Render the levels hub with level links and reset button
   return (
     <section className="space-y-4">
       <header className="flex items-center justify-between">
@@ -18,6 +21,7 @@ export default function LevelsHub() {
       </header>
 
       <div className="grid gap-3">
+        {/* List all levels with their status */}
         {LEVELS.map((l) => {
           const unlocked = isUnlocked(l.id);
           const finished = done.has(l.id);

@@ -2,6 +2,7 @@ import { useNavigate, useParams, Link } from 'react-router-dom';
 import { LEVELS } from '../data/levels';
 import { useProgress } from '../state/progress';
 
+// Screen component to display level details and tasks
 export default function LevelScreen() {
   const { levelId } = useParams();
   const id = Number(levelId);
@@ -9,6 +10,7 @@ export default function LevelScreen() {
   const nav = useNavigate();
   const { markDone } = useProgress();
 
+  // If level not found, show error message
   if (!level) {
     return (
       <div className="space-y-3">
@@ -20,6 +22,7 @@ export default function LevelScreen() {
     );
   }
 
+  // Render level details and tasks
   return (
     <section className="rounded-2xl border bg-white p-6 shadow-sm space-y-4">
       <h2 className="text-xl font-semibold">

@@ -1,11 +1,13 @@
 import type { ProgressState } from '../state/progressContextBase';
 
+// Initial state for the progress reducer
 export const initialProgressState: ProgressState = {
   completed: [],
   loading: false,
   error: null,
 };
 
+// Define action types for the progress reducer
 type Action =
   | { type: 'LOAD_START' }
   | { type: 'LOAD_SUCCESS'; payload: number[] }
@@ -13,6 +15,7 @@ type Action =
   | { type: 'MARK_DONE'; payload: number }
   | { type: 'RESET' };
 
+// Reducer function to manage progress state
 export function progressReducer(state: ProgressState, action: Action): ProgressState {
   switch (action.type) {
     case 'LOAD_START':
