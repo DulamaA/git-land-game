@@ -32,6 +32,7 @@ export function useGame() {
   const [taskIndex, setTaskIndex] = useState(0);
   const [input, setInput] = useState('');
   const [showHint, setShowHint] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Timer state
   const { seconds, running, toggle, reset: resetTimer } = useTimer(false);
@@ -56,6 +57,7 @@ export function useGame() {
     setTaskIndex(0);
     setInput('');
     setShowHint(false);
+    setError(null);
     resetTimer();
   }, [resetTimer]);
 
@@ -65,6 +67,7 @@ export function useGame() {
     setTaskIndex(0);
     setInput('');
     setShowHint(false);
+    setError(null);
     resetTimer();
   }, [resetTimer]);
 
@@ -74,6 +77,7 @@ export function useGame() {
       setTaskIndex((t) => Math.min(t + 1, tasks.length - 1));
       setInput('');
       setShowHint(false);
+      setError(null);
       return;
     }
 
@@ -87,7 +91,9 @@ export function useGame() {
       setTaskIndex((t) => Math.min(t + 1, tasks.length - 1));
       setInput('');
       setShowHint(false);
+      setError(null);
     } else {
+      setError('Fel kommando. Kolla mellanslag/flagga och försök igen.');
       // Show hint on incorrect input
       setShowHint(true);
     }
@@ -98,6 +104,7 @@ export function useGame() {
     setInput('');
     setShowHint(false);
     setTaskIndex(0);
+    setError(null);
     resetTimer();
   }, [resetTimer]);
 
@@ -109,6 +116,7 @@ export function useGame() {
     input,
     showHint,
     firstHint,
+    error,
     seconds,
     running,
     totalLevels,
