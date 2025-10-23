@@ -5,26 +5,34 @@ import CommandInput from './Game/CommandInput';
 import Hint from './Game/Hint';
 import RepoStatus from './Game/RepoStatus';
 import { useGame } from '../hooks/useGame';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useProgress } from '../state/progress';
+import { useEffect } from 'react';
 
 export default function GameScreen() {
   // Navigation hook
   const navigate = useNavigate();
 
+  // Progress management hook
   const { markDone } = useProgress();
 
   const handleExit = () => navigate('/');
 
+  // Handler for running the current command
   const handleRun = () => {
     const finished = run();
     if (finished) {
       markDone(level.id);
-      if (levelIndex < totalLevels - 1) nextLevel();
-      else navigate('/');
+      if (levelIndex < totalLevels - 1) {
+        nextLevel();
+        navigate(`/game/${level.id + 1}`);
+      } else {
+        navigate('/');
+      }
     }
   };
 
+  // Destructure game state and handlers from the useGame hook
   const {
     levelIndex,
     level,
@@ -39,12 +47,22 @@ export default function GameScreen() {
     statusMsg,
     setInput,
     setShowHint,
+    goToLevel,
     prevLevel,
     nextLevel,
     run,
     resetCurrent,
     toggle,
   } = useGame();
+
+  // Sync level from URL param on mount
+  const { level: levelParam } = useParams();
+  useEffect(() => {
+    const levelNum = Number(levelParam);
+    if (Number.isFinite(levelNum) && levelNum > 0) {
+      goToLevel(levelNum);
+    }
+  }, [levelParam, goToLevel]);
 
   // Render the main game screen layout
   return (
@@ -58,8 +76,18 @@ export default function GameScreen() {
           running={running}
           seconds={seconds}
           onToggleTimer={toggle}
-          onPrev={prevLevel}
-          onNext={nextLevel}
+          onPrev={() => {
+            if (levelIndex > 0) {
+              prevLevel();
+              navigate(`/game/${level.id - 1}`);
+            }
+          }}
+          onNext={() => {
+            if (levelIndex < totalLevels - 1) {
+              nextLevel();
+              navigate(`/game/${level.id + 1}`);
+            }
+          }}
         />
 
         <TaskList tasks={level.tasks} />

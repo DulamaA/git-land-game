@@ -87,6 +87,22 @@ export function useGame() {
     });
     resetTimer();
   }, [resetTimer]);
+ 
+  // Go to specific level handler
+  const goToLevel = useCallback((id: number) => {
+    const idx = Math.max(0, Math.min(LEVELS.length -1, id -1));
+    setLevelIndex(idx);
+    setTaskIndex(0);
+    setInput('');
+    setShowHint(false);
+    setError(null);
+    setRepo(initialRepoState);
+    setStatusMsg({
+      type: 'info',
+      text: 'Väntar på kommando...',
+    });
+    resetTimer();
+  }, [resetTimer])
 
   // Run/submit handler
   const run = useCallback((): boolean => {
@@ -164,6 +180,7 @@ export function useGame() {
     // setters/handlers
     setInput,
     setShowHint,
+    goToLevel,
     prevLevel,
     nextLevel,
     run,
