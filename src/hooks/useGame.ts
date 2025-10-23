@@ -41,6 +41,8 @@ export function useGame() {
     text: 'Väntar på kommando...',
   });
 
+  const [, setMisses] = useState(0);
+
   // Timer state
   const { seconds, running, toggle, reset: resetTimer } = useTimer(false);
 
@@ -145,6 +147,13 @@ export function useGame() {
       // Show hint on incorrect input
       setShowHint(true);
       setStatusMsg({ type: 'error', text: `Fel: "${input || 'tomt'}"` });
+
+         setMisses((m) => {
+           const n = m + 1;
+           if (n >= 2) setShowHint(true);
+           return n;
+         });
+         
       return false;
     }
   }, [input, expectedList, tasks.length, taskIndex, repo]);
@@ -162,6 +171,7 @@ export function useGame() {
     });
     resetTimer();
   }, [resetTimer]);
+
 
   return {
     // data
