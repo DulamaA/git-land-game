@@ -72,6 +72,7 @@ export function useGame() {
       type: 'info',
       text: 'Väntar på kommando...',
     });
+    setMisses(0);
     resetTimer();
   }, [resetTimer]);
 
@@ -87,24 +88,32 @@ export function useGame() {
       type: 'info',
       text: 'Väntar på kommando...',
     });
+    setMisses(0);
     resetTimer();
   }, [resetTimer]);
- 
+
   // Go to specific level handler
-  const goToLevel = useCallback((id: number) => {
-    const idx = Math.max(0, Math.min(LEVELS.length -1, id -1));
-    setLevelIndex(idx);
-    setTaskIndex(0);
-    setInput('');
-    setShowHint(false);
-    setError(null);
-    setRepo(initialRepoState);
-    setStatusMsg({
-      type: 'info',
-      text: 'Väntar på kommando...',
-    });
-    resetTimer();
-  }, [resetTimer])
+  const goToLevel = useCallback(
+    (id: number) => {
+      const idx = Math.max(0, Math.min(LEVELS.length - 1, id - 1));
+
+      setLevelIndex((prev) => {
+        if (prev === idx) return prev;
+
+        setTaskIndex(0);
+        setInput('');
+        setShowHint(false);
+        setError(null);
+        setRepo(initialRepoState);
+        setStatusMsg({ type: 'info', text: 'Väntar på kommando...' });
+        setMisses(0);
+        resetTimer();
+
+        return idx;
+      });
+    },
+    [resetTimer],
+  );
 
   // Run/submit handler
   const run = useCallback((): boolean => {
@@ -115,6 +124,7 @@ export function useGame() {
       setShowHint(false);
       setError(null);
       setStatusMsg({ type: 'info', text: 'Inga kommandon att köra för denna uppgift.' });
+      setMisses(0);
       return isLast;
     }
 
@@ -140,6 +150,7 @@ export function useGame() {
       setInput('');
       setShowHint(false);
       setError(null);
+      setMisses(0);
 
       return isLast;
     } else {
@@ -148,12 +159,12 @@ export function useGame() {
       setShowHint(true);
       setStatusMsg({ type: 'error', text: `Fel: "${input || 'tomt'}"` });
 
-         setMisses((m) => {
-           const n = m + 1;
-           if (n >= 2) setShowHint(true);
-           return n;
-         });
-         
+      setMisses((m) => {
+        const n = m + 1;
+        if (n >= 2) setShowHint(true);
+        return n;
+      });
+
       return false;
     }
   }, [input, expectedList, tasks.length, taskIndex, repo]);
@@ -169,9 +180,9 @@ export function useGame() {
       type: 'info',
       text: 'Återställd nivå',
     });
+    setMisses(0);
     resetTimer();
   }, [resetTimer]);
-
 
   return {
     // data

@@ -57,6 +57,7 @@ export default function GameScreen() {
 
   // Sync level from URL param on mount
   const { level: levelParam } = useParams();
+
   useEffect(() => {
     const levelNum = Number(levelParam);
     if (Number.isFinite(levelNum) && levelNum > 0) {
