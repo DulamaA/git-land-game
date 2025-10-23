@@ -6,10 +6,24 @@ import Hint from './Game/Hint';
 import RepoStatus from './Game/RepoStatus';
 import { useGame } from '../hooks/useGame';
 import { useNavigate } from 'react-router-dom';
+import { useProgress } from '../state/progress';
 
 export default function GameScreen() {
   // Navigation hook
   const navigate = useNavigate();
+
+  const { markDone } = useProgress();
+
+  const handleExit = () => navigate('/');
+
+  const handleRun = () => {
+    const finished = run();
+    if (finished) {
+      markDone(level.id);
+      if (levelIndex < totalLevels - 1) nextLevel();
+      else navigate('/');
+    }
+  };
 
   const {
     levelIndex,
@@ -31,9 +45,6 @@ export default function GameScreen() {
     resetCurrent,
     toggle,
   } = useGame();
-
-  // Handle exit button click
-  const handleExit = () => navigate('/');
 
   // Render the main game screen layout
   return (
@@ -58,7 +69,7 @@ export default function GameScreen() {
         {error && <p className="mt-2 text-sm font-medium text-red-600">{error}</p>}
 
         <GameButtons
-          onRun={run}
+          onRun={handleRun}
           onReset={resetCurrent}
           onHint={() => setShowHint((v) => !v)}
           onExit={handleExit}
