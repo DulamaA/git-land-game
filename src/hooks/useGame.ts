@@ -89,14 +89,15 @@ export function useGame() {
   }, [resetTimer]);
 
   // Run/submit handler
-  const run = useCallback(() => {
+  const run = useCallback((): boolean => {
     if (expectedList.length === 0) {
+      const isLast = taskIndex >= tasks.length - 1;
       setTaskIndex((t) => Math.min(t + 1, tasks.length - 1));
       setInput('');
       setShowHint(false);
       setError(null);
       setStatusMsg({ type: 'info', text: 'Inga kommandon att köra för denna uppgift.' });
-      return;
+      return isLast;
     }
 
     // Check if input matches any expected command
@@ -115,17 +116,22 @@ export function useGame() {
       setRepo(nextRepo);
       setStatusMsg(message);
 
+      const isLast = taskIndex >= tasks.length - 1;
+
       setTaskIndex((t) => Math.min(t + 1, tasks.length - 1));
       setInput('');
       setShowHint(false);
       setError(null);
+
+      return isLast;
     } else {
       setError('Fel kommando. Kolla mellanslag/flagga och försök igen.');
       // Show hint on incorrect input
       setShowHint(true);
       setStatusMsg({ type: 'error', text: `Fel: "${input || 'tomt'}"` });
+      return false;
     }
-  }, [input, expectedList, tasks.length, repo]);
+  }, [input, expectedList, tasks.length, taskIndex, repo]);
 
   // Reset current task state
   const resetCurrent = useCallback(() => {
