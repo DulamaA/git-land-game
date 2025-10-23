@@ -36,7 +36,7 @@ export function useGame() {
   const [error, setError] = useState<string | null>(null);
 
   const [repo, setRepo] = useState<RepoState>(initialRepoState);
-  const [StatusMsg, setStatusMsg] = useState<StatusMsg | null>({
+  const [statusMsg, setStatusMsg] = useState<StatusMsg | null>({
     type: 'info',
     text: 'Väntar på kommando...',
   });
@@ -151,7 +151,7 @@ export function useGame() {
     firstHint,
     error,
     repo,
-    StatusMsg,
+    statusMsg,
     seconds,
     running,
     totalLevels,
