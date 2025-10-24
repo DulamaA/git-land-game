@@ -69,7 +69,7 @@ export function useGame() {
     text: 'Väntar på kommando...',
   });
 
-  const [, setMisses] = useState(0);
+  const [misses, setMisses] = useState(0);
 
   // Timer state
   const { seconds, running, toggle, reset: resetTimer } = useTimer(false);
@@ -86,8 +86,9 @@ export function useGame() {
   const taskText = step.text;
   const expectedList = useMemo(() => step.expects, [step]);
   const firstHint = useMemo(
-    () => step.hints?.[0] ?? getFirstHint(taskText) ?? '',
-    [step, taskText],
+    () => getFirstHint(taskText, misses) ?? '',
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [step.hints, taskText, misses],
   );
 
   // Total number of levels
