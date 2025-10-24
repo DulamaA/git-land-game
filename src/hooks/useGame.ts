@@ -3,6 +3,9 @@ import { LEVELS } from '../data/levels';
 import { useTimer } from './useTimer';
 import { getFirstHint } from '../utils/getFirstHint';
 import { applyEffect, initialRepoState, type RepoState, type StatusMsg } from '../models/repo';
+import type { Step } from '../types';
+
+// ---------- helpers ----------
 
 // Trim and convert all whitespace sequences to single spaces
 function normalizeSpaces(s: string) {
@@ -18,7 +21,7 @@ function patternFromExpected(cmd: string): RegExp {
   return new RegExp(`^${ESC}$`, 'i');
 }
 
-// Extract backtick-enclosed commands from a task string
+// Extract backtick-enclosed commands from a legacy task string
 function getExpectedCommands(task: string): string[] {
   const out: string[] = [];
   const re = /`([^`]+)`/g;
@@ -27,8 +30,33 @@ function getExpectedCommands(task: string): string[] {
   return out;
 }
 
+// Normalize one level into {text, expects, hints}
+type NormStep = { text: string; expects: string[]; hints?: string[] };
+type RawLevel = { steps?: Step[]; tasks?: string[] } | null | undefined;
+function toNormSteps(level: RawLevel): NormStep[] {
+  if (!level) return [];
+
+  // New model: steps: Step[]
+  if (Array.isArray(level.steps)) {
+    return level.steps.map((s) => ({
+      text: s.text,
+      expects: s.expects ?? [],
+      hints: s.hints ?? [],
+    }));
+  }
+
+  // Legacy model: tasks: string[] that contain backtick answers
+  const tasks: string[] = level.tasks ?? [];
+  return tasks.map((t) => ({
+    text: t.replace(/`([^`]+)`/g, '…'),
+    expects: getExpectedCommands(t),
+  }));
+}
+
+// ---------- hook ----------
+
 export function useGame() {
-  //Level and task state
+  // Level and task state
   const [levelIndex, setLevelIndex] = useState(0);
   const [taskIndex, setTaskIndex] = useState(0);
   const [input, setInput] = useState('');
@@ -46,21 +74,26 @@ export function useGame() {
   // Timer state
   const { seconds, running, toggle, reset: resetTimer } = useTimer(false);
 
-  // Current level, task, hints, and expected commands
+  // Current level and normalized steps
   const level = LEVELS[levelIndex];
-  const tasks = level?.tasks ?? [];
-  const task = tasks[taskIndex] ?? '';
+  const steps = useMemo(() => toNormSteps(level), [level]);
+  const step = useMemo(
+    () => steps[taskIndex] ?? { text: '', expects: [], hints: [] },
+    [steps, taskIndex],
+  );
 
-  // First hint for the current task
-  const firstHint = useMemo(() => getFirstHint(task) ?? '', [task]);
-
-  // Expected commands for the current task
-  const expectedList = useMemo(() => getExpectedCommands(task), [task]);
+  // UI text + validation list + first hint
+  const taskText = step.text;
+  const expectedList = useMemo(() => step.expects, [step]);
+  const firstHint = useMemo(
+    () => step.hints?.[0] ?? getFirstHint(taskText) ?? '',
+    [step, taskText],
+  );
 
   // Total number of levels
   const totalLevels = LEVELS.length;
 
-  // Handlers for navigating levels and tasks
+  // Handlers for navigating levels
   const prevLevel = useCallback(() => {
     setLevelIndex((i) => Math.max(0, i - 1));
     setTaskIndex(0);
@@ -68,15 +101,11 @@ export function useGame() {
     setShowHint(false);
     setError(null);
     setRepo(initialRepoState);
-    setStatusMsg({
-      type: 'info',
-      text: 'Väntar på kommando...',
-    });
+    setStatusMsg({ type: 'info', text: 'Väntar på kommando...' });
     setMisses(0);
     resetTimer();
   }, [resetTimer]);
 
-  // Next level handler
   const nextLevel = useCallback(() => {
     setLevelIndex((i) => Math.min(LEVELS.length - 1, i + 1));
     setTaskIndex(0);
@@ -84,22 +113,18 @@ export function useGame() {
     setShowHint(false);
     setError(null);
     setRepo(initialRepoState);
-    setStatusMsg({
-      type: 'info',
-      text: 'Väntar på kommando...',
-    });
+    setStatusMsg({ type: 'info', text: 'Väntar på kommando...' });
     setMisses(0);
     resetTimer();
   }, [resetTimer]);
 
-  // Go to specific level handler
+  // Go to specific level
   const goToLevel = useCallback(
     (id: number) => {
       const idx = Math.max(0, Math.min(LEVELS.length - 1, id - 1));
-
       setLevelIndex((prev) => {
         if (prev === idx) return prev;
-
+        // reset only when changing level
         setTaskIndex(0);
         setInput('');
         setShowHint(false);
@@ -108,7 +133,6 @@ export function useGame() {
         setStatusMsg({ type: 'info', text: 'Väntar på kommando...' });
         setMisses(0);
         resetTimer();
-
         return idx;
       });
     },
@@ -118,8 +142,8 @@ export function useGame() {
   // Run/submit handler
   const run = useCallback((): boolean => {
     if (expectedList.length === 0) {
-      const isLast = taskIndex >= tasks.length - 1;
-      setTaskIndex((t) => Math.min(t + 1, tasks.length - 1));
+      const isLast = taskIndex >= steps.length - 1;
+      setTaskIndex((t) => Math.min(t + 1, steps.length - 1));
       setInput('');
       setShowHint(false);
       setError(null);
@@ -128,7 +152,6 @@ export function useGame() {
       return isLast;
     }
 
-    // Check if input matches any expected command
     const user = normalizeSpaces(input);
 
     let matched: string | null = null;
@@ -144,9 +167,8 @@ export function useGame() {
       setRepo(nextRepo);
       setStatusMsg(message);
 
-      const isLast = taskIndex >= tasks.length - 1;
-
-      setTaskIndex((t) => Math.min(t + 1, tasks.length - 1));
+      const isLast = taskIndex >= steps.length - 1;
+      setTaskIndex((t) => Math.min(t + 1, steps.length - 1));
       setInput('');
       setShowHint(false);
       setError(null);
@@ -155,31 +177,25 @@ export function useGame() {
       return isLast;
     } else {
       setError('Fel kommando. Kolla mellanslag/flagga och försök igen.');
-      // Show hint on incorrect input
       setShowHint(true);
       setStatusMsg({ type: 'error', text: `Fel: "${input || 'tomt'}"` });
-
       setMisses((m) => {
         const n = m + 1;
         if (n >= 2) setShowHint(true);
         return n;
       });
-
       return false;
     }
-  }, [input, expectedList, tasks.length, taskIndex, repo]);
+  }, [input, expectedList, steps.length, taskIndex, repo]);
 
-  // Reset current task state
+  // Reset current level state
   const resetCurrent = useCallback(() => {
     setInput('');
     setShowHint(false);
     setTaskIndex(0);
     setError(null);
     setRepo(initialRepoState);
-    setStatusMsg({
-      type: 'info',
-      text: 'Återställd nivå',
-    });
+    setStatusMsg({ type: 'info', text: 'Återställd nivå' });
     setMisses(0);
     resetTimer();
   }, [resetTimer]);
@@ -188,6 +204,7 @@ export function useGame() {
     // data
     levelIndex,
     level,
+    steps,
     taskIndex,
     input,
     showHint,

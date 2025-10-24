@@ -22,6 +22,7 @@ export default function GameScreen() {
 
   // Destructure game state and handlers from the useGame hook
   const {
+    steps,
     levelIndex,
     level,
     input,
@@ -58,7 +59,7 @@ export default function GameScreen() {
 
   const bubble =
     showHint && firstHint
-      ? 'Hint: ${firstHint}'
+      ? `Hint: ${firstHint}`
       : statusMsg?.type === 'error'
         ? pick(talk.error)
         : statusMsg?.type === 'info'
@@ -124,7 +125,7 @@ export default function GameScreen() {
           }}
         />
 
-        <TaskList tasks={level.tasks} />
+        <TaskList steps={steps} />
 
         <CommandInput value={input} onChange={setInput} placeholder="> t.ex. git add ." />
 

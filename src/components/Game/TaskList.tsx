@@ -1,8 +1,10 @@
-export default function TaskList({ tasks }: { tasks: string[] }) {
+type TaskListProps = { steps: { text: string }[] };
+
+export default function TaskList({ steps }: TaskListProps) {
   return (
-    <ol className="mt-2 list-decimal pl-5 space-y-1 text-sm text-slate-700">
-      {tasks.map((t, i) => (
-        <li key={i}>{t}</li>
+    <ol className="list-decimal pl-6 space-y-2">
+      {steps.map((s, i) => (
+        <li key={i}>{s.text}</li>
       ))}
     </ol>
   );
