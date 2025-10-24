@@ -4,10 +4,12 @@ import TaskList from './Game/TaskList';
 import CommandInput from './Game/CommandInput';
 import Hint from './Game/Hint';
 import RepoStatus from './Game/RepoStatus';
+import OctocatAvatar from './Game/OctocatAvatar';
+import { variantByLevel } from '../utils/octocatVariants';
 import { useGame } from '../hooks/useGame';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useProgress } from '../state/progress';
-import { useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export default function GameScreen() {
   // Navigation hook
@@ -15,22 +17,6 @@ export default function GameScreen() {
 
   // Progress management hook
   const { markDone } = useProgress();
-
-  const handleExit = () => navigate('/');
-
-  // Handler for running the current command
-  const handleRun = () => {
-    const finished = run();
-    if (finished) {
-      markDone(level.id);
-      if (levelIndex < totalLevels - 1) {
-        nextLevel();
-        navigate(`/game/${level.id + 1}`);
-      } else {
-        navigate('/');
-      }
-    }
-  };
 
   // Destructure game state and handlers from the useGame hook
   const {
@@ -64,6 +50,42 @@ export default function GameScreen() {
       goToLevel(levelNum);
     }
   }, [levelParam, goToLevel]);
+
+  //Octocat variant + speech bubble
+  const variant = useMemo(() => variantByLevel[levelIndex + 1] ?? 'base', [levelIndex]);
+
+  const bubble = showHint && firstHint ? 'Hint: ${firstHint}' : (statusMsg?.text ?? '');
+
+  //Simple motion: bounce on info, shake on error, then return to idle
+  const [mood, setMood] = useState<'idle' | 'happy' | 'oops'>('idle');
+  useEffect(() => {
+    if (!statusMsg) return;
+    if (statusMsg.type === 'error') {
+      setMood('oops');
+      const t = setTimeout(() => setMood('idle'), 450);
+      return () => clearTimeout(t);
+    } else {
+      setMood('happy');
+      const t = setTimeout(() => setMood('idle'), 700);
+      return () => clearTimeout(t);
+    }
+  }, [statusMsg]);
+
+  const handleExit = () => navigate('/');
+
+  // Handler for running the current command
+  const handleRun = () => {
+    const finished = run();
+    if (finished) {
+      markDone(level.id);
+      if (levelIndex < totalLevels - 1) {
+        nextLevel();
+        navigate(`/game/${level.id + 1}`);
+      } else {
+        navigate('/');
+      }
+    }
+  };
 
   // Render the main game screen layout
   return (
@@ -107,7 +129,12 @@ export default function GameScreen() {
         <Hint visible={showHint} hint={firstHint} />
       </div>
 
-      <RepoStatus repo={repo} message={statusMsg} />
+      <div className="flex flex-col gap-3">
+        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <OctocatAvatar variant={variant} say={bubble} mood={mood} />
+        </div>
+        <RepoStatus repo={repo} message={statusMsg} />
+      </div>
     </section>
   );
 }
