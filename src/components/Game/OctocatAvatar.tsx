@@ -1,16 +1,16 @@
-import type { OctoVariantKey } from '../../utils/octocatVariants';
-import { badgeEmoji, variantFilters } from '../../utils/octocatVariants';
+import type { OctoMood, OctoVariantKey } from '../../utils/octocatVariants';
+import { badgeEmoji, variantFilters, getOctoSrc} from '../../utils/octocatVariants';
 
 type Props = {
   variant: OctoVariantKey;
   say?: string;
-  mood?: 'idle' | 'happy' | 'oops';
+  mood?: OctoMood;
 };
 
 export default function OctocatAvatar({ variant, say, mood = 'idle' }: Props) {
-  const src = '/images/git-cat.png';
+  const src = getOctoSrc(variant, mood);
   const filterClass = variantFilters[variant] ?? '';
-  const moodClass = mood === 'happy' ? 'animate-bounce' : mood === 'oops' ? 'animate-shake' : '';
+  const moodClass = mood === 'happy' ? 'animate-bounce' : mood === 'error' ? 'animate-shake' : '';
 
   return (
     <div className="relative flex items-end gap-3">

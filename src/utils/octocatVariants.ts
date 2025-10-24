@@ -26,7 +26,7 @@ export const variantFilters: Record<OctoVariantKey, string> = {
   rebase: 'filter contrast-110',
 };
 
-export function srcFor(variant: OctoVariantKey, mood: OctoMood): string {
+export function getOctoSrc(variant: OctoVariantKey, mood: OctoMood): string {
   const v = octoSources[variant] ?? {};
   return v[mood] ?? v.idle ?? '/images/git-cat.png';
 }

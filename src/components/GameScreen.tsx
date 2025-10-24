@@ -6,6 +6,7 @@ import Hint from './Game/Hint';
 import RepoStatus from './Game/RepoStatus';
 import OctocatAvatar from './Game/OctocatAvatar';
 import { variantByLevel } from '../utils/octocatVariants';
+import type { OctoMood } from '../utils/octocatVariants';
 import { talk, pick } from '../utils/octocatTalk';
 import { useGame } from '../hooks/useGame';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -65,11 +66,13 @@ export default function GameScreen() {
           : talk.defaultIdle(level.id, level.title);
 
   //Simple motion: bounce on info, shake on error, then return to idle
-  const [mood, setMood] = useState<'idle' | 'happy' | 'oops'>('idle');
+  const [mood, setMood] = useState<OctoMood>('idle');
+
   useEffect(() => {
     if (!statusMsg) return;
+
     if (statusMsg.type === 'error') {
-      setMood('oops');
+      setMood('error');
       const t = setTimeout(() => setMood('idle'), 450);
       return () => clearTimeout(t);
     } else {
