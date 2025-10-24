@@ -6,6 +6,7 @@ import Hint from './Game/Hint';
 import RepoStatus from './Game/RepoStatus';
 import OctocatAvatar from './Game/OctocatAvatar';
 import { variantByLevel } from '../utils/octocatVariants';
+import { talk, pick } from '../utils/octocatTalk';
 import { useGame } from '../hooks/useGame';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useProgress } from '../state/progress';
@@ -54,7 +55,14 @@ export default function GameScreen() {
   //Octocat variant + speech bubble
   const variant = useMemo(() => variantByLevel[levelIndex + 1] ?? 'base', [levelIndex]);
 
-  const bubble = showHint && firstHint ? 'Hint: ${firstHint}' : (statusMsg?.text ?? '');
+  const bubble =
+    showHint && firstHint
+      ? 'Hint: ${firstHint}'
+      : statusMsg?.type === 'error'
+        ? pick(talk.error)
+        : statusMsg?.type === 'info'
+          ? pick(talk.info)
+          : talk.defaultIdle(level.id, level.title);
 
   //Simple motion: bounce on info, shake on error, then return to idle
   const [mood, setMood] = useState<'idle' | 'happy' | 'oops'>('idle');
