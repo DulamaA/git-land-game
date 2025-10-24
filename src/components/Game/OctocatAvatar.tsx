@@ -1,17 +1,19 @@
-import type { OctoVariantKey } from "../../utils/octocatVariants";
-import { badgeEmoji, variantFilters } from "../../utils/octocatVariants";
+import type { OctoVariantKey } from '../../utils/octocatVariants';
+import { badgeEmoji, variantFilters } from '../../utils/octocatVariants';
 
 type Props = {
-    variant: OctoVariantKey;
-    say?: string;
+  variant: OctoVariantKey;
+  say?: string;
+  mood?: 'idle' | 'happy' | 'oops';
 };
 
-export default function OctocatAvatar({ variant, say }: Props) {
-    const src = '/images/git-cat.png';
-    const filterClass = variantFilters[variant] ?? '';
+export default function OctocatAvatar({ variant, say, mood = 'idle' }: Props) {
+  const src = '/images/git-cat.png';
+  const filterClass = variantFilters[variant] ?? '';
+  const moodClass = mood === 'happy' ? 'animate-bounce' : mood === 'oops' ? 'animate-shake' : '';
 
-    return (
-        <div className="relative flex items-end gap-3">
+  return (
+    <div className="relative flex items-end gap-3">
       {say && (
         <div className="max-w-[22rem] rounded-2xl bg-white/90 text-black px-3 py-2 shadow-md text-sm">
           {say}
@@ -26,7 +28,7 @@ export default function OctocatAvatar({ variant, say }: Props) {
         <img
           src={src}
           alt="Octocat"
-          className={`h-32 w-32 select-none drop-shadow-lg rounded-xl ${filterClass}`}
+          className={`h-32 w-32 select-none drop-shadow-lg rounded-xl ${filterClass} ${moodClass}`}
           draggable={false}
         />
       </div>
