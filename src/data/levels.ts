@@ -4,140 +4,218 @@ export const LEVELS: Level[] = [
   {
     id: 1,
     title: 'Initiera projektet',
-    tasks: ['Initiera repo: `git init`', 'Lägg till remote origin: `git remote add origin <url>`'],
+    steps: [
+      { text: 'Initiera ett tomt Git-repo i den här mappen.', expects: ['git init'] },
+      {
+        text: 'Koppla en fjärr som heter "origin" till en URL.',
+        expects: ['git remote add origin <url>'],
+      },
+    ],
   },
+
   {
     id: 2,
     title: 'Första commit',
-    tasks: [
-      'Stage:a alla filer: `git add .`',
-      'Gör en initial commit: `git commit -m "chore: initial commit"`',
+    steps: [
+      { text: 'Staga alla filer för commit.', expects: ['git add .', 'git add -A'] },
+      { text: 'Gör en initial commit med ett meddelande.', expects: ['git commit -m <message>'] },
     ],
   },
+
   {
     id: 3,
     title: 'Synka main mot remote',
-    tasks: [
-      'Byt/skapa main: `git checkout -B main`',
-      'Hämta remote: `git fetch origin`',
-      'Uppdatera main: `git pull --ff-only origin main`',
+    steps: [
+      {
+        text: 'Byt till (eller skapa) main som aktiv branch.',
+        expects: [
+          'git checkout -B main',
+          'git checkout -b main',
+          'git switch -C main',
+          'git switch -c main',
+          'git checkout main',
+          'git switch main',
+        ],
+      },
+      { text: 'Hämta senaste från remote.', expects: ['git fetch', 'git fetch origin'] },
+      {
+        text: 'Uppdatera main snabbt utan merge-commit.',
+        expects: ['git pull --ff-only', 'git pull --ff-only origin main'],
+      },
     ],
   },
+
   {
     id: 4,
     title: 'Skapa feature-branch',
-    tasks: ['Skapa ny branch: `git checkout -b feature/test`'],
+    steps: [
+      {
+        text: 'Skapa och byt till en ny feature-branch.',
+        expects: ['git checkout -b <branch>', 'git switch -c <branch>'],
+      },
+    ],
   },
+
   {
     id: 5,
     title: 'Jobba & committa på branchen',
-    tasks: [
-      'Stage:a alla filer: `git add .`',
-      'Commit:a ändring: `git commit -m "feat: add button"`',
+    steps: [
+      { text: 'Staga alla ändringar.', expects: ['git add .', 'git add -A'] },
+      {
+        text: 'Commit:a ändringen med ett tydligt meddelande.',
+        expects: ['git commit -m <message>'],
+      },
     ],
   },
+
   {
     id: 6,
     title: 'Push första gången',
-    tasks: ['Push:a branchen: `git push -u origin feature/test`'],
+    steps: [
+      { text: 'Pusha din branch och sätt upstream.', expects: ['git push -u origin <branch>'] },
+    ],
   },
+
   {
     id: 7,
     title: 'Öppna Pull Request',
-    tasks: [
-      'Skapa PR med GitHub: `gh pr create --base main --head feature/test --title "feat: test" --body "Add button"`',
+    steps: [
+      {
+        text: 'Öppna en Pull Request från din branch mot main.',
+        expects: [
+          'gh pr create --base main --head <branch> --title <message> --body <message>',
+          'gh pr create --base main --head <branch>',
+          'gh pr create',
+        ],
+      },
     ],
   },
+
   {
     id: 8,
     title: 'Review-loop',
-    tasks: [
-      'Gör fler ändringar (stage): `git add .`',
-      'Commit:a fix: `git commit -m "fix: review changes"`',
-      'Push:a uppdateringen: `git push`',
+    steps: [
+      {
+        text: 'Gör fler ändringar och staga dem.',
+        expects: ['git add .', 'git add -A', 'git add <file>'],
+      },
+      { text: 'Commit:a din fix.', expects: ['git commit -m <message>'] },
+      { text: 'Pusha uppdateringen till samma PR.', expects: ['git push'] },
     ],
   },
+
   {
     id: 9,
     title: 'Håll branchen uppdaterad',
-    tasks: [
-      'Hämta senaste: `git fetch origin`',
-      'Uppdatera med main (välj en): `git merge origin/main` eller `git rebase origin/main`',
-      'Push:a efter uppdatering: `git push` (eller `git push --force-with-lease` vid rebase)',
+    steps: [
+      { text: 'Hämta senaste från origin.', expects: ['git fetch', 'git fetch origin'] },
+      {
+        text: 'Uppdatera din branch med main (välj strategi).',
+        expects: ['git merge origin/main', 'git rebase origin/main'],
+      },
+      {
+        text: 'Pusha efter uppdatering (säkert vid rebase).',
+        expects: ['git push', 'git push --force-with-lease'],
+      },
     ],
   },
+
   {
     id: 10,
     title: 'Lös merge/rebase-konflikter',
-    tasks: [
-      'Stage:a lösta filer: `git add <fil(er)>`',
-      'Färdigställ: `git commit` (merge) eller `git rebase --continue` (rebase)',
-      'Push:a: `git push`',
+    steps: [
+      {
+        text: 'Staga de filer du löst.',
+        expects: ['git add <file>', 'git add <file(s)>', 'git add .'],
+      },
+      { text: 'Färdigställ konflikten.', expects: ['git commit', 'git rebase --continue'] },
+      { text: 'Pusha när allt är grönt.', expects: ['git push'] },
     ],
   },
+
   {
     id: 11,
     title: 'Squash-merge PR och ta bort remote-branch',
-    tasks: ['Squash-merge + delete: `gh pr merge <nr/url> --squash --delete-branch`'],
+    steps: [
+      {
+        text: 'Squash-merga din PR och ta bort fjärr-branchen.',
+        expects: [
+          'gh pr merge <nr/url> --squash --delete-branch',
+          'gh pr merge --squash --delete-branch',
+        ],
+      },
+    ],
   },
+
   {
     id: 12,
     title: 'Synka lokal main & städa lokalt',
-    tasks: [
-      'Byt till main: `git checkout main`',
-      'Hämta senaste main: `git pull --ff-only origin main`',
-      'Ta bort lokal feature-branch: `git branch -d feature/test`',
-      'Rensa bort gamla remote-branches: `git fetch -p`',
+    steps: [
+      { text: 'Byt till main.', expects: ['git checkout main', 'git switch main'] },
+      {
+        text: 'Hämta senaste main snabbt.',
+        expects: ['git pull --ff-only', 'git pull --ff-only origin main'],
+      },
+      { text: 'Ta bort din lokala feature-branch.', expects: ['git branch -d <branch>'] },
+      { text: 'Rensa bort gamla fjärr-branscher.', expects: ['git fetch -p', 'git fetch --prune'] },
     ],
   },
+
   {
     id: 13,
     title: 'Multi-branch-flöde (develop → main)',
-    tasks: [
-      'Skapa develop: `git checkout -b develop`',
-      'Push:a develop: `git push -u origin develop`',
-      'Skapa PR mot develop: `gh pr create --base develop --head feature/task --title "feat: task"`',
-      'Skapa release-PR till main: `gh pr create --base main --head develop --title "release: v1.0.0"`',
+    steps: [
+      {
+        text: 'Skapa develop och byt till den.',
+        expects: ['git checkout -b develop', 'git switch -c develop'],
+      },
+      { text: 'Pusha develop och spåra den.', expects: ['git push -u origin develop'] },
+      {
+        text: 'Öppna PR mot develop från din feature-branch.',
+        expects: ['gh pr create --base develop --head <branch>', 'gh pr create'],
+      },
+      {
+        text: 'Öppna release-PR från develop till main.',
+        expects: ['gh pr create --base main --head develop', 'gh pr create'],
+      },
     ],
   },
+
   {
     id: 14,
     title: 'Rebase - fördjupning',
-    tasks: [
-      'Byt till feature: `git checkout feature/task`',
-      'Hämta senaste: `git fetch origin`',
-      'Interaktiv rebase mot main: `git rebase -i origin/main`',
-      'Push:a säkert efter rebase: `git push --force-with-lease`',
+    steps: [
+      {
+        text: 'Byt till din feature-branch.',
+        expects: ['git checkout <branch>', 'git switch <branch>'],
+      },
+      { text: 'Hämta senaste från origin.', expects: ['git fetch', 'git fetch origin'] },
+      {
+        text: 'Interaktiv rebase mot main (t.ex. 3 senaste).',
+        expects: ['git rebase -i origin/main', 'git rebase -i HEAD~3'],
+      },
+      { text: 'Pusha säkert efter rebase.', expects: ['git push --force-with-lease', 'git push'] },
     ],
   },
+
   {
     id: 15,
     title: 'Deploy/CI med GitHub Actions (intro)',
-    tasks: [
-      `Skapa filen \`.github/workflows/ci.yml\` med detta innehåll (Node 20, kör på push/PR till main & develop):
-
-\`\`\`yaml
-name: CI
-
-on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main, develop]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      - run: npm ci
-      - run: npm test --if-present
-\`\`\`
-`,
+    steps: [
+      {
+        text: 'Lägg till en CI-workflow för Node 20 som körs vid push och PR till main & develop.',
+        expects: [],
+      },
+      { text: 'Staga workflow-filen.', expects: ['git add .github/workflows/ci.yml', 'git add .'] },
+      { text: 'Commit:a ändringen.', expects: ['git commit -m <message>'] },
+      {
+        text: 'Pusha upp förändringen (till main eller din branch).',
+        expects: ['git push', 'git push origin main', 'git push -u origin <branch>'],
+      },
+      {
+        text: 'Verifiera i GitHub → Actions att jobben körs (build & test).',
+        expects: [],
+      },
     ],
   },
 ];
