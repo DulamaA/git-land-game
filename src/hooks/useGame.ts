@@ -178,7 +178,6 @@ export function useGame() {
       return isLast;
     } else {
       setError('Fel kommando. Kolla mellanslag/flagga och försök igen.');
-      setShowHint(true);
       setStatusMsg({ type: 'error', text: `Fel: "${input || 'tomt'}"` });
       setMisses((m) => {
         const n = m + 1;

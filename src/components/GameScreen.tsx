@@ -131,14 +131,14 @@ export default function GameScreen() {
 
         {error && <p className="mt-2 text-sm font-medium text-red-600">{error}</p>}
 
+        {showHint && <Hint visible={showHint} hint={firstHint} />}
+
         <GameButtons
           onRun={handleRun}
           onReset={resetCurrent}
           onHint={() => setShowHint((v) => !v)}
           onExit={handleExit}
         />
-
-        <Hint visible={showHint} hint={firstHint} />
       </div>
 
       <div className="flex flex-col gap-3">
