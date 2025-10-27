@@ -35,3 +35,21 @@ body,
 .animate-shake {
   animation: shake 0.35s linear both;
 }
+
+@keyframes dropInOnce {
+  0% {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  60% {
+    transform: translateY(4px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.animate-drop-in {
+  animation: dropInOnce 600ms cubic-bezier(0.2, 0.8, 0.2, 1) 1 both;
+}
