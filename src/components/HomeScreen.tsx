@@ -30,7 +30,7 @@ export default function HomeScreen() {
             <strong>Framsteg sparas automatiskt</strong> i din webbläsare.
           </li>
           <li>
-            <strong>Repo-status</strong> visar vad som händer i ditt “simulerat-repo”.
+            <strong>Repo-status</strong> visar vad som händer i ditt “simulerade-repo”.
           </li>
         </ul>
 

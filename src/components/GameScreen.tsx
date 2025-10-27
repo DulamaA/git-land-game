@@ -54,6 +54,11 @@ export default function GameScreen() {
     }
   }, [levelParam, goToLevel]);
 
+  //Mobil scroll
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [levelIndex]);
+
   //Octocat variant + speech bubble
   const variant = useMemo(() => variantByLevel[levelIndex + 1] ?? 'base', [levelIndex]);
 
@@ -101,8 +106,8 @@ export default function GameScreen() {
 
   // Render the main game screen layout
   return (
-    <section className="mt-6 grid gap-4 md:grid-cols-[1fr_300px]">
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <section className="mx-auto max-w-[90rem] px-3 sm:px-4 md:px-6 lg:px-12 mt-10 md:mt-16 lg:mt-28 grid gap-4 sm:gap-6 md:gap-10 md:grid-cols-2">
+      <div className="mx-2 sm:mx-0 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 md:p-6 lg:p-10 shadow-sm min-w-0">
         <LevelHeader
           levelId={level.id}
           title={level.title}
@@ -141,8 +146,8 @@ export default function GameScreen() {
         />
       </div>
 
-      <div className="flex flex-col gap-3">
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="mx-2 sm:mx-0 flex flex-col gap-4 md:sticky md:top-8 self-start min-w-0">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 lg:p-8 shadow-sm">
           <OctocatAvatar variant={variant} say={bubble} mood={mood} />
         </div>
         <RepoStatus repo={repo} message={statusMsg} />
