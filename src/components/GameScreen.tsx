@@ -70,6 +70,7 @@ export default function GameScreen() {
 
   const bubble = useMemo(() => {
     if (statusMsg?.type === 'error') return pick(talk.error);
+    if (statusMsg?.type === 'ok') return pick(talk.happy);
     if (statusMsg?.type === 'info') return pick(talk.info);
     if (showHint) return 'Kolla Hint-rutan för en ledtråd!';
     return talk.defaultIdle(level.id, level.title);
@@ -79,7 +80,8 @@ export default function GameScreen() {
   useEffect(() => {
     if (!statusMsg) return;
     if (statusMsg.type === 'error') setMood('error');
-    else if (statusMsg.type === 'info') setMood('happy');
+    else if (statusMsg.type === 'ok') setMood('happy');
+    else setMood('idle');
   }, [statusMsg]);
 
   const handleExit = () => navigate('/');
