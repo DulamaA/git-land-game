@@ -54,38 +54,32 @@ export default function GameScreen() {
     }
   }, [levelParam, goToLevel]);
 
-  //Mobil scroll
+  //Simple motion: bounce on info, shake on error, then return to idle
+  const [mood, setMood] = useState<OctoMood>('idle');
+
+  //Mobil scroll + Delete hint/input after changing the level
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [levelIndex]);
+    setShowHint(false);
+    setInput('');
+    setMood('idle');
+  }, [levelIndex, setInput, setShowHint]);
 
   //Octocat variant + speech bubble
   const variant = useMemo(() => variantByLevel[levelIndex + 1] ?? 'base', [levelIndex]);
 
-  const bubble =
-    showHint && firstHint
-      ? `Hint: ${firstHint}`
-      : statusMsg?.type === 'error'
-        ? pick(talk.error)
-        : statusMsg?.type === 'info'
-          ? pick(talk.info)
-          : talk.defaultIdle(level.id, level.title);
+  const bubble = useMemo(() => {
+    if (statusMsg?.type === 'error') return pick(talk.error);
+    if (statusMsg?.type === 'info') return pick(talk.info);
+    if (showHint) return 'Kolla Hint-rutan för en ledtråd!';
+    return talk.defaultIdle(level.id, level.title);
+  }, [statusMsg, showHint, level.id, level.title]);
 
-  //Simple motion: bounce on info, shake on error, then return to idle
-  const [mood, setMood] = useState<OctoMood>('idle');
-
+  //Update mood after result(no auto-reset)
   useEffect(() => {
     if (!statusMsg) return;
-
-    if (statusMsg.type === 'error') {
-      setMood('error');
-      const t = setTimeout(() => setMood('idle'), 450);
-      return () => clearTimeout(t);
-    } else {
-      setMood('happy');
-      const t = setTimeout(() => setMood('idle'), 700);
-      return () => clearTimeout(t);
-    }
+    if (statusMsg.type === 'error') setMood('error');
+    else if (statusMsg.type === 'info') setMood('happy');
   }, [statusMsg]);
 
   const handleExit = () => navigate('/');
@@ -118,12 +112,16 @@ export default function GameScreen() {
           onToggleTimer={toggle}
           onPrev={() => {
             if (levelIndex > 0) {
+              setMood('idle');
+              setShowHint(false);
               prevLevel();
               navigate(`/game/${level.id - 1}`);
             }
           }}
           onNext={() => {
             if (levelIndex < totalLevels - 1) {
+              setMood('idle');
+              setShowHint(false);
               nextLevel();
               navigate(`/game/${level.id + 1}`);
             }
@@ -134,7 +132,7 @@ export default function GameScreen() {
 
         <CommandInput value={input} onChange={setInput} placeholder="> t.ex. git add ." />
 
-        {error && <p className="mt-2 text-sm font-medium text-red-600">{error}</p>}
+        {error && <p className="mt-2 text-sm font-medium text-red-600" role="alert">{error}</p>}
 
         {showHint && <Hint visible={showHint} hint={firstHint} />}
 
