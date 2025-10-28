@@ -1,11 +1,11 @@
 export const talk = {
   defaultIdle: (n: number, title: string) => `Level ${n}: ${title}`,
+
   info: [
-    'Snyggt jobbat! 💪',
-    'Bra där, fortsätt så!',
-    'Commiten gick igenom! ✅',
-    'Allt ser fint ut ✨',
-    'Du är på rätt spår 🧭',
+    'OK - fortsätt till nästa steg. ℹ️',
+    'Kommandot kördes. ℹ️',
+    'Status uppdaterad. ℹ️',
+    'Allt i ordning. ℹ️',
   ],
 
   error: [
@@ -17,6 +17,11 @@ export const talk = {
   ],
 
   happy: [
+    'Snyggt jobbat! 💪',
+    'Bra där, fortsätt så!',
+    'Commiten gick igenom! ✅',
+    'Allt ser fint ut ✨',
+    'Du är på rätt spår 🧭',
     'Wohoo! Nästa nivå väntar 🚀',
     'Du klarade det! 🎉',
     'Git ninja! 🐱‍👤',
@@ -25,5 +30,6 @@ export const talk = {
 };
 
 export function pick(arr: string[]) {
-    return arr[Math.floor(Math.random() * arr.length)];
+  if (!Array.isArray(arr) || arr.length === 0) return '';
+  return arr[Math.floor(Math.random() * arr.length)];
 }
