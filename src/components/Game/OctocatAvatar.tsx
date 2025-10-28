@@ -1,5 +1,5 @@
 import type { OctoMood, OctoVariantKey } from '../../utils/octocatVariants';
-import { badgeEmoji, variantFilters, getOctoSrc } from '../../utils/octocatVariants';
+import { variantFilters, getOctoSrc } from '../../utils/octocatVariants';
 
 type Props = {
   variant: OctoVariantKey;
@@ -25,13 +25,9 @@ export default function OctocatAvatar({ variant, say, mood = 'idle' }: Props) {
       )}
 
       <div className="relative">
-        <span className="absolute -right-2 -top-2 select-none rounded-full bg-black/50 px-2 py-0.5 text-white text-xs">
-          {badgeEmoji[variant]}
-        </span>
-
         <img
           src={src}
-          alt="Octocat"
+          alt="Octocat avatar"
           className={`h-32 w-32 select-none drop-shadow-lg rounded-xl ${filterClass} ${moodClass}`}
           draggable={false}
         />
