@@ -224,7 +224,7 @@ export function useGame() {
   // Reset current level state
   const resetCurrent = useCallback(() => {
     hardResetLevelState();
-    setStatusMsg({ type: 'info', text: 'Återställd nivå' });
+    setStatusMsg({ type: 'info', text: 'Väntar på kommando...' });
   }, [hardResetLevelState]);
 
   return {

@@ -71,9 +71,20 @@ export default function GameScreen() {
   const bubble = useMemo(() => {
     if (statusMsg?.type === 'error') return pick(talk.error);
     if (statusMsg?.type === 'ok') return pick(talk.happy);
+
+    const idleInfoTexts = new Set(['Väntar på kommando...', 'Återställd nivå']);
+    const isIdleInfo =
+      !statusMsg || (statusMsg.type === 'info' && idleInfoTexts.has(statusMsg.text));
+
+    if (isIdleInfo) {
+      return talk.defaultIdle(level.id, level.title);
+    }
+
     if (statusMsg?.type === 'info') return pick(talk.info);
+
     if (hintStage > 0 && !showSolution) return 'Kolla tipsen här nedan!';
     if (showSolution) return 'Här är lösningen - kör den för att gå vidare.';
+
     return talk.defaultIdle(level.id, level.title);
   }, [statusMsg, hintStage, showSolution, level.id, level.title]);
 
@@ -193,7 +204,10 @@ export default function GameScreen() {
 
         <GameButtons
           onRun={handleRun}
-          onReset={resetCurrent}
+          onReset={() => {
+            setMood('idle');
+            resetCurrent();
+          }}
           onHint={() => {
             if (hintStage > 0) {
               const y = window.scrollY + 350;
