@@ -2,7 +2,6 @@ import GameButtons from './GameButtons';
 import LevelHeader from './Game/LevelHeader';
 import TaskList from './Game/TaskList';
 import CommandInput from './Game/CommandInput';
-import Hint from './Game/Hint';
 import RepoStatus from './Game/RepoStatus';
 import OctocatAvatar from './Game/OctocatAvatar';
 import { variantByLevel } from '../utils/octocatVariants';
@@ -26,8 +25,6 @@ export default function GameScreen() {
     levelIndex,
     level,
     input,
-    showHint,
-    firstHint,
     error,
     seconds,
     running,
@@ -35,13 +32,19 @@ export default function GameScreen() {
     repo,
     statusMsg,
     setInput,
-    setShowHint,
     goToLevel,
     prevLevel,
     nextLevel,
     run,
+    runSolution,
     resetCurrent,
     toggle,
+    levelDone,
+    hints,
+    hintStage,
+    showSolution,
+    solutionText,
+    locked,
   } = useGame();
 
   // Sync level from URL param on mount
@@ -49,9 +52,7 @@ export default function GameScreen() {
 
   useEffect(() => {
     const levelNum = Number(levelParam);
-    if (Number.isFinite(levelNum) && levelNum > 0) {
-      goToLevel(levelNum);
-    }
+    if (Number.isFinite(levelNum) && levelNum > 0) goToLevel(levelNum);
   }, [levelParam, goToLevel]);
 
   //Simple motion: bounce on info, shake on error, then return to idle
@@ -60,10 +61,9 @@ export default function GameScreen() {
   //Mobil scroll + Delete hint/input after changing the level
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    setShowHint(false);
     setInput('');
     setMood('idle');
-  }, [levelIndex, setInput, setShowHint]);
+  }, [levelIndex, setInput]);
 
   //Octocat variant + speech bubble
   const variant = useMemo(() => variantByLevel[levelIndex + 1] ?? 'base', [levelIndex]);
@@ -72,9 +72,10 @@ export default function GameScreen() {
     if (statusMsg?.type === 'error') return pick(talk.error);
     if (statusMsg?.type === 'ok') return pick(talk.happy);
     if (statusMsg?.type === 'info') return pick(talk.info);
-    if (showHint) return 'Kolla Hint-rutan för en ledtråd!';
+    if (hintStage > 0 && !showSolution) return 'Kolla tipsen här nedan!';
+    if (showSolution) return 'Här är lösningen - kör den för att gå vidare.';
     return talk.defaultIdle(level.id, level.title);
-  }, [statusMsg, showHint, level.id, level.title]);
+  }, [statusMsg, hintStage, showSolution, level.id, level.title]);
 
   //Update mood after result(no auto-reset)
   useEffect(() => {
@@ -89,6 +90,19 @@ export default function GameScreen() {
   // Handler for running the current command
   const handleRun = () => {
     const finished = run();
+    if (finished) {
+      markDone(level.id);
+      if (levelIndex < totalLevels - 1) {
+        nextLevel();
+        navigate(`/game/${level.id + 1}`);
+      } else {
+        navigate('/');
+      }
+    }
+  };
+
+  const handleRunSolution = () => {
+    const finished = runSolution();
     if (finished) {
       markDone(level.id);
       if (levelIndex < totalLevels - 1) {
@@ -115,15 +129,14 @@ export default function GameScreen() {
           onPrev={() => {
             if (levelIndex > 0) {
               setMood('idle');
-              setShowHint(false);
               prevLevel();
               navigate(`/game/${level.id - 1}`);
             }
           }}
           onNext={() => {
+            if (!levelDone) return;
             if (levelIndex < totalLevels - 1) {
               setMood('idle');
-              setShowHint(false);
               nextLevel();
               navigate(`/game/${level.id + 1}`);
             }
@@ -132,16 +145,61 @@ export default function GameScreen() {
 
         <TaskList steps={steps} />
 
-        <CommandInput value={input} onChange={setInput} placeholder="> t.ex. git add ." />
+        <CommandInput
+          value={input}
+          onChange={setInput}
+          placeholder="> t.ex. git add ."
+          // readOnly={locked}
+        />
 
-        {error && <p className="mt-2 text-sm font-medium text-red-600" role="alert">{error}</p>}
+        {error && (
+          <p className="mt-2 text-sm font-medium text-red-600" role="alert">
+            {error}
+          </p>
+        )}
 
-        {showHint && <Hint visible={showHint} hint={firstHint} />}
+        {hintStage > 0 && (
+          <div className="mt-3 rounded-xl border border-sky-200 bg-sky-50 p-3 text-sm">
+            <p className="font-semibold mb-1">Tips</p>
+            <ul className="list-disc pl-5 space-y-1">
+              {hints.slice(0, hintStage).map((h, i) => (
+                <li key={i}>{h}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {showSolution && (
+          <div className="mt-3 rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm">
+            <p className="font-semibold mb-1">Lösning</p>
+            <p className="mb-2">
+              Kör kommandot för att komma vidare:
+              <br />
+              <code className="px-2 py-1 bg-white rounded">{solutionText || '—'}</code>
+            </p>
+            <button
+              onClick={handleRunSolution}
+              className="rounded-lg px-3 py-1.5 bg-amber-500 text-white hover:opacity-90"
+            >
+              Kör lösningen åt mig
+            </button>
+            {locked && (
+              <p className="mt-2 text-amber-700">
+                Du har nått max antal försök. Skriv kommandot själv eller klicka knappen.
+              </p>
+            )}
+          </div>
+        )}
 
         <GameButtons
           onRun={handleRun}
           onReset={resetCurrent}
-          onHint={() => setShowHint((v) => !v)}
+          onHint={() => {
+            if (hintStage > 0) {
+              const y = window.scrollY + 350;
+              window.scrollTo({ top: y, behavior: 'smooth' });
+            }
+          }}
           onExit={handleExit}
         />
       </div>
