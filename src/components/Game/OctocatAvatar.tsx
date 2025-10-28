@@ -1,5 +1,5 @@
 import type { OctoMood, OctoVariantKey } from '../../utils/octocatVariants';
-import { badgeEmoji, variantFilters, getOctoSrc} from '../../utils/octocatVariants';
+import { badgeEmoji, variantFilters, getOctoSrc } from '../../utils/octocatVariants';
 
 type Props = {
   variant: OctoVariantKey;
@@ -15,7 +15,11 @@ export default function OctocatAvatar({ variant, say, mood = 'idle' }: Props) {
   return (
     <div className="relative flex items-end gap-3">
       {say && (
-        <div className="max-w-[22rem] rounded-2xl bg-white/90 text-black px-3 py-2 shadow-md text-sm">
+        <div
+          className="max-w-[22rem] rounded-2xl bg-white/90 text-black px-3 py-2 shadow-md text-sm"
+          role="status"
+          aria-live="polite"
+        >
           {say}
         </div>
       )}

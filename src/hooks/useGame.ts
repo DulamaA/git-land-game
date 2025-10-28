@@ -86,8 +86,7 @@ export function useGame() {
   const taskText = step.text;
   const expectedList = useMemo(() => step.expects, [step]);
   const firstHint = useMemo(
-    () => getFirstHint(taskText, misses) ?? '',
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    () => (step.hints?.[0] || getFirstHint(taskText, misses) || ''),
     [step.hints, taskText, misses],
   );
 
