@@ -45,7 +45,7 @@ export function applyEffect(
     const m = s.match(/-m\s+(.+)$/);
     if (!m) return 'commit';
     // Remove surrounding quotes if present
-    return m[1].replace(/^"(.*)"$/, '$1');
+    return m[1].replace(/^['"](.*)['"]$/, '$1').trim();
   };
 
   // Process 'git init' command
@@ -69,7 +69,7 @@ export function applyEffect(
     const base = next.branches[next.current] ?? [];
     next.branches[name] = [...base];
     next.current = name;
-    return { repo: next, message: ok('Ny branch: ${name}') };
+    return { repo: next, message: ok(`Ny branch: ${name}`) };
   }
 
   if (/^git checkout -b <[\w/()-]+>$/i.test(cmd)) {
@@ -127,5 +127,5 @@ export function applyEffect(
   }
 
 // Default case: no changes made
-  return { repo: next, message: info('OK') };
+  return { repo: next, message: info('Väntar på kommando...') };
 }
