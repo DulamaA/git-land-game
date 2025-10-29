@@ -191,7 +191,7 @@ export function useGame() {
         const nextStage = Math.min(3, (hintStage + 1) as 1 | 2 | 3);
         setHintStage(nextStage as 1 | 2 | 3);
 
-        if (n >= 3) {
+        if (n >= 4) {
           setShowSolution(true);
           setLocked(true);
         }
@@ -200,7 +200,8 @@ export function useGame() {
       return false;
     }
   }, [input, expectedList, steps.length, taskIndex, repo, locked, hintStage]);
-
+ 
+  //Solution is visible after the fourth attempt
   const runSolution = useCallback((): boolean => {
     if (!solutionText) return false;
 
@@ -240,6 +241,7 @@ export function useGame() {
     running,
     totalLevels,
     levelDone,
+    
     hints,
     hintStage,
     showSolution,
