@@ -264,5 +264,6 @@ export function useGame() {
     runSolution,
     resetCurrent,
     toggle,
+    resetTimer,
   };
 }

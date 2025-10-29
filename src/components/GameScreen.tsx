@@ -39,6 +39,7 @@ export default function GameScreen() {
     runSolution,
     resetCurrent,
     toggle,
+    resetTimer,
     levelDone,
     hints,
     hintStage,
@@ -89,15 +90,15 @@ export default function GameScreen() {
   }, [statusMsg, hintStage, showSolution, level.id, level.title]);
 
   //Update mood after result(no auto-reset)
-  useEffect(() => {
-    if (!statusMsg) return;
-    if (statusMsg.type === 'error') setMood('error');
-    else if (statusMsg.type === 'ok') setMood('happy');
-    else setMood('idle');
-  }, [statusMsg]);
-
-  const handleExit = () => navigate('/');
-
+  //Update mood after result(no auto-reset)
+    useEffect(() => {
+      if (!statusMsg) return;
+      if (statusMsg.type === 'error') setMood('error');
+      else if (statusMsg.type === 'ok') setMood('happy');
+      else setMood('idle');
+    }, [statusMsg]);
+  
+    const handleExit = () => navigate('/');
   // Handler for running the current command
   const handleRun = () => {
     const finished = run();
@@ -138,6 +139,7 @@ export default function GameScreen() {
             running={running}
             seconds={seconds}
             onToggleTimer={toggle}
+            onResetTimer={resetTimer}
             onPrev={() => {
               if (levelIndex > 0) {
                 setMood('idle');

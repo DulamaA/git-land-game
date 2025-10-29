@@ -8,6 +8,7 @@ type HeaderProps = {
   running: boolean;
   seconds: number;
   onToggleTimer: () => void;
+  onResetTimer: () => void;
   onPrev: () => void;
   onNext: () => void;
 };
@@ -20,6 +21,7 @@ export default function LevelHeader({
   running,
   seconds,
   onToggleTimer,
+  onResetTimer,
   onPrev,
   onNext,
 }: HeaderProps) {
@@ -30,8 +32,8 @@ export default function LevelHeader({
         <span className="block">{title}</span>
       </h2>
 
-      <div className="flex flex-col items-start sm:items-end gap-2">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col items-start sm:items-end gap-4">
+        <div className="flex items-center gap-2 mb-1">
           <span
             className={`px-2 py-0.5 rounded-full text-[11px] font-medium border
               ${
@@ -56,6 +58,14 @@ export default function LevelHeader({
             title="Slå på/av timer"
           >
             {running ? 'Pausa' : 'Timer på'}
+          </button>
+
+          <button
+            onClick={onResetTimer}
+            className="rounded-md px-2 py-0.5 text-xs border border-slate-300 text-slate-600 hover:bg-slate-50"
+            title="Nollställ timer"
+          >
+            ↺ Nollställ
           </button>
         </div>
 
