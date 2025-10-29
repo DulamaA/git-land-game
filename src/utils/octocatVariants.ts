@@ -12,12 +12,6 @@ export const octoSources: Record<OctoVariantKey, Partial<Record<OctoMood, string
   rebase: { idle: '/images/git-rosa.png' },
 };
 
-export const badgeEmoji: Record<OctoVariantKey, string> = {
-  base: '🐙',
-  branching: '🌿',
-  remote: '📡',
-  rebase: '🧹',
-};
 
 export const variantFilters: Record<OctoVariantKey, string> = {
   base: '',
