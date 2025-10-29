@@ -241,7 +241,7 @@ export function useGame() {
     running,
     totalLevels,
     levelDone,
-    
+
     hints,
     hintStage,
     showSolution,

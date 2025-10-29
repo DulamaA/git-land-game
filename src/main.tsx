@@ -7,10 +7,10 @@ import App from './App.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ProgressProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <ProgressProvider>
         <App />
-      </BrowserRouter>
-    </ProgressProvider>
+      </ProgressProvider>
+    </BrowserRouter>
   </StrictMode>,
 );
