@@ -33,99 +33,142 @@ export function applyEffect(
   matchedExpected: string,
   userInput: string,
 ): { repo: RepoState; message: StatusMsg } {
-  // Clone the current repository state
   const next: RepoState = structuredClone(repo);
 
   const ok = (text: string): StatusMsg => ({ type: 'ok', text });
   const info = (text: string): StatusMsg => ({ type: 'info', text });
 
-  // Handle different expected commands
-  const extractCommitMsg = (s: string) => {
-    // Extract commit message from command
-    const m = s.match(/-m\s+(.+)$/);
-    if (!m) return 'commit';
-    // Remove surrounding quotes if present
-    return m[1].replace(/^['"](.*)['"]$/, '$1').trim();
-  };
-
-  // Process 'git init' command
   const cmd = matchedExpected.toLowerCase();
 
-  // Handle various git commands
-  if (/^git init$/i.test(cmd)) {
+  const extractCommitMsg = (s: string) => {
+    const m = s.match(/-m\s+(.+)$/i);
+    if (!m) return 'commit';
+    const raw = m[1].trim();
+    return raw
+      .replace(/^"(.*)"$/, '$1')
+      .replace(/^'(.*)'$/, '$1')
+      .trim();
+  };
+
+  const currentBranch = () => next.current || 'main';
+
+  // --- init---
+  if (/^git\s+init$/i.test(cmd)) {
     next.initialized = true;
     next.branches.main ||= [];
     next.current = 'main';
     return { repo: next, message: ok('Repository initierat.') };
   }
 
-  if (/^git remote add origin /i.test(cmd)) {
+  // --- remote add / set-url---
+  if (/^git\s+remote\s+add\s+origin\s+/i.test(cmd)) {
     next.remotes.origin = true;
     return { repo: next, message: ok('Remote "origin" tillagd.') };
   }
-
-  if (/^git checkout -b /i.test(cmd)) {
-    const name = matchedExpected.split(/\s+/).at(-1)!;
-    const base = next.branches[next.current] ?? [];
-    next.branches[name] = [...base];
-    next.current = name;
-    return { repo: next, message: ok(`Ny branch: ${name}`) };
+  if (/^git\s+remote\s+set-url\s+origin\s+/i.test(cmd)) {
+    next.remotes.origin = true;
+    return { repo: next, message: ok('Remote "origin" uppdaterad.') };
   }
 
-  if (/^git checkout -b <[\w/()-]+>$/i.test(cmd)) {
-    const name = userInput.trim().split(/\s+/).at(-1)!;
-    const base = next.branches[next.current] ?? [];
-    next.branches[name] = [...base];
-    next.current = name;
-    return { repo: next, message: ok(`Ny branch: ${name}`) };
-  }
-
-  if (/^git checkout -b/.test(cmd) === false && /^git checkout -B main$/i.test(cmd)) {
+  // --- checkout / switch (skapa/byt branch) ---
+  if (/^git\s+checkout\s+-B\s+main$/i.test(cmd)) {
     next.branches.main ||= [];
     next.current = 'main';
-    return { repo: next, message: ok('Bytt/skapa main') };
+    return { repo: next, message: ok('Bytte till main (ev. skapad).') };
+  }
+  if (/^git\s+checkout\s+-b\s+/i.test(cmd)) {
+    const name = userInput.trim().split(/\s+/).at(-1)!;
+    const base = next.branches[currentBranch()] ?? [];
+    next.branches[name] = [...base];
+    next.current = name;
+    return { repo: next, message: ok(`Ny branch: ${name}`) };
+  }
+  if (/^git\s+checkout\s+main$/i.test(cmd) || /^git\s+switch\s+main$/i.test(cmd)) {
+    next.branches.main ||= next.branches.main || [];
+    next.current = 'main';
+    return { repo: next, message: ok('Bytte till main') };
+  }
+  if (/^git\s+switch\s+-c\s+/i.test(cmd)) {
+    const name = userInput.trim().split(/\s+/).at(-1)!;
+    const base = next.branches[currentBranch()] ?? [];
+    next.branches[name] = [...base];
+    next.current = name;
+    return { repo: next, message: ok(`Ny branch: ${name}`) };
+  }
+  if (/^git\s+switch\s+[\w./-]+$/i.test(cmd)) {
+    const name = userInput.trim().split(/\s+/).at(-1)!;
+    if (!next.branches[name]) next.branches[name] = [];
+    next.current = name;
+    return { repo: next, message: ok(`Bytte till ${name}`) };
   }
 
-  if (/^git add \.$/i.test(cmd)) {
+  // --- add ---
+  if (/^git\s+add\s+(?:\.|-A|--all)$/i.test(cmd) || /^git\s+add\s+.+/i.test(cmd)) {
     return { repo: next, message: info('Staged (simulerat)') };
   }
 
-  if (/^git commit -m /i.test(cmd)) {
+  // --- commit ---
+  if (/^git\s+commit\s+-m\s+/i.test(cmd)) {
     if (!next.initialized) {
       next.initialized = true;
       next.branches.main ||= [];
       next.current = 'main';
     }
-    const b = next.current;
+    const b = currentBranch();
     next.branches[b] ||= [];
     next.branches[b].push({ id: id(), msg: extractCommitMsg(userInput) });
     return { repo: next, message: ok('Commit skapad') };
   }
-
-  if (/^git fetch origin$/i.test(cmd)) {
-    return { repo: next, message: info('Fetch (simulerat)') };
+  if (/^git\s+commit$/i.test(cmd)) {
+    // to accept “git commit” whitout -m
+    const b = currentBranch();
+    next.branches[b] ||= [];
+    next.branches[b].push({ id: id(), msg: 'commit' });
+    return { repo: next, message: ok('Commit skapad') };
   }
 
-  if (/^git pull --ff-only origin main$/i.test(cmd)) {
+  // --- fetch/pull ---
+  if (/^git\s+fetch(\s+origin)?$/i.test(cmd)) {
+    return { repo: next, message: info('Fetch (simulerat)') };
+  }
+  if (/^git\s+pull\s+--ff-only(\s+origin\s+main)?$/i.test(cmd)) {
     return { repo: next, message: info('Pull (simulerat)') };
   }
 
-  if (/^git push( -u origin [\w/.-]+)?$/i.test(cmd)) {
+  // --- push ---
+  if (/^git\s+push(\s+-u\s+origin\s+[\w./-]+)?$/i.test(cmd)) {
     return { repo: next, message: info('Push (simulerat)') };
   }
+  if (/^git\s+push\s+--force-with-lease$/i.test(cmd)) {
+    return { repo: next, message: info('Push (force-with-lease, simulerat)') };
+  }
 
-  if (/^git merge origin\/main$/i.test(cmd)) {
+  // --- merge/rebase ---
+  if (/^git\s+merge\s+origin\/main$/i.test(cmd)) {
     return { repo: next, message: info('Merge (simulerat)') };
   }
-
-  if (/^git rebase origin\/main$/i.test(cmd)) {
+  if (/^git\s+rebase\s+origin\/main$/i.test(cmd)) {
     return { repo: next, message: info('Rebase (simulerat)') };
   }
-
-  if (/^gh pr /i.test(cmd)) {
-    return { repo: next, message: info('PR åtgärd (simulerad)') };
+  if (/^git\s+rebase\s+-i\s+(origin\/main|HEAD~\d+)$/i.test(cmd)) {
+    return { repo: next, message: info('Interaktiv rebase (simulerad)') };
+  }
+  if (/^git\s+rebase\s+--continue$/i.test(cmd)) {
+    return { repo: next, message: info('Rebase fortsatte (simulerad)') };
   }
 
-// Default case: no changes made
+  // --- branch delete ---
+  if (/^git\s+branch\s+-d\s+[\w./-]+$/i.test(cmd)) {
+    return { repo: next, message: info('Branch raderad (simulerat)') };
+  }
+
+  // --- gh pr ---
+  if (/^gh\s+pr\s+create/i.test(cmd)) {
+    return { repo: next, message: info('PR skapad (simulerad)') };
+  }
+  if (/^gh\s+pr\s+merge/i.test(cmd)) {
+    return { repo: next, message: info('PR mergad (simulerad)') };
+  }
+
   return { repo: next, message: info('Väntar på kommando...') };
 }
