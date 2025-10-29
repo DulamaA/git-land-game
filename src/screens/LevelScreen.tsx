@@ -3,6 +3,20 @@ import { LEVELS } from '../data/levels';
 import { useProgress } from '../state/progress';
 import OctocatAvatar from '../components/Game/OctocatAvatar';
 import { variantByLevel } from '../utils/octocatVariants';
+import TaskList from '../components/Game/TaskList';
+
+type PreviewStep = { text: string };
+
+function toPreviewSteps(
+  level: { steps?: { text: string }[]; tasks?: string[] } | undefined,
+): PreviewStep[] {
+  if (!level) return [];
+  if (Array.isArray(level.steps) && level.steps.length > 0) {
+    return level.steps.map((s) => ({ text: s.text }));
+  }
+  const tasks = level.tasks ?? [];
+  return tasks.map((t) => ({ text: t.replace(/`([^`]+)`/g, '…') }));
+}
 
 // Level screen component displaying level details and navigation
 export default function LevelScreen() {
@@ -10,7 +24,8 @@ export default function LevelScreen() {
   const id = Number(levelId) || 1;
   const level = LEVELS.find((lvl) => lvl.id === id);
   const nav = useNavigate();
-  const { markDone } = useProgress();
+  const { state } = useProgress();
+  const done = new Set(state.completed);
 
   // If level not found, show error message
   if (!level) {
@@ -25,10 +40,10 @@ export default function LevelScreen() {
   }
 
   // Determine if current level is the last one and prepare navigation data
-  const isLast = level.id >= LEVELS.length;
-  const nextId = Math.min(level.id + 1, LEVELS.length);
+  const isUnlocked = level.id === 1 || done.has(level.id) || done.has(level.id - 1);
   const variant = variantByLevel[level.id] ?? 'base';
   const bubble = `Level ${level.id}: ${level.title}`;
+  const steps = toPreviewSteps(level);
 
   // Render the level screen layout
   return (
@@ -53,50 +68,21 @@ export default function LevelScreen() {
           <OctocatAvatar variant={variant} say={bubble} />
         </div>
 
-  
         <div className="order-1 md:order-2 space-y-4">
           <h2 className="text-lg sm:text-xl font-semibold">
             {level.id}. {level.title}
           </h2>
-         
-         {/* Task list */}
-          <ol className="list-decimal space-y-2 pl-5 sm:pl-6">
-            {level.tasks.map((t, i) => (
-              <li key={i} className="text-sm sm:text-base leading-relaxed">
-                {t.split(/`([^`]+)`/g).map((seg, idx) =>
-                  idx % 2 ? (
-                    <code
-                      key={idx}
-                      className="rounded bg-slate-200/70 px-1 py-0.5 break-words whitespace-pre-wrap"
-                    >
-                      {seg}
-                    </code>
-                  ) : (
-                    <span key={idx}>{seg}</span>
-                  ),
-                )}
-              </li>
-            ))}
-          </ol>
+
+          <TaskList steps={steps} />
 
           <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-            <Link
-              to={`/game/${level.id}`}
-              className="inline-flex w-full sm:w-auto justify-center rounded-lg bg-indigo-600 px-3 py-2 text-white hover:bg-indigo-700"
-            >
-              Spela nivån
-            </Link>
-           
-           {/* Navigation buttons */}
             <button
-              onClick={() => {
-                markDone(level.id);
-                if (isLast) nav('/levels');
-                else nav(`/levels/${nextId}`);
-              }}
-              className="inline-flex w-full sm:w-auto justify-center rounded-lg bg-emerald-600 px-3 py-2 text-white hover:bg-emerald-700"
+              onClick={() => isUnlocked && nav(`/game/${level.id}`)}
+              disabled={!isUnlocked}
+              className={`inline-flex w-full sm:w-auto justify-center rounded-lg px-3 py-2 text-white
+                ${isUnlocked ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-slate-400 cursor-not-allowed'}`}
             >
-              Markera klar → {isLast ? 'Till nivåer' : `Nivå ${nextId}`}
+              {isUnlocked ? 'Apela nivån' : 'Låst'}
             </button>
 
             <Link
@@ -106,6 +92,12 @@ export default function LevelScreen() {
               Till nivåer
             </Link>
           </div>
+
+          {!isUnlocked && (
+            <p className="text-sm text-slate-500">
+              Denna nivå låses upp när du klarat föregående nivå.
+            </p>
+          )}
         </div>
       </div>
     </section>
