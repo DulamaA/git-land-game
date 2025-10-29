@@ -12,11 +12,19 @@ function normalizeSpaces(s: string) {
   return s.trim().replace(/\s+/g, ' ');
 }
 
-// Create a regex pattern from an expected command string
+function tokenForPlaceholder(name: string) {
+  if (/(message|url)/i.test(name)) {
+    return `(?:"[^"]+"|'[^']+'|\\S[\\s\\S]*)`;
+  }
+
+  if (/branch/i.test(name)) return `[\\w./-]+`;
+  return `\\S+`;
+}
+
 function patternFromExpected(cmd: string): RegExp {
   const ESC = cmd
     .replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // escape special
-    .replace(/<[^>]+>/g, '\\S+') // <placeholder> → no-whitespace-token
+    .replace(/<([^>]+)>/g, (_, name) => tokenForPlaceholder(name)) // no-whitespace-token
     .replace(/\s+/g, '\\s+'); // spaces → \s+
   return new RegExp(`^${ESC}$`, 'i');
 }
@@ -200,7 +208,7 @@ export function useGame() {
       return false;
     }
   }, [input, expectedList, steps.length, taskIndex, repo, locked, hintStage]);
- 
+
   //Solution is visible after the fourth attempt
   const runSolution = useCallback((): boolean => {
     if (!solutionText) return false;
