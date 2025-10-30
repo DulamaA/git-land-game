@@ -1,17 +1,18 @@
+import { asset } from './asset';
+
 export type OctoVariantKey = 'base' | 'branching' | 'remote' | 'rebase';
 export type OctoMood = 'idle' | 'info' | 'happy' | 'error';
 
 export const octoSources: Record<OctoVariantKey, Partial<Record<OctoMood, string>>> = {
-  base: { idle: '/images/git-cat.png' },
+  base: { idle: asset('images/git-cat.png') },
   branching: {
-    idle: '/images/git-utvecklare.png',
-    happy: '/images/git-happy.png',
-    error: '/images/git-error.png',
+    idle: asset('images/git-utvecklare.png'),
+    happy: asset('images/git-happy.png'),
+    error: asset('images/git-error.png'),
   },
-  remote: { idle: '/images/git-samurai.png' },
-  rebase: { idle: '/images/git-rosa.png' },
-};
-
+  remote: { idle: asset('images/git-samurai.png') },
+  rebase: { idle: asset('images/git-rosa.png') },
+} as const;
 
 export const variantFilters: Record<OctoVariantKey, string> = {
   base: '',

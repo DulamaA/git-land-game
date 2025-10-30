@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { useProgress } from '../state/progress';
 import { LEVELS } from '../data/levels';
+import { asset } from '../utils/asset';
 import GitLandLogo from './GitLandLogo';
+
 
 export default function HomeScreen() {
   const navigate = useNavigate();
@@ -69,7 +71,7 @@ export default function HomeScreen() {
 
       <div className="mt-8 md:mt-0 shrink-0 justify-self-center md:justify-self-end pr-0 md:pr-8">
         <img
-          src="/images/git-cat.png"
+          src={asset('images/git-cat.png')}
           alt="Git-Lands maskot med laptop"
           width={160}
           height={160}
