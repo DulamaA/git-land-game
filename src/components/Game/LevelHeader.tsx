@@ -13,24 +13,40 @@ type HeaderProps = {
   onNext: () => void;
 };
 
-export default function LevelHeader({
-  levelId,
-  title,
-  levelIndex,
-  totalLevels,
-  running,
-  seconds,
-  onToggleTimer,
-  onResetTimer,
-  onPrev,
-  onNext,
-}: HeaderProps) {
+export default function LevelHeader(props: HeaderProps) {
+  const {
+    levelId,
+    title,
+    levelIndex,
+    totalLevels,
+    running,
+    seconds,
+    onToggleTimer,
+    onResetTimer,
+    onPrev,
+    onNext,
+  } = props;
+
+  const ratioRaw = totalLevels > 0 ? (Number(levelIndex) + 1) / totalLevels : 0;
+  const ratio = Math.max(0, Math.min(1, ratioRaw));
+
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
       <h2 className="text-lg font-semibold leading-snug">
         <span className="block text-slate-500 text-sm font-medium">Level {levelId}</span>
         <span className="block">{title}</span>
       </h2>
+
+      <div className="mt-2 w-full">
+        <div className="h-1.5 w-full rounded bg-slate-200">
+          <div
+            className="h-1.5 rounded bg-green-600 transition-[width] duration-300"
+            style={{ width: `${(ratio * 100).toFixed(0)}%` }}
+            aria-hidden
+          />
+        </div>
+        <span className="sr-only">Progress {Math.round(ratio * 100)} percent</span>
+      </div>
 
       <div className="flex flex-col items-start sm:items-end gap-4">
         <div className="flex items-center gap-2 mb-1">
