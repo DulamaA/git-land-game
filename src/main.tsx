@@ -10,7 +10,7 @@ if (!rootEl) throw new Error('#root missing');
 
 createRoot(rootEl).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <ProgressProvider>
         <Suspense fallback={<div className="p-4">Laddar...</div>}>
           <App />
