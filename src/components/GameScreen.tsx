@@ -91,14 +91,14 @@ export default function GameScreen() {
 
   //Update mood after result(no auto-reset)
   //Update mood after result(no auto-reset)
-    useEffect(() => {
-      if (!statusMsg) return;
-      if (statusMsg.type === 'error') setMood('error');
-      else if (statusMsg.type === 'ok') setMood('happy');
-      else setMood('idle');
-    }, [statusMsg]);
-  
-    const handleExit = () => navigate('/');
+  useEffect(() => {
+    if (!statusMsg) return;
+    if (statusMsg.type === 'error') setMood('error');
+    else if (statusMsg.type === 'ok') setMood('happy');
+    else setMood('idle');
+  }, [statusMsg]);
+
+  const handleExit = () => navigate('/');
   // Handler for running the current command
   const handleRun = () => {
     const finished = run();
@@ -167,6 +167,12 @@ export default function GameScreen() {
             value={input}
             onChange={setInput}
             placeholder="> t.ex. git add ."
+            autoFocus
+            onEnter={handleRun}
+            onEscape={() => {
+              setMood('idle');
+              resetCurrent();
+            }}
             // readOnly={locked}
           />
 
