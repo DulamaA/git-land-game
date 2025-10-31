@@ -40,13 +40,13 @@ export default function RepoStatus({
         </div>
         <div>
           <div className="text-xs font-semibold uppercase tracking-wide text-white/90 mb-1">
-            Aktiv gren
+            Aktiv branch
           </div>
           <span
             className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs
                        bg-emerald-900/40 border border-emerald-700 text-emerald-200"
           >
-            🧭 {repo.current}
+            🌱 {repo.current}
           </span>
         </div>
       </div>
