@@ -23,7 +23,13 @@ export const variantFilters: Record<OctoVariantKey, string> = {
 
 export function getOctoSrc(variant: OctoVariantKey, mood: OctoMood): string {
   const v = octoSources[variant] ?? {};
-  return v[mood] ?? v.idle ?? '/images/git-cat.png';
+  return (
+    v[mood] ??
+    v.idle ??
+    octoSources.branching[mood] ??
+    octoSources.base.idle ??
+    '/images/git-cat.png'
+  );
 }
 
 export const variantByLevel: Record<number, OctoVariantKey> = {
