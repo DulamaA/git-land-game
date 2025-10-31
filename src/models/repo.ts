@@ -15,44 +15,57 @@ export type StatusMsg =
   | { type: 'error'; text: string };
 
 // Initial state of the repository
-export const initialRepoState: RepoState = {
-  initialized: false,
-  current: 'main',
-  branches: {},
-  remotes: {},
-};
+export function createInitialRepoState(): RepoState {
+  return {
+    initialized: false,
+    current: 'main',
+    branches: {},
+    remotes: {},
+  };
+}
 
 // Generate a random commit ID
-function id() {
+export function id() {
   return Math.random().toString(36).slice(2, 8);
 }
 
 // Apply the effect of a user command on the repository state
 export function applyEffect(
-  repo: RepoState,
+  prev: RepoState,
   matchedExpected: string,
   userInput: string,
 ): { repo: RepoState; message: StatusMsg } {
-  const next: RepoState = structuredClone(repo);
+  const next: RepoState = structuredClone(prev);
+
+  next.branches ||= {};
+  next.remotes ||= {};
 
   const ok = (text: string): StatusMsg => ({ type: 'ok', text });
   const info = (text: string): StatusMsg => ({ type: 'info', text });
 
-  const cmd = matchedExpected.toLowerCase();
+  const cmd = matchedExpected.trim().replace(/\s+/g, ' ').toLowerCase();
 
-  const extractCommitMsg = (s: string) => {
-    const m = s.match(/-m\s+(.+)$/i);
-    if (!m) return 'commit';
-    const raw = m[1].trim();
-    return raw
-      .replace(/^"(.*)"$/, '$1')
-      .replace(/^'(.*)'$/, '$1')
-      .trim();
+  const genId = () => Math.random().toString(36).slice(2, 10);
+  const currentBranch = () => (next.current && next.branches[next.current] ? next.current : 'main');
+
+  const ensureInitialized = () => {
+    if (!next.initialized) next.initialized = true;
+    if (!next.branches.main) next.branches.main = [];
+    if (!next.current) next.current = 'main';
   };
 
-  const currentBranch = () => next.current || 'main';
+  const getBranchFromInput = (pattern: RegExp): string | null => {
+    const m = userInput.match(pattern);
+    return m?.[1]?.trim() || null;
+  };
 
-  // --- init---
+  const extractCommitMsg = (s: string) => {
+    const m = s.match(/(?:^|\s)-m\s+(?:"([^"]*)"|'([^']*)'|(.+))$/i);
+    const raw = (m?.[1] ?? m?.[2] ?? m?.[3] ?? '').trim();
+    return raw || 'commit';
+  };
+
+  // --- init ---
   if (/^git\s+init$/i.test(cmd)) {
     next.initialized = true;
     next.branches.main ||= [];
@@ -60,7 +73,7 @@ export function applyEffect(
     return { repo: next, message: ok('Repository initierat.') };
   }
 
-  // --- remote add / set-url---
+  // --- remote add / set-url ---
   if (/^git\s+remote\s+add\s+origin\s+/i.test(cmd)) {
     next.remotes.origin = true;
     return { repo: next, message: ok('Remote "origin" tillagd.') };
@@ -70,68 +83,76 @@ export function applyEffect(
     return { repo: next, message: ok('Remote "origin" uppdaterad.') };
   }
 
-  // --- checkout / switch (skapa/byt branch) ---
-  if (/^git\s+checkout\s+-B\s+main$/i.test(cmd)) {
-    next.branches.main ||= [];
-    next.current = 'main';
-    return { repo: next, message: ok('Bytte till main (ev. skapad).') };
-  }
+  // --- checkout / switch (create/change branch) ---
   if (/^git\s+checkout\s+-b\s+/i.test(cmd)) {
-    const name = userInput.trim().split(/\s+/).at(-1)!;
+    ensureInitialized();
+
+    const name = getBranchFromInput(/\bcheckout\b\s+-b\s+([^\s]+)/i);
     const base = next.branches[currentBranch()] ?? [];
-    next.branches[name] = [...base];
-    next.current = name;
-    return { repo: next, message: ok(`Ny branch: ${name}`) };
+    if (name) {
+      next.branches[name] = [...base];
+      next.current = name;
+      return { repo: next, message: ok(`Ny branch: ${name}`) };
+    }
   }
-  if (/^git\s+checkout\s+main$/i.test(cmd) || /^git\s+switch\s+main$/i.test(cmd)) {
+
+  if (/^git\s+checkout\s+-b?main$/i.test(cmd) || /^git\s+switch\s+main$/i.test(cmd)) {
+    ensureInitialized();
     next.branches.main ||= next.branches.main || [];
     next.current = 'main';
     return { repo: next, message: ok('Bytte till main') };
   }
-  if (/^git\s+switch\s+-c\s+/i.test(cmd)) {
-    const name = userInput.trim().split(/\s+/).at(-1)!;
-    const base = next.branches[currentBranch()] ?? [];
-    next.branches[name] = [...base];
-    next.current = name;
-    return { repo: next, message: ok(`Ny branch: ${name}`) };
+
+  if (/^git\s+checkout\s+-b?\s*main$/i.test(cmd) || /^git\s+checkout\s+-B\s+main$/i.test(cmd)) {
+    ensureInitialized();
+    next.branches.main ||= [];
+    next.current = 'main';
+    return { repo: next, message: ok('Bytte till main (ev. skapad).') };
   }
-  if (/^git\s+switch\s+[\w./-]+$/i.test(cmd)) {
-    const name = userInput.trim().split(/\s+/).at(-1)!;
-    if (!next.branches[name]) next.branches[name] = [];
-    next.current = name;
-    return { repo: next, message: ok(`Bytte till ${name}`) };
+
+  if (/^git\s+switch\s+-c\s+/i.test(cmd)) {
+    ensureInitialized();
+    const name = getBranchFromInput(/\bswitch\b\s+-c\s+([^\s]+)/i);
+    const base = next.branches[currentBranch()] ?? [];
+    if (name) {
+      next.branches[name] = [...base];
+      next.current = name;
+      return { repo: next, message: ok(`Ny branch: ${name}`) };
+    }
+  }
+
+  if (/^git\s+(?:checkout|switch)\s+[\w./-]+$/i.test(cmd)) {
+    ensureInitialized();
+    const name =
+      getBranchFromInput(/\bcheckout\s+([^\s]+)/i) ?? getBranchFromInput(/\bswitch\s+([^\s]+)/i);
+    if (name) {
+      if (!next.branches[name]) next.branches[name] = [];
+      next.current = name;
+      return { repo: next, message: ok(`Bytte till ${name}`) };
+    }
   }
 
   // --- add ---
-  if (/^git\s+add\s+(?:\.|-A|--all)$/i.test(cmd) || /^git\s+add\s+.+/i.test(cmd)) {
+  if (/^git\s+add\s+.+/i.test(cmd)) {
     return { repo: next, message: info('Staged (simulerat)') };
   }
 
   // --- commit ---
-  if (/^git\s+commit\s+-m\s+/i.test(cmd)) {
-    if (!next.initialized) {
-      next.initialized = true;
-      next.branches.main ||= [];
-      next.current = 'main';
-    }
+  if (/^git\s+commit\b/i.test(cmd)) {
+    ensureInitialized();
+    const msg = /^git\s+commit\s+-m\b/i.test(cmd) ? extractCommitMsg(userInput) : 'commit';
     const b = currentBranch();
     next.branches[b] ||= [];
-    next.branches[b].push({ id: id(), msg: extractCommitMsg(userInput) });
-    return { repo: next, message: ok('Commit skapad') };
-  }
-  if (/^git\s+commit$/i.test(cmd)) {
-    // to accept “git commit” whitout -m
-    const b = currentBranch();
-    next.branches[b] ||= [];
-    next.branches[b].push({ id: id(), msg: 'commit' });
-    return { repo: next, message: ok('Commit skapad') };
+    next.branches[b].push({ id: genId(), msg });
+
+    return { repo: next, message: ok(`Commit skapad${msg ? `: "${msg}"` : ''}`) };
   }
 
   // --- fetch/pull ---
   if (/^git\s+fetch(\s+origin)?$/i.test(cmd)) {
     return { repo: next, message: info('Fetch (simulerat)') };
   }
-  if (/^git\s+pull\s+--ff-only(\s+origin\s+main)?$/i.test(cmd)) {
+  if (/^git\s+pull\b/i.test(cmd)) {
     return { repo: next, message: info('Pull (simulerat)') };
   }
 
@@ -144,21 +165,26 @@ export function applyEffect(
   }
 
   // --- merge/rebase ---
-  if (/^git\s+merge\s+origin\/main$/i.test(cmd)) {
+  if (/^git\s+merge\s+[\w./-]+$/i.test(cmd)) {
     return { repo: next, message: info('Merge (simulerat)') };
   }
-  if (/^git\s+rebase\s+origin\/main$/i.test(cmd)) {
+  if (/^git\s+rebase\b/i.test(cmd)) {
+    if (/--continue/i.test(userInput)) {
+      return { repo: next, message: info('Rebase fortsatte (simulerad)') };
+    }
     return { repo: next, message: info('Rebase (simulerat)') };
-  }
-  if (/^git\s+rebase\s+-i\s+(origin\/main|HEAD~\d+)$/i.test(cmd)) {
-    return { repo: next, message: info('Interaktiv rebase (simulerad)') };
-  }
-  if (/^git\s+rebase\s+--continue$/i.test(cmd)) {
-    return { repo: next, message: info('Rebase fortsatte (simulerad)') };
   }
 
   // --- branch delete ---
   if (/^git\s+branch\s+-d\s+[\w./-]+$/i.test(cmd)) {
+    const name = getBranchFromInput(/\bbranch\b\s+-d\s+([\w./-]+)/i);
+    if (name && next.branches[name]) {
+      delete next.branches[name];
+      if (next.current === name) {
+        next.current = 'main';
+        next.branches.main ||= [];
+      }
+    }
     return { repo: next, message: info('Branch raderad (simulerat)') };
   }
 

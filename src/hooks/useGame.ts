@@ -2,7 +2,7 @@ import { useMemo, useState, useCallback } from 'react';
 import { LEVELS } from '../data/levels';
 import { useTimer } from './useTimer';
 import { getFirstHint } from '../utils/getFirstHint';
-import { applyEffect, initialRepoState, type RepoState, type StatusMsg } from '../models/repo';
+import { applyEffect, createInitialRepoState, type RepoState, type StatusMsg } from '../models/repo';
 import type { Step } from '../types';
 
 // ---------- helpers ----------
@@ -67,7 +67,7 @@ export function useGame() {
   const [input, setInput] = useState('');
   const [error, setError] = useState<string | null>(null);
 
-  const [repo, setRepo] = useState<RepoState>(initialRepoState);
+  const [repo, setRepo] = useState<RepoState>(createInitialRepoState);
   const [statusMsg, setStatusMsg] = useState<StatusMsg | null>({
     type: 'info',
     text: 'Väntar på kommando...',
@@ -106,8 +106,9 @@ export function useGame() {
     setTaskIndex(0);
     setInput('');
     setError(null);
-    setRepo(initialRepoState);
-    setStatusMsg({ type: 'info', text: 'Väntar på kommando...' });
+
+    setRepo(createInitialRepoState());
+    setStatusMsg({ type: 'info', text: 'Väntar på kommando...' } as const);
 
     setMisses(0);
     setHintStage(0);

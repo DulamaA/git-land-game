@@ -168,7 +168,6 @@ export default function GameScreen() {
             autoFocus
             onEnter={handleRun}
             onEscape={handleReset}
-            // readOnly={locked}
           />
 
           {error && (
