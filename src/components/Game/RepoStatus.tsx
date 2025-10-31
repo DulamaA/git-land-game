@@ -46,7 +46,7 @@ export default function RepoStatus({
             className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs
                        bg-emerald-900/40 border border-emerald-700 text-emerald-200"
           >
-            🌱 {repo.current}
+            🌿 {repo.current}
           </span>
         </div>
       </div>
