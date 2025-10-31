@@ -111,7 +111,7 @@ export default function GameScreen() {
         nextLevel();
         navigate(`/game/${level.id + 1}`);
       } else {
-        navigate('/');
+        navigate('/congrats');
       }
     }
   };

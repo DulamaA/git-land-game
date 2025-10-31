@@ -6,6 +6,7 @@ const GameScreen = lazy(() => import('./components/GameScreen'));
 const LevelsHub = lazy(() => import('./screens/LevelsHub'));
 const LevelScreen = lazy(() => import('./screens/LevelScreen'));
 const NotFound = lazy(() => import('./screens/NotFound'));
+const FinishGame = lazy(() => import('./screens/FinishGame'));
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
       <Route path="/levels/:levelId" element={<LevelScreen />} />
       <Route path="/404" element={<NotFound />} />
       <Route path="*" element={<Navigate to="/404" replace />} />
+      <Route path="/congrats" element={<FinishGame />} />
     </Routes>
   );
 }
