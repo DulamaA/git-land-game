@@ -16,7 +16,7 @@ export default function OctocatAvatar({ variant, say, mood = 'idle' }: Props) {
     <div className="relative flex items-end gap-3">
       {say && (
         <div
-          className="max-w-[22rem] rounded-2xl bg-white/90 text-black px-3 py-2 shadow-md text-sm"
+          className="max-w-[22rem] rounded-2xl bg-violet-600 text-white px-3 py-2 shadow-md text-sm border border-violet-700"
           role="status"
           aria-live="polite"
         >
