@@ -1,45 +1,43 @@
+import { Link } from 'react-router-dom';
+
 export default function FinishGame() {
   return (
-    <section className="mx-auto max-w-3xl px-6 py-16 text-center">
-      <div className="relative inline-block">
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-800">
-          🎉 Grattis! Du är klar! 🎉
-        </h1>
-        <div className="pointer-events-none absolute inset-0 -z-10 overflow-visible">
-          {[...Array(40)].map((_, i) => (
-            <span
-              key={i}
-              className="absolute text-xl animate-[fall_1200ms_linear_forwards] opacity-0"
-              style={{
-                left: `${(i * 23) % 100}%`,
-                animationDelay: `${(i % 10) * 80}ms`,
-              }}
-            >
-              {['🎊', '🎉', '✨', '💫', '🎈'][i % 5]}
-            </span>
-          ))}
-        </div>
+    <section className="mx-auto max-w-3xl px-6 py-16 text-center relative">
+      <h1 className="text-3xl font-extrabold text-slate-800">🎉 Grattis! Du är klar! 🎉</h1>
+      <p className="mt-3 text-slate-600">Du har tagit dig igenom alla nivåer. Snyyggt jobbat!</p>
+
+      <div className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 overflow-visible">
+        {[...Array(48)].map((_, i) => (
+          <span
+            key={i}
+            className="absolute text-2xl animate-[confetti_1200ms_linear_forwards]"
+            style={{
+              left: `${(i * 19) % 100}%`,
+              top: '-16px',
+              animationDelay: `${(i % 12) * 70}ms`,
+              opacity: 0,
+            }}
+            aria-hidden
+          >
+            {['🎊', '🎉', '✨', '💫', '🎈'][i % 5]}
+          </span>
+        ))}
       </div>
 
-      <p className="mt-4 text-slate-600">Du har tagit dig igenom alla nivåer. Snyggt jobbat!</p>
-
       <div className="mt-8 flex justify-center gap-3">
-        <a
-          href={import.meta.env.BASE_URL}
-          className="rounded-lg bg-violet-600 text-white px-4 py-2"
-        >
+        <Link to="/" className="rounded-lg bg-violet-600 text-white px-4 py-2 hover:bg-violet-700">
           Gå till startsidan
-        </a>
-        <a href={`${import.meta.env.BASE_URL}levels`} className="rounded-lg border px-4 py-2">
+        </Link>
+        <Link to="/levels" className="rounded-lg border px-4 py-2 hover:bg-slate-50">
           Spela nivåer igen
-        </a>
+        </Link>
       </div>
 
       <style>{`
-        @keyframes fall {
-          0% { transform: translateY(-20px) rotate(0deg); opacity: 0; }
-          10% { opacity: 1; }
-          100% { transform: translateY(280px) rotate(240deg); opacity: 0; }
+        @keyframes confetti {
+          0%   { transform: translateY(-10px) rotate(0deg);   opacity: 0; }
+          10%  { opacity: 1; }
+          100% { transform: translateY(320px) rotate(260deg); opacity: 0; }
         }
       `}</style>
     </section>

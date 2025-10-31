@@ -20,9 +20,10 @@ export default function App() {
 
       <Route path="/levels" element={<LevelsHub />} />
       <Route path="/levels/:levelId" element={<LevelScreen />} />
+      <Route path="/congrats" element={<FinishGame />} />
+
       <Route path="/404" element={<NotFound />} />
       <Route path="*" element={<Navigate to="/404" replace />} />
-      <Route path="/congrats" element={<FinishGame />} />
     </Routes>
   );
 }

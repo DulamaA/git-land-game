@@ -30,16 +30,17 @@ export default function HomeScreen() {
             Skriv kommandot i rutan och tryck <strong>Kör</strong>.
           </li>
           <li>
-            <strong>Hint</strong> ger en ledtråd (visas automatiskt efter två fel).
+            <strong>Tips</strong> visas automatiskt om du kör fel tre gånger.
           </li>
           <li>
             <strong>Reset</strong> startar nivån om från början.
           </li>
           <li>
-            <strong>Timer</strong> är frivillig.
+            <strong>Timer</strong> är frivillig (du kan pausa eller nollställa).
           </li>
           <li>
-            <strong>Framsteg sparas automatiskt</strong> i din webbläsare.
+            <strong>Framsteg sparas automatiskt</strong> i din webbläsare - välj <em>Fortsätt</em>{' '}
+            för att hoppa in där du slutade.
           </li>
           <li>
             <strong>Repo-status</strong> visar vad som händer i ditt “simulerade-repo”.
