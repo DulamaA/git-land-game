@@ -1,12 +1,11 @@
 type Props = {
   onRun: () => void;
   onReset: () => void;
-  onHint: () => void;
   onExit: () => void;
 };
 
 
-export default function GameButtons({ onRun, onReset, onHint, onExit }: Props) {
+export default function GameButtons({ onRun, onReset, onExit }: Props) {
   return (
     <div className="mt-2 flex flex-wrap items-center gap-2">
       <button
@@ -23,14 +22,6 @@ export default function GameButtons({ onRun, onReset, onHint, onExit }: Props) {
         className="rounded-full bg-gray-500 text-white px-4 py-1.5 text-sm font-medium shadow hover:bg-gray-600 active:bg-gray-700 transition"
       >
         Reset
-      </button>
-
-      <button
-        type="button"
-        onClick={onHint}
-        className="rounded-full bg-yellow-400 text-white px-4 py-1.5 text-sm font-medium shadow hover:bg-yellow-500 active:bg-yellow-600 transition"
-      >
-        Hint
       </button>
 
       <button

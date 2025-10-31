@@ -211,15 +211,7 @@ export default function GameScreen() {
           )}
 
           <div className="pt-1">
-            <GameButtons
-              onRun={handleRun}
-              onReset={handleReset}
-              onHint={() => {
-                if (hintStage > 0)
-                  window.scrollTo({ top: window.scrollY + 350, behavior: 'smooth' });
-              }}
-              onExit={handleExit}
-            />
+            <GameButtons onRun={handleRun} onReset={handleReset} onExit={handleExit} />
           </div>
         </div>
       </div>
