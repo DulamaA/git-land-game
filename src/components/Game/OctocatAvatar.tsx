@@ -15,12 +15,21 @@ export default function OctocatAvatar({ variant, say, mood = 'idle' }: Props) {
   return (
     <div className="relative flex items-end gap-3">
       {say && (
-        <div
-          className="max-w-[22rem] rounded-2xl bg-violet-600 text-white px-3 py-2 shadow-md text-sm border border-violet-700"
-          role="status"
-          aria-live="polite"
-        >
-          {say}
+        <div className="relative">
+          <div
+            className="relative max-w-[22rem] rounded-2xl bg-violet-600 text-white px-3 py-2 shadow-md
+                 border border-violet-700 text-sm"
+            role="status"
+            aria-live="polite"
+          >
+            {say}
+
+            <span
+              className="pointer-events-none absolute -bottom-1.5 right-4 block h-3 w-3 rotate-45
+                   bg-violet-600 border-b border-r border-violet-700"
+              aria-hidden="true"
+            />
+          </div>
         </div>
       )}
 
