@@ -13,13 +13,9 @@ import { useProgress } from '../state/progress';
 import { useEffect, useMemo, useState } from 'react';
 
 export default function GameScreen() {
-  // Navigation hook
   const navigate = useNavigate();
-
-  // Progress management hook
   const { markDone } = useProgress();
 
-  // Destructure game state and handlers from the useGame hook
   const {
     steps,
     levelIndex,
@@ -48,7 +44,6 @@ export default function GameScreen() {
     locked,
   } = useGame();
 
-  // Sync level from URL param on mount
   const { level: levelParam } = useParams();
 
   useEffect(() => {
@@ -56,17 +51,14 @@ export default function GameScreen() {
     if (Number.isFinite(levelNum) && levelNum > 0) goToLevel(levelNum);
   }, [levelParam, goToLevel]);
 
-  //Simple motion: bounce on info, shake on error, then return to idle
   const [mood, setMood] = useState<OctoMood>('idle');
 
-  //Mobil scroll + Delete hint/input after changing the level
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setInput('');
     setMood('idle');
   }, [levelIndex, setInput]);
 
-  //Octocat variant + speech bubble
   const variant = useMemo(() => variantByLevel[levelIndex + 1] ?? 'base', [levelIndex]);
 
   const bubble = useMemo(() => {
@@ -89,8 +81,6 @@ export default function GameScreen() {
     return talk.defaultIdle(level.id, level.title);
   }, [statusMsg, hintStage, showSolution, level.id, level.title]);
 
-  //Update mood after result(no auto-reset)
-  //Update mood after result(no auto-reset)
   useEffect(() => {
     if (!statusMsg) return;
     if (statusMsg.type === 'error') setMood('error');
@@ -99,7 +89,7 @@ export default function GameScreen() {
   }, [statusMsg]);
 
   const handleExit = () => navigate('/');
-  // Handler for running the current command
+
   const handleRun = () => {
     const finished = run();
     if (finished) {
@@ -126,7 +116,14 @@ export default function GameScreen() {
     }
   };
 
-  // Render the main game screen layout
+  const [resetTick, setResetTick] = useState(0);
+
+  const handleReset = () => {
+    setMood('idle');
+    resetCurrent();
+    setResetTick((t) => t + 1);
+  };
+
   return (
     <section className="mx-auto max-w-[90rem] px-3 sm:px-4 md:px-6 lg:px-12 mt-10 md:mt-16 lg:mt-28 grid gap-4 sm:gap-6 md:gap-10 md:grid-cols-2">
       <div className="mx-2 sm:mx-0 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 md:p-6 lg:p-10 shadow-sm min-w-0">
@@ -164,15 +161,13 @@ export default function GameScreen() {
 
         <div className="space-y-4 mt-6">
           <CommandInput
+            key={resetTick}
             value={input}
             onChange={setInput}
             placeholder="> t.ex. git add ."
             autoFocus
             onEnter={handleRun}
-            onEscape={() => {
-              setMood('idle');
-              resetCurrent();
-            }}
+            onEscape={handleReset}
             // readOnly={locked}
           />
 
@@ -218,15 +213,10 @@ export default function GameScreen() {
           <div className="pt-1">
             <GameButtons
               onRun={handleRun}
-              onReset={() => {
-                setMood('idle');
-                resetCurrent();
-              }}
+              onReset={handleReset}
               onHint={() => {
-                if (hintStage > 0) {
-                  const y = window.scrollY + 350;
-                  window.scrollTo({ top: y, behavior: 'smooth' });
-                }
+                if (hintStage > 0)
+                  window.scrollTo({ top: window.scrollY + 350, behavior: 'smooth' });
               }}
               onExit={handleExit}
             />
