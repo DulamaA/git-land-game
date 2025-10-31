@@ -82,7 +82,7 @@ export default function LevelScreen() {
               className={`inline-flex w-full sm:w-auto justify-center rounded-lg px-3 py-2 text-white
                 ${isUnlocked ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-slate-400 cursor-not-allowed'}`}
             >
-              {isUnlocked ? 'Apela nivån' : 'Låst'}
+              {isUnlocked ? 'Visa nivå' : 'Låst'}
             </button>
 
             <Link
