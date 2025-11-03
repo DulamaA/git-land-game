@@ -8,7 +8,7 @@ export const LEVELS: Level[] = [
       { text: 'Initiera ett tomt Git-repo i den här mappen.', expects: ['git init'] },
       {
         text: 'Koppla en fjärr som heter "origin" till en URL.',
-        expects: ['git remote add origin <url>'],
+        expects: ['git remote add origin https://github.com/my-user/testrepo'],
       },
     ],
   },
