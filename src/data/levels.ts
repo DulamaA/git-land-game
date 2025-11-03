@@ -17,7 +17,7 @@ export const LEVELS: Level[] = [
     id: 2,
     title: 'Första commit',
     steps: [
-      { text: 'Staga alla filer för commit.', expects: ['git add .', 'git add -A'] },
+      { text: 'Stage:a alla filer för commit.', expects: ['git add .', 'git add -A'] },
       { text: 'Gör en initial commit med ett meddelande.', expects: ['git commit -m <message>'] },
     ],
   },
