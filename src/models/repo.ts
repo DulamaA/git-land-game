@@ -78,12 +78,13 @@ export function applyEffect(prev: RepoState,
   }
 
   // --- remote add / set-url ---
-  if (/^git\s+remote\s+add\s+origin\s+/i.test(cmd)) {
+  if (/^git\s+remote\s+add\s+origin\s+(?:"[^"]+"|'[^']+'|\S+)$/i.test(userInput.trim())) {
     next.remotes.origin = true;
 
     return { repo: next, message: ok('Remote "origin" tillagd.') };
   }
-  if (/^git\s+remote\s+set-url\s+origin\s+/i.test(cmd)) {
+
+  if (/^git\s+remote\s+set-url\s+origin\s+(?:"[^"]+"|'[^']+'|\S+)$/i.test(userInput.trim())) {
     next.remotes.origin = true;
 
     return { repo: next, message: ok('Remote "origin" uppdaterad.') };
