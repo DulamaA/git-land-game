@@ -18,6 +18,10 @@ body,
   }
 }
 
+input[type='text'] {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
 @layer utilities {
   @keyframes shake {
     0%,

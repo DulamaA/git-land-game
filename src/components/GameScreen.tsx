@@ -20,6 +20,7 @@ export default function GameScreen() {
 
   const {
     steps,
+    taskIndex,
     levelIndex,
     level,
     input,
@@ -180,7 +181,7 @@ export default function GameScreen() {
           />
 
           <div className="mt-3">
-            <TaskList steps={steps} />
+            <TaskList steps={steps} activeIndex={taskIndex} />
           </div>
         </div>
 
