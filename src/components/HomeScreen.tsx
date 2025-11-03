@@ -15,7 +15,8 @@ export default function HomeScreen() {
   return (
     <header
       className="mx-auto max-w-5xl min-h-[72vh] grid items-center gap-8
-        md:gap-12 md:grid-cols-2 px-6 lg:px-8 pt-10 md:pt-12 pb-10 mt-6 md:mt-14">
+        md:gap-12 md:grid-cols-2 px-6 lg:px-8 pt-10 md:pt-12 pb-10 mt-6 md:mt-14"
+    >
       <div className="max-w-prose text-left md:text-left">
         <h1 className="sr-only">Git-Land</h1>
 
@@ -31,13 +32,13 @@ export default function HomeScreen() {
             Skriv kommandot i rutan och tryck <strong>Kör</strong>.
           </li>
           <li>
-            <strong>Tips</strong> visas automatiskt om du kör fel tre gånger.
+            <strong>Tips</strong> visas automatiskt om du skriver fel tre gånger.
           </li>
           <li>
-            <strong>Reset</strong> startar nivån om från början.
+            <strong>Reset</strong> startar om nivån från början.
           </li>
           <li>
-            <strong>Timer</strong> är frivillig (du kan pausa eller nollställa).
+            <strong>Timern</strong> är frivillig (du kan pausa eller nollställa).
           </li>
           <li>
             <strong>Framsteg sparas automatiskt</strong> i din webbläsare - välj <em>Fortsätt</em> för att hoppa in där
