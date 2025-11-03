@@ -1,5 +1,6 @@
 type Props = {
   value: string;
+  // eslint-disable-next-line no-unused-vars
   onChange: (v: string) => void;
   placeholder?: string;
   autoFocus?: boolean;
@@ -8,18 +9,11 @@ type Props = {
 };
 
 export default function CommandInput({
-  value,
-  onChange,
-  placeholder,
-  autoFocus,
-  onEnter,
-  onEscape,
+  value, onChange, placeholder, autoFocus, onEnter, onEscape,
 }: Props) {
   return (
     <div className="mt-4">
-      <label className="block text-xs uppercase tracking-wide text-slate-500 mb-1">
-        Skriv kommandot
-      </label>
+      <label className="block text-xs uppercase tracking-wide text-slate-500 mb-1">Skriv kommandot</label>
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}

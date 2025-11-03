@@ -10,7 +10,9 @@ import { talk, pick } from '../utils/octocatTalk';
 import { useGame } from '../hooks/useGame';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useProgress } from '../state/progress';
-import { useEffect, useMemo, useState } from 'react';
+import {
+  useEffect, useMemo, useState,
+} from 'react';
 
 export default function GameScreen() {
   const navigate = useNavigate();
@@ -48,7 +50,9 @@ export default function GameScreen() {
 
   useEffect(() => {
     const levelNum = Number(levelParam);
-    if (Number.isFinite(levelNum) && levelNum > 0) goToLevel(levelNum);
+    if (Number.isFinite(levelNum) && levelNum > 0) {
+      goToLevel(levelNum);
+    }
   }, [levelParam, goToLevel]);
 
   const [mood, setMood] = useState<OctoMood>('idle');
@@ -62,30 +66,47 @@ export default function GameScreen() {
   const variant = useMemo(() => variantByLevel[levelIndex + 1] ?? 'base', [levelIndex]);
 
   const bubble = useMemo(() => {
-    if (statusMsg?.type === 'error') return pick(talk.error);
-    if (statusMsg?.type === 'ok') return pick(talk.happy);
+    if (statusMsg?.type === 'error') {
+      return pick(talk.error);
+    }
+    if (statusMsg?.type === 'ok') {
+      return pick(talk.happy);
+    }
 
     const idleInfoTexts = new Set(['Väntar på kommando...', 'Återställd nivå']);
-    const isIdleInfo =
-      !statusMsg || (statusMsg.type === 'info' && idleInfoTexts.has(statusMsg.text));
+    const isIdleInfo = !statusMsg || (statusMsg.type === 'info' && idleInfoTexts.has(statusMsg.text));
 
     if (isIdleInfo) {
       return talk.defaultIdle(level.id, level.title);
     }
 
-    if (statusMsg?.type === 'info') return pick(talk.info);
+    if (statusMsg?.type === 'info') {
+      return pick(talk.info);
+    }
 
-    if (hintStage > 0 && !showSolution) return 'Kolla tipsen här nedan!';
-    if (showSolution) return 'Här är lösningen - kör den för att gå vidare.';
+    if (hintStage > 0 && !showSolution) {
+      return 'Kolla tipsen här nedan!';
+    }
+    if (showSolution) {
+      return 'Här är lösningen - kör den för att gå vidare.';
+    }
 
     return talk.defaultIdle(level.id, level.title);
-  }, [statusMsg, hintStage, showSolution, level.id, level.title]);
+  }, [
+    statusMsg, hintStage, showSolution, level.id, level.title,
+  ]);
 
   useEffect(() => {
-    if (!statusMsg) return;
-    if (statusMsg.type === 'error') setMood('error');
-    else if (statusMsg.type === 'ok') setMood('happy');
-    else setMood('idle');
+    if (!statusMsg) {
+      return;
+    }
+    if (statusMsg.type === 'error') {
+      setMood('error');
+    } else if (statusMsg.type === 'ok') {
+      setMood('happy');
+    } else {
+      setMood('idle');
+    }
   }, [statusMsg]);
 
   const handleExit = () => navigate('/');
@@ -125,7 +146,9 @@ export default function GameScreen() {
   };
 
   return (
+    // eslint-disable-next-line @stylistic/max-len
     <section className="mx-auto max-w-[90rem] px-3 sm:px-4 md:px-6 lg:px-12 mt-10 md:mt-16 lg:mt-28 grid gap-4 sm:gap-6 md:gap-10 md:grid-cols-2">
+      {/* eslint-disable-next-line @stylistic/max-len */}
       <div className="mx-2 sm:mx-0 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 md:p-6 lg:p-10 shadow-sm min-w-0">
         <div className="pb-2 mb-4">
           <LevelHeader
@@ -145,7 +168,9 @@ export default function GameScreen() {
               }
             }}
             onNext={() => {
-              if (!levelDone) return;
+              if (!levelDone) {
+                return;
+              }
               if (levelIndex < totalLevels - 1) {
                 setMood('idle');
                 nextLevel();

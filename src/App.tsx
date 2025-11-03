@@ -1,4 +1,6 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import {
+  Routes, Route, Navigate,
+} from 'react-router-dom';
 import { lazy } from 'react';
 
 const HomeScreen = lazy(() => import('./components/HomeScreen'));

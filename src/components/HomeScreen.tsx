@@ -4,7 +4,6 @@ import { LEVELS } from '../data/levels';
 import { asset } from '../utils/asset';
 import GitLandLogo from './GitLandLogo';
 
-
 export default function HomeScreen() {
   const navigate = useNavigate();
   const { state } = useProgress();
@@ -14,15 +13,17 @@ export default function HomeScreen() {
   const canContinue = maxDone > 0;
 
   return (
-    <header className="mx-auto max-w-5xl min-h-[72vh] grid items-center gap-8 md:gap-12 md:grid-cols-2 px-6 lg:px-8 pt-10 md:pt-12 pb-10 mt-6 md:mt-14">
+    <header
+      className="mx-auto max-w-5xl min-h-[72vh] grid items-center gap-8
+        md:gap-12 md:grid-cols-2 px-6 lg:px-8 pt-10 md:pt-12 pb-10 mt-6 md:mt-14">
       <div className="max-w-prose text-left md:text-left">
         <h1 className="sr-only">Git-Land</h1>
 
         <GitLandLogo className="mb-1" />
 
         <p className="mt-3 text-base leading-relaxed text-slate-700">
-          Ett litet äventyr in i Git-världen. Lös uppgifter steg för steg och lär dig vanliga
-          kommandon i lugn takt eller slå på timern om du vill tävla mot klockan.
+          Ett litet äventyr in i Git-världen. Lös uppgifter steg för steg och lär dig vanliga kommandon i lugn takt
+          eller slå på timern om du vill tävla mot klockan.
         </p>
 
         <ul className="mt-4 space-y-2 text-sm text-slate-700 list-disc pl-5">
@@ -39,8 +40,8 @@ export default function HomeScreen() {
             <strong>Timer</strong> är frivillig (du kan pausa eller nollställa).
           </li>
           <li>
-            <strong>Framsteg sparas automatiskt</strong> i din webbläsare - välj <em>Fortsätt</em>{' '}
-            för att hoppa in där du slutade.
+            <strong>Framsteg sparas automatiskt</strong> i din webbläsare - välj <em>Fortsätt</em> för att hoppa in där
+            du slutade.
           </li>
           <li>
             <strong>Repo-status</strong> visar vad som händer i ditt “simulerade-repo”.

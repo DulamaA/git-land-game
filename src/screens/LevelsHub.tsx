@@ -31,17 +31,13 @@ export default function LevelsHub() {
               key={l.id}
               to={unlocked ? `/levels/${l.id}` : '#'}
               className={`flex items-center justify-between rounded-xl border p-4 shadow-sm ${
-                unlocked
-                  ? 'bg-white hover:bg-slate-50'
-                  : 'bg-slate-100 cursor-not-allowed opacity-70'
+                unlocked ? 'bg-white hover:bg-slate-50' : 'bg-slate-100 cursor-not-allowed opacity-70'
               }`}
             >
               <span>
                 {l.id}. {l.title}
               </span>
-              <span className="text-sm">
-                {finished ? '✔ Klar' : unlocked ? 'Starta →' : 'Låst'}
-              </span>
+              <span className="text-sm">{finished ? '✔ Klar' : unlocked ? 'Starta →' : 'Låst'}</span>
             </Link>
           );
         })}

@@ -2,30 +2,12 @@ type Props = { className?: string };
 
 export default function GitLandLogo({ className = '' }: Props) {
   return (
-    <svg
-      viewBox="0 0 520 120"
-      role="img"
-      aria-label="Git-Land"
-      className={`h-14 md:h-16 ${className}`}
-    >
-      <text
-        x="10"
-        y="78"
-        fontFamily="Inter, ui-sans-serif, system-ui"
-        fontWeight="800"
-        fontSize="56"
-        fill="#0f172a"
-      >
+    <svg viewBox="0 0 520 120" role="img" aria-label="Git-Land" className={`h-14 md:h-16 ${className}`}>
+      <text x="10" y="78" fontFamily="Inter, ui-sans-serif, system-ui" fontWeight="800" fontSize="56" fill="#0f172a">
         Git-<tspan fill="#16a34a">Land</tspan>
       </text>
 
-      <g
-        transform="translate(340,26)"
-        fill="none"
-        stroke="#16a34a"
-        strokeWidth="6"
-        strokeLinecap="round"
-      >
+      <g transform="translate(340,26)" fill="none" stroke="#16a34a" strokeWidth="6" strokeLinecap="round">
         <path d="M0 18 C 18 18, 24 30, 24 42 C24 62, 40 66, 60 66" />
 
         <circle cx="0" cy="18" r="6" fill="#16a34a" />

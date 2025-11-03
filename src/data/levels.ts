@@ -71,9 +71,7 @@ export const LEVELS: Level[] = [
   {
     id: 6,
     title: 'Push första gången',
-    steps: [
-      { text: 'Pusha din branch och sätt upstream.', expects: ['git push -u origin <branch>'] },
-    ],
+    steps: [{ text: 'Pusha din branch och sätt upstream.', expects: ['git push -u origin <branch>'] }],
   },
 
   {
@@ -139,10 +137,7 @@ export const LEVELS: Level[] = [
     steps: [
       {
         text: 'Squash-merga din PR och ta bort fjärr-branchen.',
-        expects: [
-          'gh pr merge <nr/url> --squash --delete-branch',
-          'gh pr merge --squash --delete-branch',
-        ],
+        expects: ['gh pr merge <nr/url> --squash --delete-branch', 'gh pr merge --squash --delete-branch'],
       },
     ],
   },
