@@ -11,8 +11,11 @@ import { useGame } from '../hooks/useGame';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useProgress } from '../state/progress';
 import {
-  useEffect, useMemo, useState,
+  useEffect,
+  useMemo,
+  useState,
 } from 'react';
+
 
 export default function GameScreen() {
   const navigate = useNavigate();
@@ -190,7 +193,7 @@ export default function GameScreen() {
             key={resetTick}
             value={input}
             onChange={setInput}
-            placeholder="> t.ex. git add ."
+            placeholder="t.ex. git init"
             autoFocus
             onEnter={handleRun}
             onEscape={handleReset}
