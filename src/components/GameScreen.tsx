@@ -193,7 +193,6 @@ export default function GameScreen() {
             key={resetTick}
             value={input}
             onChange={setInput}
-            placeholder="t.ex. git init"
             autoFocus
             onEnter={handleRun}
             onEscape={handleReset}
