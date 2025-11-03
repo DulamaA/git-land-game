@@ -5,8 +5,11 @@ const KEY = 'gitland_progress_v1';
 export function readProgress(): number[] {
   try {
     const raw = localStorage.getItem(KEY);
-    if (!raw) return [];
+    if (!raw) {
+      return [];
+    }
     const parsed = JSON.parse(raw);
+
     return Array.isArray(parsed) ? parsed.filter((n) => Number.isFinite(n)) : [];
   } catch {
     return [];

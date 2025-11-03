@@ -7,7 +7,9 @@ type Props = {
   mood?: OctoMood;
 };
 
-export default function OctocatAvatar({ variant, say, mood = 'idle' }: Props) {
+export default function OctocatAvatar({
+  variant, say, mood = 'idle',
+}: Props) {
   const src = getOctoSrc(variant, mood);
   const filterClass = variantFilters[variant] ?? '';
   const moodClass = mood === 'happy' ? 'animate-bounce' : mood === 'error' ? 'animate-shake' : '';

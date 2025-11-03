@@ -1,8 +1,12 @@
-import { useMemo, useState, useCallback } from 'react';
+import {
+  useMemo, useState, useCallback,
+} from 'react';
 import { LEVELS } from '../data/levels';
 import { useTimer } from './useTimer';
 import { getFirstHint } from '../utils/getFirstHint';
-import { applyEffect, createInitialRepoState, type RepoState, type StatusMsg } from '../models/repo';
+import {
+  applyEffect, createInitialRepoState, type RepoState, type StatusMsg,
+} from '../models/repo';
 import type { Step } from '../types';
 
 // ---------- helpers ----------
@@ -14,11 +18,14 @@ function normalizeSpaces(s: string) {
 
 function tokenForPlaceholder(name: string) {
   if (/(message|url)/i.test(name)) {
-    return `(?:"[^"]+"|'[^']+'|\\S[\\s\\S]*)`;
+    return '(?:"[^"]+"|\'[^\']+\'|\\S[\\s\\S]*)';
   }
 
-  if (/branch/i.test(name)) return `[\\w./-]+`;
-  return `\\S+`;
+  if (/branch/i.test(name)) {
+    return '[\\w./-]+';
+  }
+
+  return '\\S+';
 }
 
 function patternFromExpected(cmd: string): RegExp {
@@ -26,15 +33,22 @@ function patternFromExpected(cmd: string): RegExp {
     .replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // escape special
     .replace(/<([^>]+)>/g, (_, name) => tokenForPlaceholder(name)) // no-whitespace-token
     .replace(/\s+/g, '\\s+'); // spaces → \s+
+
   return new RegExp(`^${ESC}$`, 'i');
 }
 
 // Normalize one level into {text, expects, hints}
-type NormStep = { text: string; expects: string[]; hints?: string[] };
+type NormStep = {
+  text: string;
+  expects: string[];
+  hints?: string[];
+};
 type RawLevel = { steps?: Step[]; tasks?: string[] } | null | undefined;
 
 function toNormSteps(level: RawLevel): NormStep[] {
-  if (!level) return [];
+  if (!level) {
+    return [];
+  }
   if (Array.isArray(level.steps)) {
     return level.steps.map((s) => ({
       text: s.text,
@@ -45,6 +59,7 @@ function toNormSteps(level: RawLevel): NormStep[] {
 
   // Legacy model: tasks: string[] that contain backtick answers
   const tasks: string[] = level.tasks ?? [];
+
   return tasks.map((t) => ({
     text: t.replace(/`([^`]+)`/g, '…'),
     expects: [],
@@ -55,6 +70,7 @@ function getThreeHints(taskText: string): string[] {
   const h1 = getFirstHint(taskText, 0) || '';
   const h2 = getFirstHint(taskText, 1) || '';
   const h3 = getFirstHint(taskText, 2) || '';
+
   return [h1, h2, h3].filter(Boolean);
 }
 
@@ -80,23 +96,31 @@ export function useGame() {
 
   const [levelDone, setLevelDone] = useState(false);
 
-  const { seconds, running, toggle, reset: resetTimer } = useTimer(false);
+  const {
+    seconds, running, toggle, reset: resetTimer,
+  } = useTimer(false);
 
   // Current level and normalized steps
   const level = LEVELS[levelIndex];
   const steps = useMemo(() => toNormSteps(level), [level]);
-  const step = useMemo(
-    () => steps[taskIndex] ?? { text: '', expects: [], hints: [] },
-    [steps, taskIndex],
-  );
+  const step = useMemo(() =>
+    steps[taskIndex] ?? {
+      text: '',
+      expects: [],
+      hints: [],
+    },
+  [steps, taskIndex]);
 
   const expectedList = useMemo(() => step.expects, [step]);
   const solutionText = useMemo(() => expectedList[0] ?? '', [expectedList]);
 
   const hints = useMemo(() => {
     const custom = (step.hints ?? []).filter(Boolean);
-    if (custom.length >= 3) return custom.slice(0, 3);
+    if (custom.length >= 3) {
+      return custom.slice(0, 3);
+    }
     const generated = getThreeHints(step.text);
+
     return [...custom, ...generated].slice(0, 3);
   }, [step.hints, step.text]);
 
@@ -130,21 +154,23 @@ export function useGame() {
     hardResetLevelState();
   }, [hardResetLevelState]);
 
-  const goToLevel = useCallback(
-    (id: number) => {
-      const idx = Math.max(0, Math.min(LEVELS.length - 1, id - 1));
-      setLevelIndex((prev) => {
-        if (prev === idx) return prev;
-        hardResetLevelState();
-        return idx;
-      });
-    },
-    [hardResetLevelState],
-  );
+  const goToLevel = useCallback((id: number) => {
+    const idx = Math.max(0, Math.min(LEVELS.length - 1, id - 1));
+    setLevelIndex((prev) => {
+      if (prev === idx) {
+        return prev;
+      }
+      hardResetLevelState();
+
+      return idx;
+    });
+  },
+  [hardResetLevelState]);
 
   const run = useCallback((): boolean => {
     if (locked) {
       setStatusMsg({ type: 'info', text: 'Max antal försök. Kör lösningen för att gå vidare.' });
+
       return false;
     }
 
@@ -160,7 +186,10 @@ export function useGame() {
       setLocked(false);
 
       setStatusMsg({ type: 'info', text: 'Inga kommandon att köra för denna uppgift.' });
-      if (isLast) setLevelDone(true);
+      if (isLast) {
+        setLevelDone(true);
+      }
+
       return isLast;
     }
 
@@ -189,7 +218,10 @@ export function useGame() {
       setShowSolution(false);
       setLocked(false);
 
-      if (isLast) setLevelDone(true);
+      if (isLast) {
+        setLevelDone(true);
+      }
+
       return isLast;
     } else {
       setError('Fel kommando. Kolla mellanslag/flagga och försök igen.');
@@ -204,15 +236,21 @@ export function useGame() {
           setShowSolution(true);
           setLocked(true);
         }
+
         return n;
       });
+
       return false;
     }
-  }, [input, expectedList, steps.length, taskIndex, repo, locked, hintStage]);
+  }, [
+    input, expectedList, steps.length, taskIndex, repo, locked, hintStage,
+  ]);
 
-  //Solution is visible after the fourth attempt
+  // Solution is visible after the fourth attempt
   const runSolution = useCallback((): boolean => {
-    if (!solutionText) return false;
+    if (!solutionText) {
+      return false;
+    }
 
     const { repo: nextRepo, message } = applyEffect(repo, solutionText, solutionText);
     setRepo(nextRepo);
@@ -227,9 +265,14 @@ export function useGame() {
     setShowSolution(false);
     setLocked(false);
 
-    if (isLast) setLevelDone(true);
+    if (isLast) {
+      setLevelDone(true);
+    }
+
     return isLast;
-  }, [repo, solutionText, steps.length, taskIndex]);
+  }, [
+    repo, solutionText, steps.length, taskIndex,
+  ]);
 
   // Reset current level state
   const resetCurrent = useCallback(() => {

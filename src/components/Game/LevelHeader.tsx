@@ -15,17 +15,9 @@ type HeaderProps = {
 
 export default function LevelHeader(props: HeaderProps) {
   const {
-    levelId,
-    title,
-    levelIndex,
-    totalLevels,
-    running,
-    seconds,
-    onToggleTimer,
-    onResetTimer,
-    onPrev,
-    onNext,
-  } = props;
+    levelId, title, levelIndex, totalLevels, running, seconds, onToggleTimer, onResetTimer, onPrev, onNext,
+  } =
+    props;
 
   const ratioRaw = totalLevels > 0 ? (Number(levelIndex) + 1) / totalLevels : 0;
   const ratio = Math.max(0, Math.min(1, ratioRaw));
@@ -46,9 +38,7 @@ export default function LevelHeader(props: HeaderProps) {
           <div className="flex items-center gap-2">
             <span
               className={`px-2 py-0.5 rounded-full text-[11px] font-medium border ${
-                running
-                  ? 'bg-violet-600 text-white border-violet-700'
-                  : 'bg-slate-100 text-slate-700 border-slate-300'
+                running ? 'bg-violet-600 text-white border-violet-700' : 'bg-slate-100 text-slate-700 border-slate-300'
               }`}
               aria-label="Timer"
               title="Timer"
@@ -59,9 +49,9 @@ export default function LevelHeader(props: HeaderProps) {
             <button
               onClick={onToggleTimer}
               className={`rounded-md px-2 py-0.5 text-xs border transition ${
-                running
-                  ? 'bg-violet-50 border-violet-300 text-violet-700 hover:bg-violet-100'
-                  : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50'
+                running ?
+                  'bg-violet-50 border-violet-300 text-violet-700 hover:bg-violet-100' :
+                  'bg-white border-slate-300 text-slate-700 hover:bg-slate-50'
               }`}
               title="Slå på/av timer"
             >

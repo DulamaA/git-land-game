@@ -2,17 +2,29 @@ export function getFirstHint(taskText: string, misses = 0): string | null {
   const t = taskText.toLowerCase();
 
   let context = '';
-  if (t.includes('init')) context = 'init';
-  else if (t.includes('remote')) context = 'remote';
-  else if (t.includes('commit')) context = 'commit';
-  else if (t.includes('push')) context = 'push';
-  else if (t.includes('pull')) context = 'pull';
-  else if (t.includes('branch')) context = 'branch';
-  else if (t.includes('merge')) context = 'merge';
-  else if (t.includes('rebase')) context = 'rebase';
-  else if (t.includes('checkout') || t.includes('switch')) context = 'checkout';
-  else if (t.includes('action') || t.includes('workflow')) context = 'workflow';
-  else context = 'general';
+  if (t.includes('init')) {
+    context = 'init';
+  } else if (t.includes('remote')) {
+    context = 'remote';
+  } else if (t.includes('commit')) {
+    context = 'commit';
+  } else if (t.includes('push')) {
+    context = 'push';
+  } else if (t.includes('pull')) {
+    context = 'pull';
+  } else if (t.includes('branch')) {
+    context = 'branch';
+  } else if (t.includes('merge')) {
+    context = 'merge';
+  } else if (t.includes('rebase')) {
+    context = 'rebase';
+  } else if (t.includes('checkout') || t.includes('switch')) {
+    context = 'checkout';
+  } else if (t.includes('action') || t.includes('workflow')) {
+    context = 'workflow';
+  } else {
+    context = 'general';
+  }
 
   const baseHints: Record<string, string[]> = {
     init: [
@@ -74,5 +86,6 @@ export function getFirstHint(taskText: string, misses = 0): string | null {
 
   const hints = baseHints[context] ?? baseHints.general;
   const idx = Math.min(misses, hints.length - 1);
+
   return hints[idx];
 }

@@ -9,10 +9,7 @@ export type RepoState = {
 };
 
 // Define status message types
-export type StatusMsg =
-  | { type: 'info'; text: string }
-  | { type: 'ok'; text: string }
-  | { type: 'error'; text: string };
+export type StatusMsg = { type: 'info'; text: string } | { type: 'ok'; text: string } | { type: 'error'; text: string };
 
 // Initial state of the repository
 export function createInitialRepoState(): RepoState {
@@ -30,11 +27,9 @@ export function id() {
 }
 
 // Apply the effect of a user command on the repository state
-export function applyEffect(
-  prev: RepoState,
+export function applyEffect(prev: RepoState,
   matchedExpected: string,
-  userInput: string,
-): { repo: RepoState; message: StatusMsg } {
+  userInput: string): { repo: RepoState; message: StatusMsg } {
   const next: RepoState = structuredClone(prev);
 
   next.branches ||= {};
@@ -49,19 +44,27 @@ export function applyEffect(
   const currentBranch = () => (next.current && next.branches[next.current] ? next.current : 'main');
 
   const ensureInitialized = () => {
-    if (!next.initialized) next.initialized = true;
-    if (!next.branches.main) next.branches.main = [];
-    if (!next.current) next.current = 'main';
+    if (!next.initialized) {
+      next.initialized = true;
+    }
+    if (!next.branches.main) {
+      next.branches.main = [];
+    }
+    if (!next.current) {
+      next.current = 'main';
+    }
   };
 
   const getBranchFromInput = (pattern: RegExp): string | null => {
     const m = userInput.match(pattern);
+
     return m?.[1]?.trim() || null;
   };
 
   const extractCommitMsg = (s: string) => {
     const m = s.match(/(?:^|\s)-m\s+(?:"([^"]*)"|'([^']*)'|(.+))$/i);
     const raw = (m?.[1] ?? m?.[2] ?? m?.[3] ?? '').trim();
+
     return raw || 'commit';
   };
 
@@ -70,16 +73,19 @@ export function applyEffect(
     next.initialized = true;
     next.branches.main ||= [];
     next.current = 'main';
+
     return { repo: next, message: ok('Repository initierat.') };
   }
 
   // --- remote add / set-url ---
   if (/^git\s+remote\s+add\s+origin\s+/i.test(cmd)) {
     next.remotes.origin = true;
+
     return { repo: next, message: ok('Remote "origin" tillagd.') };
   }
   if (/^git\s+remote\s+set-url\s+origin\s+/i.test(cmd)) {
     next.remotes.origin = true;
+
     return { repo: next, message: ok('Remote "origin" uppdaterad.') };
   }
 
@@ -92,6 +98,7 @@ export function applyEffect(
     if (name) {
       next.branches[name] = [...base];
       next.current = name;
+
       return { repo: next, message: ok(`Ny branch: ${name}`) };
     }
   }
@@ -100,6 +107,7 @@ export function applyEffect(
     ensureInitialized();
     next.branches.main ||= next.branches.main || [];
     next.current = 'main';
+
     return { repo: next, message: ok('Bytte till main') };
   }
 
@@ -107,6 +115,7 @@ export function applyEffect(
     ensureInitialized();
     next.branches.main ||= [];
     next.current = 'main';
+
     return { repo: next, message: ok('Bytte till main (ev. skapad).') };
   }
 
@@ -117,17 +126,20 @@ export function applyEffect(
     if (name) {
       next.branches[name] = [...base];
       next.current = name;
+
       return { repo: next, message: ok(`Ny branch: ${name}`) };
     }
   }
 
   if (/^git\s+(?:checkout|switch)\s+[\w./-]+$/i.test(cmd)) {
     ensureInitialized();
-    const name =
-      getBranchFromInput(/\bcheckout\s+([^\s]+)/i) ?? getBranchFromInput(/\bswitch\s+([^\s]+)/i);
+    const name = getBranchFromInput(/\bcheckout\s+([^\s]+)/i) ?? getBranchFromInput(/\bswitch\s+([^\s]+)/i);
     if (name) {
-      if (!next.branches[name]) next.branches[name] = [];
+      if (!next.branches[name]) {
+        next.branches[name] = [];
+      }
       next.current = name;
+
       return { repo: next, message: ok(`Bytte till ${name}`) };
     }
   }
@@ -172,6 +184,7 @@ export function applyEffect(
     if (/--continue/i.test(userInput)) {
       return { repo: next, message: info('Rebase fortsatte (simulerad)') };
     }
+
     return { repo: next, message: info('Rebase (simulerat)') };
   }
 
@@ -185,6 +198,7 @@ export function applyEffect(
         next.branches.main ||= [];
       }
     }
+
     return { repo: next, message: info('Branch raderad (simulerat)') };
   }
 

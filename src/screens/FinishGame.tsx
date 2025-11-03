@@ -19,7 +19,9 @@ export default function FinishGame() {
             }}
             aria-hidden
           >
-            {['🎊', '🎉', '✨', '💫', '🎈'][i % 5]}
+            {[
+              '🎊', '🎉', '✨', '💫', '🎈',
+            ][i % 5]}
           </span>
         ))}
       </div>

@@ -2,10 +2,7 @@ export const talk = {
   defaultIdle: (n: number, title: string) => `Level ${n}: ${title}`,
 
   info: [
-    'OK - fortsätt till nästa steg. ℹ️',
-    'Kommandot kördes. ℹ️',
-    'Status uppdaterad. ℹ️',
-    'Allt i ordning. ℹ️',
+    'OK - fortsätt till nästa steg. ℹ️', 'Kommandot kördes. ℹ️', 'Status uppdaterad. ℹ️', 'Allt i ordning. ℹ️',
   ],
 
   error: [
@@ -30,6 +27,9 @@ export const talk = {
 };
 
 export function pick(arr: string[]) {
-  if (!Array.isArray(arr) || arr.length === 0) return '';
+  if (!Array.isArray(arr) || arr.length === 0) {
+    return '';
+  }
+
   return arr[Math.floor(Math.random() * arr.length)];
 }

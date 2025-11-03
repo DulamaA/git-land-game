@@ -6,16 +6,16 @@ import './index.css';
 import App from './App.tsx';
 
 const rootEl = document.getElementById('root');
-if (!rootEl) throw new Error('#root missing');
+if (!rootEl) {
+  throw new Error('#root missing');
+}
 
-createRoot(rootEl).render(
-  <StrictMode>
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
-      <ProgressProvider>
-        <Suspense fallback={<div className="p-4">Laddar...</div>}>
-          <App />
-        </Suspense>
-      </ProgressProvider>
-    </BrowserRouter>
-  </StrictMode>,
-);
+createRoot(rootEl).render(<StrictMode>
+  <BrowserRouter basename={import.meta.env.BASE_URL}>
+    <ProgressProvider>
+      <Suspense fallback={<div className="p-4">Laddar...</div>}>
+        <App />
+      </Suspense>
+    </ProgressProvider>
+  </BrowserRouter>
+</StrictMode>);

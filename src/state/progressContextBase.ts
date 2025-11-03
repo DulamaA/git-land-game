@@ -9,6 +9,7 @@ export type ProgressState = {
 
 export type ProgressCtx = {
   state: ProgressState;
+  // eslint-disable-next-line  no-unused-vars
   markDone: (id: number) => void;
   reset: () => void;
 };

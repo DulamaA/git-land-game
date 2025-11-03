@@ -1,4 +1,6 @@
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import {
+  useNavigate, useParams, Link,
+} from 'react-router-dom';
 import { LEVELS } from '../data/levels';
 import { useProgress } from '../state/progress';
 import OctocatAvatar from '../components/Game/OctocatAvatar';
@@ -7,14 +9,15 @@ import TaskList from '../components/Game/TaskList';
 
 type PreviewStep = { text: string };
 
-function toPreviewSteps(
-  level: { steps?: { text: string }[]; tasks?: string[] } | undefined,
-): PreviewStep[] {
-  if (!level) return [];
+function toPreviewSteps(level: { steps?: { text: string }[]; tasks?: string[] } | undefined): PreviewStep[] {
+  if (!level) {
+    return [];
+  }
   if (Array.isArray(level.steps) && level.steps.length > 0) {
     return level.steps.map((s) => ({ text: s.text }));
   }
   const tasks = level.tasks ?? [];
+
   return tasks.map((t) => ({ text: t.replace(/`([^`]+)`/g, '…') }));
 }
 
@@ -87,17 +90,14 @@ export default function LevelScreen() {
 
             <Link
               to="/levels"
-              className="inline-flex w-full sm:w-auto justify-center rounded-lg border px-3 py-2 text-sm hover:bg-slate-50"
+              className="inline-flex w-full sm:w-auto justify-center rounded-lg
+              border px-3 py-2 text-sm hover:bg-slate-50"
             >
               Till nivåer
             </Link>
           </div>
 
-          {!isUnlocked && (
-            <p className="text-sm text-slate-500">
-              Denna nivå låses upp när du klarat föregående nivå.
-            </p>
-          )}
+          {!isUnlocked && <p className="text-sm text-slate-500">Denna nivå låses upp när du klarat föregående nivå.</p>}
         </div>
       </div>
     </section>
