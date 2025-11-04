@@ -254,7 +254,7 @@ export default function GameScreen() {
             <OctocatAvatar variant={variant} say={bubble} mood={mood} />
           </div>
           <RepoStatus repo={repo} message={statusMsg} />
-          <TerminalPanel history={history} levelId={level.id} defaultScope="level" />
+          <TerminalPanel historyItems={history} levelId={level.id} defaultScope="level" />
         </div>
       </section>
 
