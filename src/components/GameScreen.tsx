@@ -4,6 +4,7 @@ import TaskList from './Game/TaskList';
 import CommandInput from './Game/CommandInput';
 import RepoStatus from './Game/RepoStatus';
 import OctocatAvatar from './Game/OctocatAvatar';
+import GameFooter from './GameFooter';
 import { variantByLevel } from '../utils/octocatVariants';
 import type { OctoMood } from '../utils/octocatVariants';
 import { talk, pick } from '../utils/octocatTalk';
@@ -150,105 +151,109 @@ export default function GameScreen() {
   };
 
   return (
-    // eslint-disable-next-line @stylistic/max-len
-    <section className="mx-auto max-w-[90rem] px-3 sm:px-4 md:px-6 lg:px-12 mt-10 md:mt-16 lg:mt-28 grid gap-4 sm:gap-6 md:gap-10 md:grid-cols-2">
-      {/* eslint-disable-next-line @stylistic/max-len */}
-      <div className="mx-2 sm:mx-0 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 md:p-6 lg:p-10 shadow-sm min-w-0">
-        <div className="pb-2 mb-4">
-          <LevelHeader
-            levelId={level.id}
-            title={level.title}
-            levelIndex={levelIndex}
-            totalLevels={totalLevels}
-            running={running}
-            seconds={seconds}
-            onToggleTimer={toggle}
-            onResetTimer={resetTimer}
-            onPrev={() => {
-              if (levelIndex > 0) {
-                setMood('idle');
-                prevLevel();
-                navigate(`/game/${level.id - 1}`);
-              }
-            }}
-            onNext={() => {
-              if (!levelDone) {
-                return;
-              }
-              if (levelIndex < totalLevels - 1) {
-                setMood('idle');
-                nextLevel();
-                navigate(`/game/${level.id + 1}`);
-              }
-            }}
-          />
+    <>
+      <section className="mx-auto max-w-[90rem]
+    px-3 sm:px-4 md:px-6 lg:px-12 mt-10 md:mt-16 lg:mt-28 grid gap-4 sm:gap-6 md:gap-10 md:grid-cols-2">
+        {/* eslint-disable-next-line @stylistic/max-len */}
+        <div className="mx-2 sm:mx-0 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 md:p-6 lg:p-10 shadow-sm min-w-0">
+          <div className="pb-2 mb-4">
+            <LevelHeader
+              levelId={level.id}
+              title={level.title}
+              levelIndex={levelIndex}
+              totalLevels={totalLevels}
+              running={running}
+              seconds={seconds}
+              onToggleTimer={toggle}
+              onResetTimer={resetTimer}
+              onPrev={() => {
+                if (levelIndex > 0) {
+                  setMood('idle');
+                  prevLevel();
+                  navigate(`/game/${level.id - 1}`);
+                }
+              }}
+              onNext={() => {
+                if (!levelDone) {
+                  return;
+                }
+                if (levelIndex < totalLevels - 1) {
+                  setMood('idle');
+                  nextLevel();
+                  navigate(`/game/${level.id + 1}`);
+                }
+              }}
+            />
 
-          <div className="mt-3">
-            <TaskList steps={steps} activeIndex={taskIndex} />
-          </div>
-        </div>
-
-        <div className="space-y-4 mt-6">
-          <CommandInput
-            key={resetTick}
-            value={input}
-            onChange={setInput}
-            autoFocus
-            onEnter={handleRun}
-            onEscape={handleReset}
-          />
-
-          {error && (
-            <p className="mt-2 text-sm font-medium text-red-600" role="alert">
-              {error}
-            </p>
-          )}
-
-          {hintStage > 0 && (
-            <div className="mt-3 rounded-xl border border-sky-200 bg-sky-50 p-3 text-sm">
-              <p className="font-semibold mb-1">Tips</p>
-              <ul className="list-disc pl-5 space-y-1">
-                {hints.slice(0, hintStage).map((h, i) => (
-                  <li key={i}>{h}</li>
-                ))}
-              </ul>
+            <div className="mt-3">
+              <TaskList steps={steps} activeIndex={taskIndex} />
             </div>
-          )}
+          </div>
 
-          {showSolution && (
-            <div className="mt-3 rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm">
-              <p className="font-semibold mb-1">Lösning</p>
-              <p className="mb-2">
-                Kör kommandot för att komma vidare:
-                <br />
-                <code className="px-2 py-1 bg-white rounded">{solutionText || '—'}</code>
+          <div className="space-y-4 mt-6">
+            <CommandInput
+              key={resetTick}
+              value={input}
+              onChange={setInput}
+              autoFocus
+              onEnter={handleRun}
+              onEscape={handleReset}
+            />
+
+            {error && (
+              <p className="mt-2 text-sm font-medium text-red-600" role="alert">
+                {error}
               </p>
-              <button
-                onClick={handleRunSolution}
-                className="rounded-lg px-3 py-1.5 bg-amber-500 text-white hover:opacity-90"
-              >
-                Kör lösningen åt mig
-              </button>
-              {locked && (
-                <p className="mt-2 text-amber-700">
-                  Du har nått max antal försök. Skriv kommandot själv eller klicka knappen.
-                </p>
-              )}
-            </div>
-          )}
+            )}
 
-          <div className="pt-1">
-            <GameButtons onRun={handleRun} onReset={handleReset} onExit={handleExit} />
+            {hintStage > 0 && (
+              <div className="mt-3 rounded-xl border border-sky-200 bg-sky-50 p-3 text-sm">
+                <p className="font-semibold mb-1">Tips</p>
+                <ul className="list-disc pl-5 space-y-1">
+                  {hints.slice(0, hintStage).map((h, i) => (
+                    <li key={i}>{h}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {showSolution && (
+              <div className="mt-3 rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm">
+                <p className="font-semibold mb-1">Lösning</p>
+                <p className="mb-2">
+                  Kör kommandot för att komma vidare:
+                  <br />
+                  <code className="px-2 py-1 bg-white rounded">{solutionText || '—'}</code>
+                </p>
+                <button
+                  onClick={handleRunSolution}
+                  className="rounded-lg px-3 py-1.5 bg-amber-500 text-white hover:opacity-90"
+                >
+                  Kör lösningen åt mig
+                </button>
+                {locked && (
+                  <p className="mt-2 text-amber-700">
+                    Du har nått max antal försök. Skriv kommandot själv eller klicka knappen.
+                  </p>
+                )}
+              </div>
+            )}
+
+            <div className="pt-1">
+              <GameButtons onRun={handleRun} onReset={handleReset} onExit={handleExit} />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="mx-2 sm:mx-0 flex flex-col gap-4 md:sticky md:top-8 self-start min-w-0">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 lg:p-8 shadow-sm">
-          <OctocatAvatar variant={variant} say={bubble} mood={mood} />
+        <div className="mx-2 sm:mx-0 flex flex-col gap-4 md:sticky md:top-8 self-start min-w-0">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 lg:p-8 shadow-sm">
+            <OctocatAvatar variant={variant} say={bubble} mood={mood} />
+          </div>
+          <RepoStatus repo={repo} message={statusMsg} />
         </div>
-        <RepoStatus repo={repo} message={statusMsg} />
-      </div>
-    </section>
+      </section>
+
+      <GameFooter />
+    </>
   );
 }
