@@ -68,10 +68,10 @@ function toNormSteps(level: RawLevel): NormStep[] {
   }));
 }
 
-function getThreeHints(taskText: string): string[] {
-  const h1 = getFirstHint(taskText, 0) || '';
-  const h2 = getFirstHint(taskText, 1) || '';
-  const h3 = getFirstHint(taskText, 2) || '';
+function getThreeHints(taskText: string, expects?: string[]): string[] {
+  const h1 = getFirstHint(taskText, 0, expects) || '';
+  const h2 = getFirstHint(taskText, 1, expects) || '';
+  const h3 = getFirstHint(taskText, 2, expects) || '';
 
   return [h1, h2, h3].filter(Boolean);
 }
@@ -121,10 +121,10 @@ export function useGame() {
     if (custom.length >= 3) {
       return custom.slice(0, 3);
     }
-    const generated = getThreeHints(step.text);
+    const generated = getThreeHints(step.text, expectedList);
 
     return [...custom, ...generated].slice(0, 3);
-  }, [step.hints, step.text]);
+  }, [step.hints, step.text, expectedList]);
 
   const totalLevels = LEVELS.length;
 
