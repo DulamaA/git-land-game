@@ -1,5 +1,8 @@
 import {
-  useMemo, useState, useCallback,
+  useMemo,
+  useState,
+  useCallback,
+  useEffect,
 } from 'react';
 import { LEVELS } from '../data/levels';
 import { useTimer } from './useTimer';
@@ -9,7 +12,6 @@ import {
 } from '../models/repo';
 import type { Step } from '../types';
 
-// ---------- helpers ----------
 
 // Trim and convert all whitespace sequences to single spaces
 function normalizeSpaces(s: string) {
@@ -143,6 +145,23 @@ export function useGame() {
     resetTimer();
   }, [resetTimer]);
 
+  useEffect(() => {
+    if (levelIndex === 2) {
+      setRepo((prev) => {
+        const next = structuredClone(prev);
+        next.initialized = true;
+        next.branches ||= {};
+        next.branches.main ||= [];
+        next.branches['feature/sync'] ||= [];
+        next.current = 'feature/sync';
+
+        return next;
+      });
+
+      setStatusMsg({ type: 'info', text: 'Startar på feature/sync - byt till main.' });
+    }
+  }, [levelIndex, setRepo, setStatusMsg]);
+
   // Handlers for navigating levels
   const prevLevel = useCallback(() => {
     setLevelIndex((i) => Math.max(0, i - 1));
@@ -164,8 +183,7 @@ export function useGame() {
 
       return idx;
     });
-  },
-  [hardResetLevelState]);
+  }, [hardResetLevelState]);
 
   const run = useCallback((): boolean => {
     if (locked) {
@@ -243,7 +261,13 @@ export function useGame() {
       return false;
     }
   }, [
-    input, expectedList, steps.length, taskIndex, repo, locked, hintStage,
+    input,
+    expectedList,
+    steps.length,
+    taskIndex,
+    repo,
+    locked,
+    hintStage,
   ]);
 
   // Solution is visible after the fourth attempt
@@ -271,7 +295,10 @@ export function useGame() {
 
     return isLast;
   }, [
-    repo, solutionText, steps.length, taskIndex,
+    repo,
+    solutionText,
+    steps.length,
+    taskIndex,
   ]);
 
   // Reset current level state
