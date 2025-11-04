@@ -98,6 +98,19 @@ export function useGame() {
 
   const [levelDone, setLevelDone] = useState(false);
 
+  type HistoryItem = {
+    ts: number;
+    levelId: number;
+    stepIndex: number;
+    input: string;
+    matched?: string | null;
+    ok: boolean;
+    message: StatusMsg;
+  };
+
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+
+
   const {
     seconds, running, toggle, reset: resetTimer,
   } = useTimer(false);
@@ -140,6 +153,7 @@ export function useGame() {
     setHintStage(0);
     setShowSolution(false);
     setLocked(false);
+    setHistory([]);
 
     setLevelDone(false);
     resetTimer();
@@ -326,6 +340,7 @@ export function useGame() {
     showSolution,
     solutionText,
     locked,
+    history,
 
     setInput,
     goToLevel,

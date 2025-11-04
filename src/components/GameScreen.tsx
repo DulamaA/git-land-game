@@ -5,6 +5,7 @@ import CommandInput from './Game/CommandInput';
 import RepoStatus from './Game/RepoStatus';
 import OctocatAvatar from './Game/OctocatAvatar';
 import GameFooter from './GameFooter';
+import TerminalPanel from './TerminalPanel';
 import { variantByLevel } from '../utils/octocatVariants';
 import type { OctoMood } from '../utils/octocatVariants';
 import { talk, pick } from '../utils/octocatTalk';
@@ -49,6 +50,7 @@ export default function GameScreen() {
     showSolution,
     solutionText,
     locked,
+    history,
   } = useGame();
 
   const { level: levelParam } = useParams();
@@ -152,8 +154,10 @@ export default function GameScreen() {
 
   return (
     <>
-      <section className="mx-auto max-w-[90rem]
-    px-3 sm:px-4 md:px-6 lg:px-12 mt-10 md:mt-16 lg:mt-28 grid gap-4 sm:gap-6 md:gap-10 md:grid-cols-2">
+      <section
+        className="mx-auto max-w-[90rem]
+    px-3 sm:px-4 md:px-6 lg:px-12 mt-10 md:mt-16 lg:mt-28 grid gap-4 sm:gap-6 md:gap-10 md:grid-cols-2"
+      >
         {/* eslint-disable-next-line @stylistic/max-len */}
         <div className="mx-2 sm:mx-0 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 md:p-6 lg:p-10 shadow-sm min-w-0">
           <div className="pb-2 mb-4">
@@ -250,6 +254,7 @@ export default function GameScreen() {
             <OctocatAvatar variant={variant} say={bubble} mood={mood} />
           </div>
           <RepoStatus repo={repo} message={statusMsg} />
+          <TerminalPanel history={history} levelId={level.id} defaultScope="level" />
         </div>
       </section>
 
