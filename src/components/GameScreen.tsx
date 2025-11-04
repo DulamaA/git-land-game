@@ -5,7 +5,6 @@ import CommandInput from './Game/CommandInput';
 import RepoStatus from './Game/RepoStatus';
 import OctocatAvatar from './Game/OctocatAvatar';
 import GameFooter from './GameFooter';
-import TerminalPanel from './TerminalPanel';
 import { variantByLevel } from '../utils/octocatVariants';
 import type { OctoMood } from '../utils/octocatVariants';
 import { talk, pick } from '../utils/octocatTalk';
@@ -253,8 +252,12 @@ export default function GameScreen() {
           <div className="rounded-2xl border border-slate-200 bg-white p-6 lg:p-8 shadow-sm">
             <OctocatAvatar variant={variant} say={bubble} mood={mood} />
           </div>
-          <RepoStatus repo={repo} message={statusMsg} />
-          <TerminalPanel historyItems={history} levelId={level.id} defaultScope="level" />
+          <RepoStatus
+            repo={repo}
+            message={statusMsg}
+            historyItems={history}
+            levelId={level.id}
+            defaultScope='upto' />
         </div>
       </section>
 

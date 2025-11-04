@@ -1,12 +1,23 @@
 import type { RepoState, StatusMsg } from '../../models/repo';
+import TerminalPanel from '../TerminalPanel';
 
 type Props = {
   repo: RepoState;
   message?: StatusMsg | null;
+
+  historyItems?: Parameters<typeof TerminalPanel>[0]['historyItems'];
+  levelId?: number;
+  defaultScope?: Parameters<typeof TerminalPanel>[0]['defaultScope'];
 };
 
 // Component to display the current status of the repository
-export default function RepoStatus({ repo, message }: Props) {
+export default function RepoStatus({
+  repo,
+  message,
+  historyItems = [],
+  levelId,
+  defaultScope = 'upto',
+}: Props) {
   const current = repo.current ?? '-';
 
   const messageClass =
@@ -91,6 +102,15 @@ export default function RepoStatus({ repo, message }: Props) {
             })}
           </div>
         )}
+      </div>
+
+      <div className="pt-4 mt-4 border-t border-slate-700/70">
+        <TerminalPanel
+          historyItems={historyItems ?? []}
+          levelId={levelId ?? 1}
+          defaultScope={defaultScope ?? 'upto'}
+          variant="dark"
+        />
       </div>
     </aside>
   );
