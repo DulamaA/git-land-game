@@ -82,6 +82,16 @@ export function useGame() {
   const [levelIndex, setLevelIndex] = useState(0);
   const [taskIndex, setTaskIndex] = useState(0);
 
+  const level = LEVELS[levelIndex];
+  const steps = useMemo(() => toNormSteps(level), [level]);
+  const step = useMemo(() =>
+    steps[taskIndex] ?? {
+      text: '',
+      expects: [],
+      hints: [],
+    },
+  [steps, taskIndex]);
+
   const [input, setInput] = useState('');
   const [error, setError] = useState<string | null>(null);
 
@@ -110,21 +120,29 @@ export function useGame() {
 
   const [history, setHistory] = useState<HistoryItem[]>([]);
 
+  const appendHistory = useCallback((item:
+  {
+    input: string; ok: boolean; matched?: string | null; message: StatusMsg,
+  }) => {
+    setHistory((prev) => [
+      ...prev,
+      {
+        ts: Date.now(),
+        levelId: level.id,
+        stepIndex: taskIndex,
+        input: item.input,
+        matched: item.matched ?? null,
+        ok: item.ok,
+        message: item.message,
+      },
+    ]);
+  },
+  [level.id, taskIndex]);
+
 
   const {
     seconds, running, toggle, reset: resetTimer,
   } = useTimer(false);
-
-  // Current level and normalized steps
-  const level = LEVELS[levelIndex];
-  const steps = useMemo(() => toNormSteps(level), [level]);
-  const step = useMemo(() =>
-    steps[taskIndex] ?? {
-      text: '',
-      expects: [],
-      hints: [],
-    },
-  [steps, taskIndex]);
 
   const expectedList = useMemo(() => step.expects, [step]);
   const solutionText = useMemo(() => expectedList[0] ?? '', [expectedList]);
@@ -153,7 +171,6 @@ export function useGame() {
     setHintStage(0);
     setShowSolution(false);
     setLocked(false);
-    setHistory([]);
 
     setLevelDone(false);
     resetTimer();
@@ -201,23 +218,27 @@ export function useGame() {
 
   const run = useCallback((): boolean => {
     if (locked) {
-      setStatusMsg({ type: 'info', text: 'Max antal försök. Kör lösningen för att gå vidare.' });
+      const msg: StatusMsg = { type: 'info', text: 'Max antal försök. Kör lösningen för att gå vidare.' };
+      setStatusMsg(msg);
+      appendHistory({
+        input, ok: false, matched: null, message: msg,
+      });
 
       return false;
     }
 
     if (expectedList.length === 0) {
+      const msg: StatusMsg = { type: 'info', text: 'Inga kommandon att köra för denna uppgift.' };
+      setStatusMsg(msg);
+
       const isLast = taskIndex >= steps.length - 1;
       setTaskIndex((t) => Math.min(t + 1, steps.length - 1));
       setInput('');
       setError(null);
-
       setMisses(0);
       setHintStage(0);
       setShowSolution(false);
       setLocked(false);
-
-      setStatusMsg({ type: 'info', text: 'Inga kommandon att köra för denna uppgift.' });
       if (isLast) {
         setLevelDone(true);
       }
@@ -239,31 +260,41 @@ export function useGame() {
       const { repo: nextRepo, message } = applyEffect(repo, matched, input);
       setRepo(nextRepo);
       setStatusMsg(message);
+      appendHistory({
+        input,
+        ok: true,
+        matched,
+        message,
+      });
 
       const isLast = taskIndex >= steps.length - 1;
       setTaskIndex((t) => Math.min(t + 1, steps.length - 1));
       setInput('');
       setError(null);
-
       setMisses(0);
       setHintStage(0);
       setShowSolution(false);
       setLocked(false);
-
       if (isLast) {
         setLevelDone(true);
       }
 
       return isLast;
     } else {
+      const msg: StatusMsg = { type: 'error', text: `Fel: "${input || 'tomt'}"` };
       setError('Fel kommando. Kolla mellanslag/flagga och försök igen.');
-      setStatusMsg({ type: 'error', text: `Fel: "${input || 'tomt'}"` });
+      setStatusMsg(msg);
+      appendHistory({
+        input,
+        ok: false,
+        matched: null,
+        message: msg,
+      });
 
       setMisses((m) => {
         const n = m + 1;
         const nextStage = Math.min(3, (hintStage + 1) as 1 | 2 | 3);
         setHintStage(nextStage as 1 | 2 | 3);
-
         if (n >= 4) {
           setShowSolution(true);
           setLocked(true);
@@ -282,7 +313,9 @@ export function useGame() {
     repo,
     locked,
     hintStage,
+    appendHistory,
   ]);
+
 
   // Solution is visible after the fourth attempt
   const runSolution = useCallback((): boolean => {
@@ -293,6 +326,9 @@ export function useGame() {
     const { repo: nextRepo, message } = applyEffect(repo, solutionText, solutionText);
     setRepo(nextRepo);
     setStatusMsg(message);
+    appendHistory({
+      input: solutionText, ok: true, matched: solutionText, message,
+    });
 
     const isLast = taskIndex >= steps.length - 1;
     setTaskIndex((t) => Math.min(t + 1, steps.length - 1));
@@ -313,6 +349,7 @@ export function useGame() {
     solutionText,
     steps.length,
     taskIndex,
+    appendHistory,
   ]);
 
   // Reset current level state
