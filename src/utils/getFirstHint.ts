@@ -54,12 +54,12 @@ export function getFirstHint(taskText: string, misses = 0, expects?: string[]): 
     ],
     commit: ['Spara dina staged ändringar.', 'Använd `-m` för meddelandet.', 'Tänk: `git commit -m "Meddelande"`.'],
     push: [
-      'Skicka commits till fjärran (GitHub).',
+      'Skicka commits till fjärren (GitHub).',
       'Ofta `git push` eller `git push -u origin <branch>`.',
       'Se till att remote och branch finns.',
     ],
     pull: [
-      'Hämta och uppdatera lokalt från fjärran.',
+      'Hämta och uppdatera lokalt från fjärren.',
       'Här vill du undvika merge-commit.',
       'Hint: använd `--ff-only` för snabb uppdatering.',
     ],
@@ -93,7 +93,7 @@ export function getFirstHint(taskText: string, misses = 0, expects?: string[]): 
 
   if (context === 'pull' && /--ff-only/.test(firstExpected)) {
     baseHints.pull = [
-      'Uppdatera från fjärran utan merge-commit.',
+      'Uppdatera från fjärren utan merge-commit.',
       'Du vill ha en fast-forward.',
       'Använd flaggan `--ff-only` tillsammans med `git pull`.',
     ];

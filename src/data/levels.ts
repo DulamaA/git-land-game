@@ -79,26 +79,11 @@ export const LEVELS: Level[] = [
   {
     id: 6,
     title: 'Push första gången',
-    steps: [{ text: 'Pusha din branch och sätt upstream.', expects: ['git push -u origin <branch>'] }],
+    steps: [{ text: 'Pusha din branch main till remoten origin.', expects: ['git push -u origin <branch>'] }],
   },
 
   {
     id: 7,
-    title: 'Öppna Pull Request',
-    steps: [
-      {
-        text: 'Öppna en Pull Request från din branch mot main.',
-        expects: [
-          'gh pr create --base main --head <branch> --title <message> --body <message>',
-          'gh pr create --base main --head <branch>',
-          'gh pr create',
-        ],
-      },
-    ],
-  },
-
-  {
-    id: 8,
     title: 'Review-loop',
     steps: [
       {
@@ -111,7 +96,7 @@ export const LEVELS: Level[] = [
   },
 
   {
-    id: 9,
+    id: 8,
     title: 'Håll branchen uppdaterad',
     steps: [
       { text: 'Hämta senaste från origin.', expects: ['git fetch', 'git fetch origin'] },
@@ -127,7 +112,7 @@ export const LEVELS: Level[] = [
   },
 
   {
-    id: 10,
+    id: 9,
     title: 'Lös merge/rebase-konflikter',
     steps: [
       {
@@ -140,7 +125,7 @@ export const LEVELS: Level[] = [
   },
 
   {
-    id: 11,
+    id: 10,
     title: 'Squash-merge PR och ta bort remote-branch',
     steps: [
       {
@@ -151,7 +136,7 @@ export const LEVELS: Level[] = [
   },
 
   {
-    id: 12,
+    id: 11,
     title: 'Synka lokal main & städa lokalt',
     steps: [
       { text: 'Byt till main.', expects: ['git checkout main', 'git switch main'] },
@@ -165,7 +150,7 @@ export const LEVELS: Level[] = [
   },
 
   {
-    id: 13,
+    id: 12,
     title: 'Multi-branch-flöde (develop → main)',
     steps: [
       {
@@ -185,7 +170,7 @@ export const LEVELS: Level[] = [
   },
 
   {
-    id: 14,
+    id: 13,
     title: 'Rebase - fördjupning',
     steps: [
       {
@@ -202,7 +187,7 @@ export const LEVELS: Level[] = [
   },
 
   {
-    id: 15,
+    id: 14,
     title: 'Deploy/CI med GitHub Actions (intro)',
     steps: [
       {
