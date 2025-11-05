@@ -58,12 +58,20 @@ export const LEVELS: Level[] = [
 
   {
     id: 5,
-    title: 'Jobba & committa på branchen',
+    title: 'Skriv tydligt commit-meddelande',
     steps: [
-      { text: 'Staga alla ändringar.', expects: ['git add .', 'git add -A'] },
       {
-        text: 'Commit:a ändringen med ett tydligt meddelande.',
+        text:
+        'Du har lagt till en header i HTML-filen. ' +
+        'Skriv ett **tydligt** commit-meddelande enligt Conventional Commits ' +
+        '(t.ex. `feat: add header`).\n\n' +
+        'Läs mer: https://www.conventionalcommits.org/en/v1.0.0/#summary',
         expects: ['git commit -m <message>'],
+        hints: [
+          'Börja med en typ: t.ex. feat, fix, docs, chore.',
+          'Exempel: feat: add header',
+          'Kommandot: git commit -m "feat: add header"',
+        ],
       },
     ],
   },
