@@ -326,35 +326,75 @@ export const LEVELS: Level[] = [
       },
     ],
   },
-
-
   {
     id: 12,
     title: 'Deploy/CI med GitHub Actions (intro)',
     steps: [
       {
-        text: 'Lägg till en CI-workflow för Node 20 som körs vid push och PR till main & develop.',
-        expects: [],
+        text:
+          'Skapa filen **`.github/workflows/deploy.yml`** och klistra in exemplet nedan. ' +
+          'Detta workflow bygger din app (Node 20) och deployar till **GitHub Pages** när du pushar till `main`.\n\n' +
+          '```yaml\n' +
+          'name: Deploy to GitHub Pages\n' +
+          'on:\n' +
+          '  push:\n' +
+          '    branches: [main]\n' +
+          'permissions:\n' +
+          '  contents: read\n' +
+          '  pages: write\n' +
+          '  id-token: write\n' +
+          'concurrency:\n' +
+          '  group: "pages"\n' +
+          '  cancel-in-progress: true\n' +
+          '\n' +
+          'jobs:\n' +
+          '  build:\n' +
+          '    runs-on: ubuntu-latest\n' +
+          '    steps:\n' +
+          '      - uses: actions/checkout@v4\n' +
+          '      - uses: actions/setup-node@v4\n' +
+          '        with:\n' +
+          '          node-version: 20\n' +
+          '      - run: npm ci\n' +
+          '      - run: npm run build\n' +
+          '      - uses: actions/upload-pages-artifact@v3\n' +
+          '        with:\n' +
+          '          path: dist\n' +
+          '\n' +
+          '  deploy:\n' +
+          '    needs: build\n' +
+          '    runs-on: ubuntu-latest\n' +
+          '    environment:\n' +
+          '      name: github-pages\n' +
+          '      url: ${{ steps.deployment.outputs.page_url }}\n' +
+          '    steps:\n' +
+          '      - id: deployment\n' +
+          '        uses: actions/deploy-pages@v4\n' +
+          '```\n\n' +
+          '_Obs:_ ändra `npm ci`/`npm run build`/`path: dist` om ditt projekt bygger till en annan mapp.',
+        expects: [], // player press "kör" to  mark done
         hints: [
-          'Skapa .github/workflows/ci.yml.',
-          'actions/setup-node@v4 och npm scripts.',
-          'Trigga på push och pull_request.',
+          'Filen ska heta deploy.yml och ligga under .github/workflows/.',
+          'Node 20 + Pages: funkar för många SPA-sidor.',
+          'Byt "dist" om din build-mapp heter något annat.',
         ],
       },
       {
-        text: 'Staga workflow-filen.', expects: ['git add .github/workflows/ci.yml', 'git add .'],
+        text: 'Staga workflow-filen.',
+        expects: ['git add .github/workflows/deploy.yml', 'git add .'],
         hints: [
           'Stagea YAML-filen.',
           'Punkt (.) tar hela mappen.',
-          'Ex: git add .github/workflows/ci.yml',
+          'Ex: git add .github/workflows/deploy.yml',
         ],
       },
       {
-        text: 'Commit:a ändringen.', expects: ['git commit -m <message>'],
+        text: 'Commit:a ändringen.',
+        expects: ['git commit -m <message>'],
         hints: [
           'Beskriv vad workflow gör.',
           'Använd -m "…".',
-          'Ex: git commit -m "ci: add Node 20 workflow"',
+          'Ex: git commit -m "ci: add deploy workflow"',
         ],
       },
       {
@@ -367,12 +407,12 @@ export const LEVELS: Level[] = [
         ],
       },
       {
-        text: 'Verifiera i GitHub → Actions att jobben körs (build & test).',
+        text: 'Verifiera i GitHub → Actions att jobben körs (build & deploy).',
         expects: [],
         hints: [
           'Öppna fliken “Actions”.',
           'Kika på senaste run.',
-          'Se att jobben är gröna.',
+          'Se att build & deploy är gröna.',
         ],
       },
     ],
