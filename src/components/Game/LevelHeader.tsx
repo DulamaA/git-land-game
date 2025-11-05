@@ -10,12 +10,23 @@ type HeaderProps = {
   onToggleTimer: () => void;
   onResetTimer: () => void;
   onPrev: () => void;
+  canGoNext?: boolean;
   onNext: () => void;
 };
 
 export default function LevelHeader(props: HeaderProps) {
   const {
-    levelId, title, levelIndex, totalLevels, running, seconds, onToggleTimer, onResetTimer, onPrev, onNext,
+    levelId,
+    title,
+    levelIndex,
+    totalLevels,
+    running,
+    seconds,
+    onToggleTimer,
+    onResetTimer,
+    onPrev,
+    canGoNext = false,
+    onNext,
   } =
     props;
 
@@ -83,9 +94,10 @@ export default function LevelHeader(props: HeaderProps) {
 
             <button
               onClick={onNext}
-              disabled={levelIndex === totalLevels - 1}
+              disabled={!canGoNext}
               className="rounded-md border px-2 py-0.5 text-xs disabled:opacity-40 hover:bg-slate-50"
-              title="Nästa nivå"
+              title={canGoNext ? 'Nästa nivå' : 'Slutför nivån först'}
+              aria-disabled={!canGoNext}
             >
               Nästa ▶
             </button>

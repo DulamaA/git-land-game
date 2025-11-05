@@ -121,12 +121,6 @@ export default function GameScreen() {
     const finished = run();
     if (finished) {
       markDone(level.id);
-      if (levelIndex < totalLevels - 1) {
-        nextLevel();
-        navigate(`/game/${level.id + 1}`);
-      } else {
-        navigate('/congrats');
-      }
     }
   };
 
@@ -134,12 +128,6 @@ export default function GameScreen() {
     const finished = runSolution();
     if (finished) {
       markDone(level.id);
-      if (levelIndex < totalLevels - 1) {
-        nextLevel();
-        navigate(`/game/${level.id + 1}`);
-      } else {
-        navigate('/congrats');
-      }
     }
   };
 
@@ -186,6 +174,7 @@ export default function GameScreen() {
                   navigate(`/game/${level.id + 1}`);
                 }
               }}
+              canGoNext={levelDone}
             />
 
             <div className="mt-3">
@@ -246,6 +235,15 @@ export default function GameScreen() {
               <GameButtons onRun={handleRun} onReset={handleReset} onExit={handleExit} />
             </div>
           </div>
+
+          {levelDone && (
+            <div className=" mt-3 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2
+                  text-emerald-800 flex items-center gap-2">
+              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full
+                     bg-emerald-600 text-white text-xs">✓</span>
+              <span className="text-sm">Klart! Tryck <b>Nästa</b> när du är redo.</span>
+            </div>
+          )}
         </div>
 
         <div className="mx-2 sm:mx-0 flex flex-col gap-4 md:sticky md:top-8 self-start min-w-0">
