@@ -233,12 +233,12 @@ export const LEVELS: Level[] = [
     title: 'Lös merge/rebase-konflikter',
     steps: [
       {
-        text: 'Stage:a de filer du löst.',
-        expects: ['git add <file>', 'git add <file(s)>', 'git add .'],
+        text: 'Du har löst konflikten i **index.html**, stage:a den.',
+        expects: ['git add index.html'],
         hints: [
-          'Markera lösta konflikter som staged.',
-          'Du kan stagea fil för fil.',
-          'Ex: git add <fil>',
+          'Stage:a just den fil du har löst.',
+          'Ange filnamnet (inte punkt).',
+          'Ex: git add index.html',
         ],
       },
       {
