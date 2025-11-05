@@ -6,7 +6,6 @@ import {
 } from 'react';
 import { LEVELS } from '../data/levels';
 import { useTimer } from './useTimer';
-import { getFirstHint } from '../utils/getFirstHint';
 import {
   applyEffect, createInitialRepoState, type RepoState, type StatusMsg,
 } from '../models/repo';
@@ -68,13 +67,13 @@ function toNormSteps(level: RawLevel): NormStep[] {
   }));
 }
 
-function getThreeHints(taskText: string, expects?: string[]): string[] {
-  const h1 = getFirstHint(taskText, 0, expects) || '';
-  const h2 = getFirstHint(taskText, 1, expects) || '';
-  const h3 = getFirstHint(taskText, 2, expects) || '';
+// function getThreeHints(taskText: string, expects?: string[]): string[] {
+//  const h1 = getFirstHint(taskText, 0, expects) || '';
+//  const h2 = getFirstHint(taskText, 1, expects) || '';
+//  const h3 = getFirstHint(taskText, 2, expects) || '';
 
-  return [h1, h2, h3].filter(Boolean);
-}
+//  return [h1, h2, h3].filter(Boolean);
+// }
 
 // ---------- hook ----------
 
@@ -148,14 +147,12 @@ export function useGame() {
   const solutionText = useMemo(() => expectedList[0] ?? '', [expectedList]);
 
   const hints = useMemo(() => {
-    const custom = (step.hints ?? []).filter(Boolean);
-    if (custom.length >= 3) {
-      return custom.slice(0, 3);
-    }
-    const generated = getThreeHints(step.text, expectedList);
+    return (step.hints ?? []).filter(Boolean).slice(0, 3);
+  }, [step.hints]);
 
-    return [...custom, ...generated].slice(0, 3);
-  }, [step.hints, step.text, expectedList]);
+  // const generated = getThreeHints(step.text, expectedList);
+  // return [...custom, ...generated].slice(0, 3);
+  // }, [step.hints, step.text, expectedList]);
 
   const totalLevels = LEVELS.length;
 
