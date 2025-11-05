@@ -20,7 +20,7 @@ import {
 
 export default function GameScreen() {
   const navigate = useNavigate();
-  const { markDone } = useProgress();
+  const { markDone, state } = useProgress();
 
   const {
     steps,
@@ -51,6 +51,14 @@ export default function GameScreen() {
     locked,
     history,
   } = useGame();
+
+  const alreadyDone =
+    Array.isArray(state.completed) ?
+      state.completed.includes(level.id) :
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (state.completed as any) instanceof Set ?
+        (state.completed as Set<number>).has(level.id) : false;
+
 
   const { level: levelParam } = useParams();
 
@@ -165,7 +173,7 @@ export default function GameScreen() {
                 }
               }}
               onNext={() => {
-                if (!levelDone) {
+                if (!(levelDone || alreadyDone)) {
                   return;
                 }
                 if (levelIndex < totalLevels - 1) {
@@ -174,7 +182,7 @@ export default function GameScreen() {
                   navigate(`/game/${level.id + 1}`);
                 }
               }}
-              canGoNext={levelDone}
+              canGoNext={levelDone || alreadyDone}
             />
 
             <div className="mt-3">
@@ -236,7 +244,7 @@ export default function GameScreen() {
             </div>
           </div>
 
-          {levelDone && (
+          {(levelDone || alreadyDone) && (
             <div className=" mt-3 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2
                   text-emerald-800 flex items-center gap-2">
               <span className="inline-flex h-5 w-5 items-center justify-center rounded-full
