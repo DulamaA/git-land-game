@@ -262,22 +262,6 @@ export const LEVELS: Level[] = [
 
   {
     id: 10,
-    title: 'Squash-merge PR och ta bort remote-branch',
-    steps: [
-      {
-        text: 'Squash-merga din PR och ta bort fjärr-branchen.',
-        expects: ['gh pr merge <nr/url> --squash --delete-branch', 'gh pr merge --squash --delete-branch'],
-        hints: [
-          'Kräver GitHub CLI (gh).',
-          'Squash skapar en enda commit.',
-          'Flaggan --delete-branch rensar remote-grenen.',
-        ],
-      },
-    ],
-  },
-
-  {
-    id: 11,
     title: 'Synka lokal main & städa lokalt',
     steps: [
       {
@@ -315,92 +299,37 @@ export const LEVELS: Level[] = [
       },
     ],
   },
+  {
+    id: 11,
+    title: 'Publicera med GitHub Pages (intro)',
+    steps: [
+      {
+        text:
+          'Öppna ditt repo på GitHub → **Settings** → **Pages**.\n' +
+          'Välj **Source: Deploy from a branch**, **Branch: main**, **Folder: /** (root) och klicka **Save**.',
+        expects: [],
+        hints: [
+          'Hitta fliken “Pages” under Settings.',
+          'Välj “Deploy from a branch”.',
+          'Branch: main, Folder: / (root).',
+        ],
+      },
+      {
+        text:
+          'Vänta 1–2 minuter tills sidan byggts. Besök sedan URL:en som visas under “Your site is live at…”.',
+        expects: [],
+        hints: [
+          'Det kan ta en liten stund första gången.',
+          'URL visas på samma Pages-sida.',
+          'Öppna länken och kontrollera att sidan laddar.',
+        ],
+      },
+    ],
+  },
+
 
   {
     id: 12,
-    title: 'Multi-branch-flöde (develop → main)',
-    steps: [
-      {
-        text: 'Skapa develop och byt till den.',
-        expects: ['git checkout -b develop', 'git switch -c develop'],
-        hints: [
-          'Separera utveckling från main.',
-          'Skapa + byt i samma kommando.',
-          'Ex: git switch -c develop',
-        ],
-      },
-      {
-        text: 'Pusha develop och spåra den.', expects: ['git push -u origin develop'],
-        hints: [
-          'Första pushen sätter upstream.',
-          'Remote är origin.',
-          'Ex: git push -u origin develop',
-        ],
-      },
-      {
-        text: 'Öppna PR mot develop från din feature-branch.',
-        expects: ['gh pr create --base develop --head <branch>', 'gh pr create'],
-        hints: [
-          'Kräver GitHub CLI (gh).',
-          'Bas: develop, head: din gren.',
-          'Alternativ: gör PR i GitHub UI.',
-        ],
-      },
-      {
-        text: 'Öppna release-PR från develop till main.',
-        expects: ['gh pr create --base main --head develop', 'gh pr create'],
-        hints: [
-          'Release-flöde via PR.',
-          'Base = main, head = develop.',
-          'Alternativ: skapa i UI.',
-        ],
-      },
-    ],
-  },
-
-  {
-    id: 13,
-    title: 'Rebase - fördjupning',
-    steps: [
-      {
-        text: 'Byt till din feature-branch.',
-        expects: ['git checkout <branch>', 'git switch <branch>'],
-        hints: [
-          'Se till att rätt gren är aktiv.',
-          'Ange namnet på din gren.',
-          'Ex: git switch feature/header',
-        ],
-      },
-      {
-        text: 'Hämta senaste från origin.', expects: ['git fetch', 'git fetch origin'],
-        hints: [
-          'Uppdatera referenser innan rebase.',
-          'origin är standard-remote.',
-          'Ex: git fetch origin',
-        ],
-      },
-      {
-        text: 'Interaktiv rebase mot main (t.ex. 3 senaste).',
-        expects: ['git rebase -i origin/main', 'git rebase -i HEAD~3'],
-        hints: [
-          'Välj omordna/squasha i editorn.',
-          'Mot main eller HEAD~N.',
-          'Ex: git rebase -i origin/main',
-        ],
-      },
-      {
-        text: 'Pusha säkert efter rebase.', expects: ['git push --force-with-lease', 'git push'],
-        hints: [
-          'Force-push behövs ofta efter rebase.',
-          'Använd --force-with-lease.',
-          'Ex: git push --force-with-lease',
-        ],
-      },
-    ],
-  },
-
-  {
-    id: 14,
     title: 'Deploy/CI med GitHub Actions (intro)',
     steps: [
       {
