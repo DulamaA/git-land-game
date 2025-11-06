@@ -4,6 +4,7 @@ export type TStep = {
   text: string;
   expects: string[];
   hints?: string[];
+  snippetBelowInput?: string;
 };
 
 export type TLevel = {

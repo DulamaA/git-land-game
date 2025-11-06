@@ -50,7 +50,6 @@ export const LEVELS: TLevel[] = [
     ],
   },
 
-
   {
     id: 3,
     title: 'Synka main mot remote',
@@ -332,52 +331,52 @@ export const LEVELS: TLevel[] = [
     steps: [
       {
         text:
-          'Skapa filen **`.github/workflows/deploy.yml`** och klistra in exemplet nedan. ' +
-          'Detta workflow bygger din app (Node 20) och deployar till **GitHub Pages** när du pushar till `main`.\n\n' +
-          '```yaml\n' +
-          'name: Deploy to GitHub Pages\n' +
-          'on:\n' +
-          '  push:\n' +
-          '    branches: [main]\n' +
-          'permissions:\n' +
-          '  contents: read\n' +
-          '  pages: write\n' +
-          '  id-token: write\n' +
-          'concurrency:\n' +
-          '  group: "pages"\n' +
-          '  cancel-in-progress: true\n' +
-          '\n' +
-          'jobs:\n' +
-          '  build:\n' +
-          '    runs-on: ubuntu-latest\n' +
-          '    steps:\n' +
-          '      - uses: actions/checkout@v4\n' +
-          '      - uses: actions/setup-node@v4\n' +
-          '        with:\n' +
-          '          node-version: 20\n' +
-          '      - run: npm ci\n' +
-          '      - run: npm run build\n' +
-          '      - uses: actions/upload-pages-artifact@v3\n' +
-          '        with:\n' +
-          '          path: dist\n' +
-          '\n' +
-          '  deploy:\n' +
-          '    needs: build\n' +
-          '    runs-on: ubuntu-latest\n' +
-          '    environment:\n' +
-          '      name: github-pages\n' +
-          '      url: ${{ steps.deployment.outputs.page_url }}\n' +
-          '    steps:\n' +
-          '      - id: deployment\n' +
-          '        uses: actions/deploy-pages@v4\n' +
-          '```\n\n' +
-          '_Obs:_ ändra `npm ci`/`npm run build`/`path: dist` om ditt projekt bygger till en annan mapp.',
+          'Skapa filen **`.github/workflows/deploy.yml`** och klistra in exempelkoden nedan. ' +
+          'Workflowen bygger din app (Node 20) och deployar till **GitHub Pages** när du pushar till `main`.',
         expects: [], // player press "kör" to mark done
         hints: [
           'Filen ska heta deploy.yml och ligga under .github/workflows/.',
-          'Node 20 + Pages: funkar för många SPA-sidor.',
+          'Node 20 + Pages funkar för många SPA-sidor.',
           'Byt "dist" om din build-mapp heter något annat.',
         ],
+        snippetBelowInput: String.raw`name: Deploy to GitHub Pages
+  on:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: \${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4`,
       },
       {
         text: 'Staga workflow-filen.',
@@ -400,20 +399,12 @@ export const LEVELS: TLevel[] = [
       {
         text: 'Pusha upp förändringen (till main eller din branch).',
         expects: ['git push', 'git push origin main', 'git push -u origin <branch>'],
-        hints: [
-          'Pusha till rätt gren.',
-          'Första push: använd -u.',
-          'Ex: git push',
-        ],
+        hints: ['Pusha till rätt gren.', 'Första push: använd -u.', 'Ex: git push'],
       },
       {
         text: 'Verifiera i GitHub → Actions att jobben körs (build & deploy).',
         expects: [],
-        hints: [
-          'Öppna fliken “Actions”.',
-          'Kika på senaste run.',
-          'Se att build & deploy är gröna.',
-        ],
+        hints: ['Öppna fliken “Actions”.', 'Kika på senaste run.', 'Se att build & deploy är gröna.'],
       },
     ],
   },

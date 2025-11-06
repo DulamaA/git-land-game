@@ -159,6 +159,11 @@ export default function GameScreen() {
     setShowSuccess(false);
   };
 
+  const snippetBelowInput =
+    (level.id === 12 && steps[taskIndex]?.snippetBelowInput) ||
+  steps[taskIndex]?.snippetBelowInput;
+
+
   return (
     <>
       <section
@@ -211,6 +216,15 @@ export default function GameScreen() {
               onEnter={handleRun}
               onEscape={handleReset}
             />
+
+            {snippetBelowInput && (
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm">
+                <p className="font-semibold mb-1">Exempelkod</p>
+                <code className="block px-2 py-1 bg-white rounded overflow-x-auto">
+                  {snippetBelowInput}
+                </code>
+              </div>
+            )}
 
             {error && (
               <p className="mt-2 text-sm font-medium text-red-600" role="alert">

@@ -57,6 +57,7 @@ type NormStep = {
   text: string;
   expects: string[];
   hints?: string[];
+  snippetBelowInput?: string;
 };
 type RawLevel = { steps?: TStep[]; tasks?: string[] } | null | undefined;
 
@@ -69,6 +70,7 @@ function toNormSteps(level: RawLevel): NormStep[] {
       text: s.text,
       expects: s.expects ?? [],
       hints: s.hints ?? [],
+      snippetBelowInput: s.snippetBelowInput,
     }));
   }
 
