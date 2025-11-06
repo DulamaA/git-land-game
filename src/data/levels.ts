@@ -316,7 +316,7 @@ export const LEVELS: TLevel[] = [
       },
       {
         text:
-          'Vänta 1–2 minuter tills sidan byggts. Besök sedan URL:en som visas under “Your site is live at…”.',
+          'Vänta 1-2 minuter tills sidan byggts. Besök sedan URL:en som visas under “Your site is live at…”.',
         expects: [],
         hints: [
           'Det kan ta en liten stund första gången.',
@@ -372,7 +372,7 @@ export const LEVELS: TLevel[] = [
           '        uses: actions/deploy-pages@v4\n' +
           '```\n\n' +
           '_Obs:_ ändra `npm ci`/`npm run build`/`path: dist` om ditt projekt bygger till en annan mapp.',
-        expects: [], // player press "kör" to  mark done
+        expects: [], // player press "kör" to mark done
         hints: [
           'Filen ska heta deploy.yml och ligga under .github/workflows/.',
           'Node 20 + Pages: funkar för många SPA-sidor.',

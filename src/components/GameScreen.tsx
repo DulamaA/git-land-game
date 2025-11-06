@@ -52,6 +52,15 @@ export default function GameScreen() {
     history,
   } = useGame();
 
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setInput('');
+    setMood('idle');
+    setShowSuccess(false);
+  }, [levelIndex, setInput]);
+
   const alreadyDone =
     Array.isArray(state.completed) ?
       state.completed.includes(level.id) :
@@ -129,6 +138,7 @@ export default function GameScreen() {
     const finished = run();
     if (finished) {
       markDone(level.id);
+      setShowSuccess(true);
     }
   };
 
@@ -136,6 +146,7 @@ export default function GameScreen() {
     const finished = runSolution();
     if (finished) {
       markDone(level.id);
+      setShowSuccess(true);
     }
   };
 
@@ -145,6 +156,7 @@ export default function GameScreen() {
     setMood('idle');
     resetCurrent();
     setResetTick((t) => t + 1);
+    setShowSuccess(false);
   };
 
   return (
@@ -244,11 +256,11 @@ export default function GameScreen() {
             </div>
           </div>
 
-          {(levelDone || alreadyDone) && (
-            <div className=" mt-3 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2
-                  text-emerald-800 flex items-center gap-2">
-              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full
-                     bg-emerald-600 text-white text-xs">✓</span>
+          {showSuccess && (
+            <div className="mt-3 rounded-lg border border-emerald-200
+           bg-emerald-50 px-3 py-2 text-emerald-800 flex items-center gap-2">
+              <span className="inline-flex h-5 w-5 items-center
+          justify-center rounded-full bg-emerald-600 text-white text-xs">✓</span>
               <span className="text-sm">Klart! Tryck <b>Nästa</b> när du är redo.</span>
             </div>
           )}
