@@ -17,6 +17,13 @@ function normalizeSpaces(s: string) {
   return s.trim().replace(/\s+/g, ' ');
 }
 
+/**
+ * Converts a placeholder name (inside <...>) into a matching regex pattern.
+ * Used by `patternFromExpected()` to allow flexible user input like:
+ *   <message> → accepts quoted or unquoted text
+ *   <branch>  → accepts valid branch names
+ *   others    → accept any non-space token
+ */
 function tokenForPlaceholder(name: string) {
   if (/(message|url)/i.test(name)) {
     return '(?:"[^"]+"|\'[^\']+\'|\\S[\\s\\S]*)';
@@ -28,6 +35,13 @@ function tokenForPlaceholder(name: string) {
 
   return '\\S+';
 }
+
+/**
+ * Returns a case-insensitive, whole-line RegExp for one expected CLI command.
+ * - Escapes regex chars, expands <placeholders> (e.g. <message>, <branch>).
+ * - Normalizes any whitespace runs to \s+ (tolerates extra spaces/tabs).
+ * Example: 'git commit -m <message>' → matches quoted or unquoted messages.
+ */
 
 function patternFromExpected(cmd: string): RegExp {
   const ESC = cmd

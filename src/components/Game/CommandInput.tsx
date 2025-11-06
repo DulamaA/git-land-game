@@ -1,3 +1,8 @@
+/**
+ * Renders the text input for entering commands and handles keyboard events.
+ * Enter → onEnter, Escape → onEscape. Label is linked via htmlFor/id for a11y.
+ */
+
 type Props = {
   value: string;
   // eslint-disable-next-line no-unused-vars
