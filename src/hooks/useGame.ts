@@ -9,7 +9,7 @@ import { useTimer } from './useTimer';
 import {
   applyEffect, createInitialRepoState, type RepoState, type StatusMsg,
 } from '../models/repo';
-import type { Step } from '../types';
+import type { TStep } from '../types';
 
 
 // Trim and convert all whitespace sequences to single spaces
@@ -44,7 +44,7 @@ type NormStep = {
   expects: string[];
   hints?: string[];
 };
-type RawLevel = { steps?: Step[]; tasks?: string[] } | null | undefined;
+type RawLevel = { steps?: TStep[]; tasks?: string[] } | null | undefined;
 
 function toNormSteps(level: RawLevel): NormStep[] {
   if (!level) {

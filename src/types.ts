@@ -1,14 +1,14 @@
 export type View = 'home' | 'game';
 
-export type Step = {
+export type TStep = {
   text: string;
   expects: string[];
   hints?: string[];
 };
 
-export type Level = {
+export type TLevel = {
   id: number;
   title: string;
   tasks?: string[];
-  steps?: Step[];
+  steps?: TStep[];
 };

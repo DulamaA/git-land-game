@@ -1,6 +1,6 @@
-import type { Level } from '../types';
+import type { TLevel } from '../types';
 
-export const LEVELS: Level[] = [
+export const LEVELS: TLevel[] = [
   {
     id: 1,
     title: 'Initiera projektet',
