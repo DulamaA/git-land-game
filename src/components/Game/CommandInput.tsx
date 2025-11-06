@@ -18,12 +18,18 @@ export default function CommandInput({
 }: Props) {
   return (
     <div className="mt-4">
-      <label className="block text-xs uppercase tracking-wide text-slate-500 mb-1">Skriv kommandot</label>
+      <label
+        htmlFor="command-input"
+        className="block text-xs uppercase tracking-wide text-slate-500 mb-1"
+      >
+        Skriv kommandot
+      </label>
 
       <div className="flex items-center gap-2">
         <span className="select-none font-mono text-slate-500">&gt;</span>
 
         <input
+          id="command-input"
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder ?? 't.ex. git init'}
