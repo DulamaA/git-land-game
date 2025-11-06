@@ -24,7 +24,7 @@ export default function GameButtons({
         className="rounded-full bg-gray-500 text-white px-4 py-1.5 text-sm font-medium shadow
         hover:bg-gray-600 active:bg-gray-700 transition"
       >
-        Reset
+        Återställ
       </button>
 
       <button
