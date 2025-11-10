@@ -41,6 +41,7 @@ Main goals:
 To add a new level open the file : src/data/levels.ts.
 Add a new level object in the **LEVELS** array:
 
+```ts
 {
   id: 13,
   title: 'Your New Level Title',
@@ -57,6 +58,7 @@ Add a new level object in the **LEVELS** array:
     },
   ],
 }
+```
 
 Save the file and restart the dev server (npm run dev).
 
@@ -87,13 +89,17 @@ Player progress (completed levels, current level, etc.) is saved in the browser 
 
 ---
 
-## Screenshots (coming)
+## Screenshots
 
-HomeScreen
-GameScreen
-FinishGame
-Levels list
-Level details
+| Screen        | Example                                                     |
+| ------------- | ----------------------------------------------------------- |
+| Home screen   | ![Home Screen](./docs/screenshots/home-screen.jpg)          |
+| Game screen   | ![Game Screen](./docs/screenshots/game-screen.jpg)          |
+| Levels list   | ![Levels list](./docs/screenshots/levels-list.jpg)          |
+| Level details | ![Level details](./docs/screenshots/level-details.jpg)      |
+| Finish game   | ![Finish Game](./docs/screenshots/finish-game.jpg)          |
+| Mobile version| ![Mobile Version](./docs/screenshots/mobile-version.jpg)    |
+
 
 ---
 ## 🚀 Development
@@ -108,13 +114,7 @@ Then open http://localhost:5173 in your browser.
 
 ---
 
-## 🤝 Contributing
-
-Pull requests are welcome! If you want to add levels, fix bugs, or improve UI — fork the repo and open a PR. Before committing, make sure ESLint and Prettier run without issues.
-
----
-
 ## 💖 Credits
 
-Built with ❤️ by Antonina Dulama
+Built with ❤️ by [@Antonina Dulama](https://github.com/DulamaA).
 Made for learning Git in a fun, interactive way.
