@@ -138,6 +138,13 @@ export default function GameScreen() {
     const finished = run();
     if (finished) {
       markDone(level.id);
+
+      if (levelIndex === totalLevels - 1) {
+        navigate('/congrats');
+
+        return;
+      }
+
       setShowSuccess(true);
     }
   };
@@ -146,6 +153,13 @@ export default function GameScreen() {
     const finished = runSolution();
     if (finished) {
       markDone(level.id);
+
+      if (levelIndex === totalLevels - 1) {
+        navigate('/congrats');
+
+        return;
+      }
+
       setShowSuccess(true);
     }
   };
@@ -197,6 +211,8 @@ export default function GameScreen() {
                   setMood('idle');
                   nextLevel();
                   navigate(`/game/${level.id + 1}`);
+                } else {
+                  navigate ('/congrats');
                 }
               }}
               canGoNext={levelDone || alreadyDone}
