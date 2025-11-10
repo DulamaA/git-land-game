@@ -288,11 +288,13 @@ export default function GameScreen() {
           </div>
 
           {showSuccess && (
-            <div className="rounded-lg border border-emerald-200
+            <div className="mt-10 pt-5 border-t border-slate-200">
+              <div className="rounded-lg border border-emerald-200
            bg-emerald-50 px-3 py-2 text-emerald-800 flex items-center gap-2">
-              <span className="inline-flex h-5 w-5 items-center
+                <span className="inline-flex h-5 w-5 items-center
           justify-center rounded-full bg-emerald-600 text-white text-xs">✓</span>
-              <span className="text-sm">Klart! Tryck <b>Nästa</b> när du är redo.</span>
+                <span className="text-sm">Klart! Tryck <b>Nästa</b> när du är redo.</span>
+              </div>
             </div>
           )}
         </div>
