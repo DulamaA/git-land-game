@@ -41,6 +41,7 @@ Main goals:
 To add a new level open the file : src/data/levels.ts.
 Add a new level object in the **LEVELS** array:
 
+```json
 {
   id: 13,
   title: 'Your New Level Title',
@@ -57,6 +58,7 @@ Add a new level object in the **LEVELS** array:
     },
   ],
 }
+```
 
 Save the file and restart the dev server (npm run dev).
 
@@ -100,11 +102,12 @@ Level details
 
 Run locally:
 
-```bash```
+```bash
 npm install
-npm run dev 
+npm run dev
+```
 
-Then open http://localhost:5173 in your browser.
+Then open `http://localhost:5173` in your browser.
 
 ---
 
