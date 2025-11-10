@@ -68,15 +68,12 @@ export default function LevelScreen() {
           {/* Avatar column */}
           <div className="order-2 lg:order-1 lg:sticky lg:top-4">
             <div className="rounded-2xl p-3 sm:p-4">
-              <div className="w-[84px] sm:w-[96px] md:w-[108px] aspect-square rounded-2xl
-               bg-white/60 p-2 grid place-items-center">
-                {/* Octocat scales without distortion */}
-                <div className="max-w-full max-h-full w-full h-full">
-                  <OctocatAvatar variant={variant} say={bubble} />
-                </div>
+              <div className="relative overflow-visible">
+                <OctocatAvatar variant={variant} say={bubble} />
               </div>
             </div>
           </div>
+
 
           {/* Text/content column */}
           <div className="order-1 lg:order-2 space-y-4">
@@ -93,9 +90,8 @@ export default function LevelScreen() {
               <button
                 onClick={() => isUnlocked && nav(`/game/${level.id}`)}
                 disabled={!isUnlocked}
-                className={`inline-flex w-full sm:w-auto justify-center rounded-lg px-3 py-2 text-white ${
-                  isUnlocked ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-slate-400 cursor-not-allowed'
-                }`}
+                className={`inline-flex w-full sm:w-auto justify-center rounded-lg px-3 py-2 text-white
+                  ${isUnlocked ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-slate-400 cursor-not-allowed'}`}
               >
                 {isUnlocked ? 'Spela nivån' : 'Låst'}
               </button>
@@ -103,7 +99,7 @@ export default function LevelScreen() {
               <Link
                 to="/levels"
                 className="inline-flex w-full sm:w-auto justify-center rounded-lg
-                 border px-3 py-2 text-sm hover:bg-slate-50"
+                border px-3 py-2 text-sm hover:bg-slate-50"
               >
                 Till nivåer
               </Link>

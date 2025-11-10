@@ -297,9 +297,12 @@ export default function GameScreen() {
         </div>
 
         <div className="mx-2 sm:mx-0 flex flex-col gap-4 md:gap-5 lg:gap-6 md:sticky md:top-8 self-start min-w-0">
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 lg:p-8 shadow-sm">
-            <OctocatAvatar variant={variant} say={bubble} mood={mood} />
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 lg:p-8 shadow-sm overflow-visible">
+            <div className="flex justify-center">
+              <OctocatAvatar variant={variant} say={bubble} mood={mood} />
+            </div>
           </div>
+
           <RepoStatus
             repo={repo}
             message={statusMsg}

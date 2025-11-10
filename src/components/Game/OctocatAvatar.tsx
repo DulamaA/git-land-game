@@ -15,31 +15,33 @@ export default function OctocatAvatar({
   const moodClass = mood === 'happy' ? 'animate-bounce' : mood === 'error' ? 'animate-shake' : '';
 
   return (
-    <div className="relative flex items-end gap-3">
+    <div className="relative flex flex-col sm:flex-row items-center sm:items-end gap-3">
       {say && (
         <div className="relative">
           <div
-            className="relative max-w-[22rem] rounded-2xl bg-violet-600 text-white px-3 py-2 shadow-md
-                 border border-violet-700 text-sm"
+            className="relative max-w-[18rem] sm:max-w-[22rem] rounded-2xl bg-violet-600 text-white px-3 py-2 shadow-md
+                       border border-violet-700 text-sm leading-snug break-words
+                       text-center sm:text-left"
             role="status"
             aria-live="polite"
           >
             {say}
-
             <span
               className="pointer-events-none absolute -bottom-1.5 right-4 block h-3 w-3 rotate-45
-                   bg-violet-600 border-b border-r border-violet-700"
+                         bg-violet-600 border-b border-r border-violet-700"
               aria-hidden="true"
             />
           </div>
         </div>
       )}
 
-      <div className="relative">
+      {/* Ensure the image always has space and can’t collapse */}
+      <div className="relative min-h-[96px]">
         <img
           src={src}
           alt="Octocat avatar"
-          className={`h-32 w-32 select-none drop-shadow-lg rounded-xl ${filterClass} ${moodClass}`}
+          className={`h-24 w-24 sm:h-28 sm:w-28 md:h-32 md:w-32 object-contain
+                      select-none drop-shadow-lg rounded-xl ${filterClass} ${moodClass}`}
           draggable={false}
         />
       </div>
