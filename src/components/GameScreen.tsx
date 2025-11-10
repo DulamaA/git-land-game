@@ -62,12 +62,7 @@ export default function GameScreen() {
   }, [levelIndex, setInput]);
 
   const alreadyDone =
-    Array.isArray(state.completed) ?
-      state.completed.includes(level.id) :
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (state.completed as any) instanceof Set ?
-        (state.completed as Set<number>).has(level.id) : false;
-
+    Array.isArray(state.completed) && state.completed.includes(level.id);
 
   const { level: levelParam } = useParams();
 

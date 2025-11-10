@@ -1,25 +1,47 @@
-// Utilities for reading and writing progress to localStorage
+// src/utils/progressStorage.ts
 const KEY = 'gitland_progress_v1';
 
-// Read progress from localStorage
+// read progress from localStorage
 export function readProgress(): number[] {
   try {
     const raw = localStorage.getItem(KEY);
     if (!raw) {
       return [];
     }
-    const parsed = JSON.parse(raw);
 
-    return Array.isArray(parsed) ? parsed.filter((n) => Number.isFinite(n)) : [];
+    const parsed: unknown = JSON.parse(raw);
+
+    // handle current and legacy shapes
+    let arr: unknown[] = [];
+    if (Array.isArray(parsed)) {
+      arr = parsed as unknown[];
+    } else if (parsed && typeof parsed === 'object') {
+      const p = parsed as { completed?: unknown; data?: unknown };
+      if (Array.isArray(p.completed)) {
+        arr = p.completed;
+      } else if (Array.isArray(p.data)) {
+        arr = p.data;
+      }
+    }
+
+    const normalized: number[] = arr
+      .map((n) => Number(n))
+      .filter((n) => Number.isFinite(n));
+
+    // unique + sorted
+    return Array.from(new Set(normalized)).sort((a, b) => a - b);
   } catch {
     return [];
   }
 }
 
-// Write progress to localStorage
-export function writeProgress(ids: number[]) {
+// write progress to localStorage: unique, sorted number[]
+export function writeProgress(ids: number[]): void {
   try {
-    localStorage.setItem(KEY, JSON.stringify(ids));
+    const clean = Array.from(new Set((ids ?? []).map((n) =>
+      Number(n)).filter((n) => Number.isFinite(n)))).sort((a, b) => a - b);
+
+    localStorage.setItem(KEY, JSON.stringify(clean));
   } catch {
     // ignore
   }
