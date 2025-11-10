@@ -31,6 +31,12 @@ export default function LevelsHub() {
               <Link
                 key={l.id}
                 to={unlocked ? `/levels/${l.id}` : '#'}
+                onClick={(e) => {
+                  if (!unlocked) {
+                    e.preventDefault();
+                  }
+                }}
+                aria-disabled={!unlocked}
                 className={`flex items-center justify-between rounded-xl border p-4 shadow-sm ${
                   unlocked ? 'bg-white hover:bg-slate-50' : 'bg-slate-100 cursor-not-allowed opacity-70'
                 }`}
