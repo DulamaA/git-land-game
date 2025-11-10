@@ -237,9 +237,11 @@ export default function GameScreen() {
             {snippetBelowInput && (
               <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm">
                 <p className="font-semibold mb-1">Exempelkod</p>
-                <code className="block px-2 py-1 bg-white rounded overflow-x-auto">
-                  {snippetBelowInput}
-                </code>
+                <pre className="bg-white rounded p-2">
+                  <code className="block whitespace-pre-wrap break-words font-mono">
+                    {snippetBelowInput}
+                  </code>
+                </pre>
               </div>
             )}
 
