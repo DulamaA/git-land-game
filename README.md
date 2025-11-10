@@ -56,7 +56,7 @@ Add a new level object in the **LEVELS** array:
       expects: ['git add .'],
       hints: [],
     },
-  ],
+  ]
 }
 ```
 
