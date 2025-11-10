@@ -52,7 +52,7 @@ export default function LevelScreen() {
 
   // Render the level screen layout
   return (
-    <main className='mx-auto max-w-prose px-4 py-10'>
+    <main className='mx-auto max-w-3xl px-4 py-10'>
       <section className="rounded-2xl border bg-white p-4 sm:p-6 shadow-sm">
         {/* Topbar */}
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -70,12 +70,16 @@ export default function LevelScreen() {
         </div>
 
         {/* Grid layout for avatar and level details */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-[auto,1fr]">
-          <div className="order-2 md:order-1 md:sticky md:top-4">
-            <OctocatAvatar variant={variant} say={bubble} />
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[280px,1fr]">
+          <div className="order-2 lg:order-1 lg:sticky lg:top-4 lg:w-[280px]">
+            <div className='rounded-2xl p-4'>
+              <div className="origin-top-left scale-[.92] md:scale-[.95] lg:scale-[.97]">
+                <OctocatAvatar variant={variant} say={bubble} />
+              </div>
+            </div>
           </div>
 
-          <div className="order-1 md:order-2 space-y-4">
+          <div className="order-1 lg:order-2 space-y-4">
             <h2 className="text-lg sm:text-xl font-semibold">
               {level.id}. {level.title}
             </h2>
