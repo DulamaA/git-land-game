@@ -115,12 +115,6 @@ Then open `http://localhost:5173` in your browser.
 
 ---
 
-## 🤝 Contributing
-
-Pull requests are welcome! If you want to add levels, fix bugs, or improve UI — fork the repo and open a PR. Before committing, make sure ESLint and Prettier run without issues.
-
----
-
 ## 💖 Credits
 
 Built with ❤️ by [@Antonina Dulama](https://github.com/DulamaA).
