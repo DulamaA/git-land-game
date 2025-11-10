@@ -41,7 +41,7 @@ Main goals:
 To add a new level open the file : src/data/levels.ts.
 Add a new level object in the **LEVELS** array:
 
-```json
+```typescript
 {
   id: 13,
   title: 'Your New Level Title',
@@ -56,7 +56,7 @@ Add a new level object in the **LEVELS** array:
       expects: ['git add .'],
       hints: [],
     },
-  ]
+  ],
 }
 ```
 
