@@ -71,7 +71,11 @@ Player progress (completed levels, current level, etc.) is saved in the browser 
  - On page reload, it automatically restores your progress.
  - The reset() function clears all saved progress.
 
- Example: localStorage.setItem('gitland_progress', JSON.stringify(state));
+ Example:
+
+ ```json 
+ localStorage.setItem('gitland_progress', JSON.stringify(state));
+ ```
 
 ---
 
