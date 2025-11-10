@@ -181,12 +181,13 @@ export default function GameScreen() {
   return (
     <>
       <section
-        className="mx-auto max-w-[90rem]
-    px-3 sm:px-4 md:px-6 lg:px-12 mt-10 md:mt-16 lg:mt-28 grid gap-4 sm:gap-6 md:gap-10 md:grid-cols-2"
+        className="mx-auto max-w-[90rem] px-3 sm:px-4 md:px-6 lg:px-12
+             mt-10 md:mt-16 lg:mt-28 grid gap-8 lg:gap-10
+             md:grid-cols-[minmax(0,1fr),420px]"
       >
 
         <div className="mx-2 sm:mx-0 rounded-2xl border border-slate-200 bg-white p-5 md:p-7 lg:p-8 shadow-sm min-w-0">
-          <div className="pb-4 mb-6">
+          <div className="pb-3 md:pb-4 mb-4 md:mb-6">
             <LevelHeader
               levelId={level.id}
               title={level.title}
@@ -223,7 +224,7 @@ export default function GameScreen() {
             </div>
           </div>
 
-          <div className="max-w-[48rem] mx-auto border-t border-slate-200 pt-6 space-y-5 sm:space-y-6">
+          <div className="max-w-[48rem] mx-auto border-t border-slate-200 pt-5 md:pt-6 space-y-5 md:space-y-6">
             <CommandInput
               key={resetTick}
               value={input}
@@ -296,7 +297,7 @@ export default function GameScreen() {
           )}
         </div>
 
-        <div className="mx-2 sm:mx-0 flex flex-col gap-4 md:sticky md:top-8 self-start min-w-0">
+        <div className="mx-2 sm:mx-0 flex flex-col gap-4 md:gap-5 lg:gap-6 md:sticky md:top-8 self-start min-w-0">
           <div className="rounded-2xl border border-slate-200 bg-white p-6 lg:p-8 shadow-sm">
             <OctocatAvatar variant={variant} say={bubble} mood={mood} />
           </div>
