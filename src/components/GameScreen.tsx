@@ -184,9 +184,9 @@ export default function GameScreen() {
         className="mx-auto max-w-[90rem]
     px-3 sm:px-4 md:px-6 lg:px-12 mt-10 md:mt-16 lg:mt-28 grid gap-4 sm:gap-6 md:gap-10 md:grid-cols-2"
       >
-        {/* eslint-disable-next-line @stylistic/max-len */}
-        <div className="mx-2 sm:mx-0 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 md:p-6 lg:p-10 shadow-sm min-w-0">
-          <div className="pb-2 mb-4">
+
+        <div className="mx-2 sm:mx-0 rounded-2xl border border-slate-200 bg-white p-5 md:p-7 lg:p-8 shadow-sm min-w-0">
+          <div className="pb-4 mb-6">
             <LevelHeader
               levelId={level.id}
               title={level.title}
@@ -218,12 +218,12 @@ export default function GameScreen() {
               canGoNext={levelDone || alreadyDone}
             />
 
-            <div className="mt-3">
+            <div className="mt-4">
               <TaskList steps={steps} activeIndex={taskIndex} />
             </div>
           </div>
 
-          <div className="space-y-4 mt-6">
+          <div className="max-w-[48rem] mx-auto border-t border-slate-200 pt-6 space-y-5 sm:space-y-6">
             <CommandInput
               key={resetTick}
               value={input}
@@ -243,13 +243,13 @@ export default function GameScreen() {
             )}
 
             {error && (
-              <p className="mt-2 text-sm font-medium text-red-600" role="alert">
+              <p className="text-sm font-medium text-red-600" role="alert">
                 {error}
               </p>
             )}
 
             {hintStage > 0 && (
-              <div className="mt-3 rounded-xl border border-sky-200 bg-sky-50 p-3 text-sm">
+              <div className="rounded-xl border border-sky-200 bg-sky-50 p-3 text-sm">
                 <p className="font-semibold mb-1">Tips</p>
                 <ul className="list-disc pl-5 space-y-1">
                   {hints.slice(0, hintStage).map((h, i) => (
@@ -260,7 +260,7 @@ export default function GameScreen() {
             )}
 
             {showSolution && (
-              <div className="mt-3 rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm">
+              <div className="rounded-xl border border-amber-300 bg-amber-50 p-3 text-sm">
                 <p className="font-semibold mb-1">Lösning</p>
                 <p className="mb-2">
                   Kör kommandot för att komma vidare:
@@ -287,7 +287,7 @@ export default function GameScreen() {
           </div>
 
           {showSuccess && (
-            <div className="mt-3 rounded-lg border border-emerald-200
+            <div className="rounded-lg border border-emerald-200
            bg-emerald-50 px-3 py-2 text-emerald-800 flex items-center gap-2">
               <span className="inline-flex h-5 w-5 items-center
           justify-center rounded-full bg-emerald-600 text-white text-xs">✓</span>
