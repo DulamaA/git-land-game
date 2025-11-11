@@ -281,15 +281,23 @@ export const LEVELS: TLevel[] = [
         ],
       },
       {
-        text: 'Ta bort din lokala feature-branch.', expects: ['git branch -d <branch>'],
+        text: 'Ta bort din lokala feature-branch som heter "feature/header".',
+        expects: [
+          'git branch -d feature/header',
+          'git branch -D feature/header',
+        ],
         hints: [
           'Rensar lokalt efter merge.',
-          'Var säker på att den är mergad.',
+          'Om den inte är mergad ännu: använd -D (force).',
           'Ex: git branch -d feature/header',
         ],
       },
       {
-        text: 'Rensa bort gamla fjärr-branscher.', expects: ['git fetch -p', 'git fetch --prune'],
+        text: 'Rensa bort gamla fjärr-branscher.', expects: [
+          'git fetch -p',
+          'git fetch --prune',
+          'git remote prune origin',
+        ],
         hints: [
           'Tar bort remote-refs som rensats.',
           'Bra rutin efter merges.',
