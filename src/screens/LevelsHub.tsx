@@ -14,9 +14,21 @@ export default function LevelsHub() {
   return (
     <main className='mx-auto max-w-prose px-4 py-10'>
       <section className="space-y-4">
-        <header className="flex items-center justify-between">
+        <header className="flex flex-col sm:flex-row items-center justify-between gap-3">
+          <Link
+            to="/"
+            className="inline-flex rounded-lg border px-3 py-1.5 text-sm hover:bg-slate-50"
+          >
+            ← Startsidan
+          </Link>
+
           <h1 className="text-xl font-semibold">Nivåer</h1>
-          <button onClick={reset} className="rounded-lg border px-3 py-1.5 text-sm hover:bg-slate-50">
+
+          <button
+            onClick={reset}
+            className="rounded-lg border px-3 py-1.5 text-sm hover:bg-slate-50"
+            aria-label="Återställ framsteg"
+          >
             Återställ
           </button>
         </header>
