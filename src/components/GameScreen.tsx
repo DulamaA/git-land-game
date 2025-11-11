@@ -212,7 +212,25 @@ export default function GameScreen() {
                 }
               }}
               canGoNext={levelDone || alreadyDone}
+              highlightNext={showSuccess}
             />
+
+            {showSuccess && (
+              <div className="mt-2">
+                <div
+                  className="rounded-md border border-emerald-300 bg-emerald-50 px-3 py-2 text-emerald-800
+                            text-sm flex items-center gap-2"
+                  role="status"
+                  aria-live="polite"
+                >
+                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full
+                                  bg-emerald-600 text-white text-xs">✓</span>
+                  <span>
+                    Klart! Tryck <b>Nästa</b> när du är redo. <span aria-hidden>⬆️</span>
+                  </span>
+                </div>
+              </div>
+            )}
 
             <div className="mt-4">
               <TaskList steps={steps} activeIndex={taskIndex} />
@@ -283,17 +301,6 @@ export default function GameScreen() {
               <GameButtons onRun={handleRun} onReset={handleReset} onExit={handleExit} />
             </div>
           </div>
-
-          {showSuccess && (
-            <div className="mt-10 pt-5 border-t border-slate-200">
-              <div className="rounded-lg border border-emerald-200
-           bg-emerald-50 px-3 py-2 text-emerald-800 flex items-center gap-2">
-                <span className="inline-flex h-5 w-5 items-center
-          justify-center rounded-full bg-emerald-600 text-white text-xs">✓</span>
-                <span className="text-sm">Klart! Tryck <b>Nästa</b> när du är redo.</span>
-              </div>
-            </div>
-          )}
         </div>
 
         <div className="mx-2 sm:mx-0 flex flex-col gap-4 md:gap-5 lg:gap-6 md:sticky md:top-8 self-start min-w-0">
