@@ -312,23 +312,24 @@ export const LEVELS: TLevel[] = [
     steps: [
       {
         text:
-          'Öppna ditt repo på GitHub → **Settings** → **Pages**.\n' +
-          'Välj **Source: Deploy from a branch**, **Branch: main**, **Folder: /** (root) och klicka **Save**.',
+          'Öppna ditt repo på GitHub → **Settings** → **Pages**. ' +
+          'Välj **Source: Deploy from a branch**, **Branch: main**, **Folder: /(root)** och klicka **Save**.',
         expects: [],
         hints: [
-          'Hitta fliken “Pages” under Settings.',
-          'Välj “Deploy from a branch”.',
-          'Branch: main, Folder: / (root).',
+          'Hitta Pages under repo-inställningarna.',
+          'Sätt “Deploy from a branch”, branch = main, folder = /(root).',
+          'Glöm inte att spara.',
         ],
       },
       {
         text:
-          'Vänta 1-2 minuter tills sidan byggts. Besök sedan URL:en som visas under “Your site is live at…”.',
-        expects: [],
+          'Vänta 1-2 minuter tills sidan har byggts. ' +
+          'När du är redo: skriv **ok** i rutan här nedanför och tryck **Enter**. ' +
+          'Besök sedan URL:en som visas under “Your site is live at…”.',
+        expects: ['ok', 'OK'],
         hints: [
-          'Det kan ta en liten stund första gången.',
-          'URL visas på samma Pages-sida.',
-          'Öppna länken och kontrollera att sidan laddar.',
+          'Bygget kan ta någon minut.',
+          'Skriv “ok” (små eller stora bokstäver) och tryck Enter för att markera steget som klart.',
         ],
       },
     ],
