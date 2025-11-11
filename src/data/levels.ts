@@ -388,7 +388,7 @@ jobs:
         uses: actions/deploy-pages@v4`,
       },
       {
-        text: 'Staga workflow-filen.',
+        text: 'Stage:a workflow-filen.',
         expects: ['git add .github/workflows/deploy.yml', 'git add .'],
         hints: [
           'Stagea YAML-filen.',
