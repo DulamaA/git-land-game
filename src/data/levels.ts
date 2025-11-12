@@ -1,3 +1,10 @@
+/**
+* This file show the complete definition of all game levels and their steps.
+* It lists each level’s title, expected commands, and hints used in the learning flow.
+* The level data is static and imported by the game logic to drive progression.
+*/
+
+
 import type { TLevel } from '../types';
 
 export const LEVELS: TLevel[] = [

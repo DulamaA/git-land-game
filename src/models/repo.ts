@@ -1,3 +1,10 @@
+/**
+* This file show the simulated Git repository model and command effects.
+* It defines repo state/types and applies updates in applyEffect based on matched user commands.
+* The UI consumes the returned repo state and status messages; rendering logic lives elsewhere.
+*/
+
+
 export type Commit = { id: string; msg: string };
 
 // Define the structure of the repository state

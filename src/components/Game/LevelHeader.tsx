@@ -1,3 +1,9 @@
+/**
+* This file show the level header UI with timer, navigation, title, and progress bar.
+* It renders buttons for starting/pausing/resetting the timer and moving between levels.
+* The timer and navigation logic is handled outside this file and passed in via props.
+*/
+
 import { formatTime } from '../../hooks/useTimer';
 
 type HeaderProps = {

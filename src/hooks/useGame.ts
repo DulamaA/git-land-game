@@ -1,3 +1,10 @@
+/**
+* This file show the main game hook that manages levels, input, hints, timer, and repo state.
+* It matches user commands to expected patterns and updates the simulated repo model.
+* The UI reads state and handlers from this hook to render and control the game flow.
+*/
+
+
 import {
   useMemo,
   useState,
@@ -52,7 +59,6 @@ function patternFromExpected(cmd: string): RegExp {
   return new RegExp(`^${ESC}$`, 'i');
 }
 
-// Normalize one level into {text, expects, hints}
 type NormStep = {
   text: string;
   expects: string[];
@@ -82,14 +88,6 @@ function toNormSteps(level: RawLevel): NormStep[] {
     expects: [],
   }));
 }
-
-// function getThreeHints(taskText: string, expects?: string[]): string[] {
-//  const h1 = getFirstHint(taskText, 0, expects) || '';
-//  const h2 = getFirstHint(taskText, 1, expects) || '';
-//  const h3 = getFirstHint(taskText, 2, expects) || '';
-
-//  return [h1, h2, h3].filter(Boolean);
-// }
 
 // ---------- hook ----------
 
@@ -165,10 +163,6 @@ export function useGame() {
   const hints = useMemo(() => {
     return (step.hints ?? []).filter(Boolean).slice(0, 3);
   }, [step.hints]);
-
-  // const generated = getThreeHints(step.text, expectedList);
-  // return [...custom, ...generated].slice(0, 3);
-  // }, [step.hints, step.text, expectedList]);
 
   const totalLevels = LEVELS.length;
 
@@ -365,7 +359,6 @@ export function useGame() {
     appendHistory,
   ]);
 
-  // Reset current level state
   const resetCurrent = useCallback(() => {
     hardResetLevelState();
     setStatusMsg({ type: 'info', text: 'Väntar på kommando...' });

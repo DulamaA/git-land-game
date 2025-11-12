@@ -1,3 +1,9 @@
+/**
+* This file show predefined talk messages for the avatar and a helper to pick a random one.
+* It exports the talk presets (idle/info/error/happy) and the pick(arr) utility.
+* The UI uses these to display short feedback bubbles during the game.
+*/
+
 export const talk = {
   defaultIdle: (n: number, title: string) => `Level ${n}: ${title}`,
 

@@ -1,3 +1,10 @@
+/**
+* This file show the level preview screen for a single level.
+* It displays the avatar, title, and task list with buttons to play or go back.
+* Unlock logic and navigation are handled via progress state and react-router.
+*/
+
+
 import {
   useNavigate, useParams, Link,
 } from 'react-router-dom';

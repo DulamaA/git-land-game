@@ -1,3 +1,9 @@
+/**
+* This file show the avatar asset mapping for variants and moods plus helpers.
+* It maps levels → variants and chooses the correct image URL for the current mood.
+* The UI calls getOctoSrc and uses variantFilters for simple visual tweaks.
+*/
+
 import { asset } from './asset';
 
 export type OctoVariantKey = 'base' | 'branching' | 'remote' | 'rebase';

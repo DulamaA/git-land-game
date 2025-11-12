@@ -1,3 +1,10 @@
+/**
+* This file show the Git-Land SVG logo component with optional className for styling.
+* It renders the wordmark and icon as accessible SVG with aria-label.
+* The logo graphics are static; size and styling are controlled by parent props.
+*/
+
+
 type Props = { className?: string };
 
 export default function GitLandLogo({ className = '' }: Props) {

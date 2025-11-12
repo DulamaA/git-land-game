@@ -1,3 +1,10 @@
+/**
+* This file show the terminal panel for listing executed commands and results.
+* It can filter history by level, up to current, or all levels and auto-scrolls to the newest.
+* The history data and theming are controlled by props and simple local state.
+*/
+
+
 import React, {
   useEffect, useMemo, useRef,
 } from 'react';

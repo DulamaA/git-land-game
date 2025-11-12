@@ -1,3 +1,9 @@
+/**
+* This file show a numbered task list of steps with an optional active highlight.
+* It renders each step and marks the active one with a pointer and bold style.
+* The steps data and active index are passed in from parent components via props.
+*/
+
 type TaskListProps = {
   steps: { text: string }[];
   activeIndex?: number;

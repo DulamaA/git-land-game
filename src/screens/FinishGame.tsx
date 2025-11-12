@@ -1,3 +1,10 @@
+/**
+* This file show the finish screen that congratulates the player and offers navigation.
+* It displays a simple confetti animation and links to home or the level list.
+* The screen is presentational; game state and progress are handled elsewhere.
+*/
+
+
 import { Link } from 'react-router-dom';
 
 export default function FinishGame() {

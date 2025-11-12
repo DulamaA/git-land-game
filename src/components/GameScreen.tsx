@@ -1,3 +1,10 @@
+/**
+* This file show the main game screen with all components combined into the full level view.
+* It manages level progression, user input, feedback messages, and UI layout.
+* The logic for gameplay and state updates is handled via the useGame and useProgress hooks.
+*/
+
+
 import GameButtons from './GameButtons';
 import LevelHeader from './Game/LevelHeader';
 import TaskList from './Game/TaskList';

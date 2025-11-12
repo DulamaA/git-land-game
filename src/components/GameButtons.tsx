@@ -1,3 +1,9 @@
+/**
+* This file show the game control buttons for run, reset, and exit.
+* It renders three action buttons and forwards clicks to handlers from props.
+* The game logic for these actions is handled outside and passed in via props.
+*/
+
 type Props = {
   onRun: () => void;
   onReset: () => void;

@@ -1,3 +1,9 @@
+/**
+* This file show the progress context provider and hook for reading/updating progress.
+* It loads/saves completed levels to storage and exposes markDone and reset actions.
+* The app wraps children in this provider so components can access progress state.
+*/
+
 import {
   useEffect, useMemo, useReducer, useCallback, type ReactNode, useContext,
 } from 'react';

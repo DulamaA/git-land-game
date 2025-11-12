@@ -1,3 +1,10 @@
+/**
+* This file show the reducer that manages user progress across levels.
+* It handles loading, errors, marking levels as done, and resetting progress state.
+* The reducer is used inside the progress context to persist completed levels.
+*/
+
+
 import type { ProgressState } from '../state/progressContextBase';
 
 // Initial state for the progress reducer

@@ -1,3 +1,9 @@
+/**
+* This file show the 404 not found screen with a link back to the home page.
+* It provides a simple message when a route doesn’t exist.
+* The component is presentational; routing is handled elsewhere.
+*/
+
 import { Link } from 'react-router-dom';
 
 export default function NotFound() {

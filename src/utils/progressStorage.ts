@@ -1,4 +1,9 @@
-// src/utils/progressStorage.ts
+/**
+* This file show the progress storage helpers using localStorage.
+* It reads/writes completed level IDs, handling legacy shapes and normalizing data.
+* The game logic calls these functions; UI does not interact with storage directly.
+*/
+
 const KEY = 'gitland_progress_v1';
 
 // read progress from localStorage

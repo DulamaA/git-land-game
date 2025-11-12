@@ -1,3 +1,10 @@
+/**
+* This file show the game footer with a link to the official Git cheat sheet.
+* It provides a simple footer section displayed at the bottom of the game view.
+* The footer is static and does not handle any interactive logic.
+*/
+
+
 export default function GameFooter() {
   return (
     <footer className="mt-16 mb-2">

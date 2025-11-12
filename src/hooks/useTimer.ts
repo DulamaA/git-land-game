@@ -1,3 +1,10 @@
+/**
+* This file show a custom timer hook with start/stop/toggle/reset controls.
+* It tracks seconds with an interval when running and cleans up on stop.
+* It also exports formatTime to render seconds as MM:SS.
+*/
+
+
 import { useEffect, useState } from 'react';
 
 // Custom hook for a timer

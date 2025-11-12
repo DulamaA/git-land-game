@@ -1,3 +1,10 @@
+/**
+* This file show the global footer with author credit and current year.
+* It renders a small signature line styled with subtle typography.
+* The footer is static and appears at the bottom of the site.
+*/
+
+
 export default function GlobalFooter() {
   const year = new Date().getFullYear();
 

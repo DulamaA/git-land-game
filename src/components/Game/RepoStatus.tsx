@@ -1,3 +1,9 @@
+/**
+* This file show the repository status panel with latest message, current branch, remotes, and branches list.
+* It renders repo details and a small terminal panel for command history.
+* The repo state and terminal logic is handled in models and the TerminalPanel component.
+*/
+
 import type { RepoState, StatusMsg } from '../../models/repo';
 import TerminalPanel from '../TerminalPanel';
 

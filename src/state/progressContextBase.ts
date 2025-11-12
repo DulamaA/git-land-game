@@ -1,3 +1,9 @@
+/**
+* This file show the progress context base with types for state and context.
+* It defines the ProgressCtx API (markDone, reset) and the React context object.
+* The provider and logic for loading/saving progress live in the progress module.
+*/
+
 import { createContext } from 'react';
 
 // Define types for progress state and context

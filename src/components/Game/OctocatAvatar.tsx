@@ -1,3 +1,9 @@
+/**
+* This file show the Octocat avatar with variant and mood, and an optional speech bubble.
+* It gets the image source and filter classes from the octocatVariants utilities.
+* The mood animations and asset mapping are handled in the utils; parents pass text via props.
+*/
+
 import type { OctoMood, OctoVariantKey } from '../../utils/octocatVariants';
 import { variantFilters, getOctoSrc } from '../../utils/octocatVariants';
 

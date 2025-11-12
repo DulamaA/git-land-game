@@ -1,3 +1,9 @@
+/**
+* This file show the app router with lazy-loaded screens and a Suspense fallback.
+* It defines routes for home, game (with default redirect), levels, finish, and 404.
+* The global footer is rendered below the routed content on every page.
+*/
+
 import {
   Routes,
   Route,

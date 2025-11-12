@@ -1,3 +1,10 @@
+/**
+* This file show the home screen with logo, intro text, and getting-started instructions.
+* It decides whether to show Start or Continue and navigates to the next level or level list.
+* The progress state and routing are handled via the useProgress hook and react-router.
+*/
+
+
 import { useNavigate } from 'react-router-dom';
 import { useProgress } from '../state/progress';
 import { LEVELS } from '../data/levels';

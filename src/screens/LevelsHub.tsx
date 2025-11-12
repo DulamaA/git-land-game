@@ -1,3 +1,9 @@
+/**
+* This file show the levels hub screen listing all levels with lock/finished status.
+* It renders links to level previews and a reset button for progress.
+* The progress state and navigation are handled via the progress context and react-router.
+*/
+
 import { Link } from 'react-router-dom';
 import { LEVELS } from '../data/levels';
 import { useProgress } from '../state/progress';
