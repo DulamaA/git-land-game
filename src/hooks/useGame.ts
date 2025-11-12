@@ -178,10 +178,8 @@ export function useGame() {
     setHintStage(0);
     setShowSolution(false);
     setLocked(false);
-
     setLevelDone(false);
-    resetTimer();
-  }, [resetTimer]);
+  }, []);
 
   useEffect(() => {
     if (levelIndex === 2) {
@@ -361,8 +359,9 @@ export function useGame() {
 
   const resetCurrent = useCallback(() => {
     hardResetLevelState();
+    resetTimer();
     setStatusMsg({ type: 'info', text: 'Väntar på kommando...' });
-  }, [hardResetLevelState]);
+  }, [hardResetLevelState, resetTimer]);
 
   return {
     levelIndex,
