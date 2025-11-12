@@ -12,7 +12,7 @@ export type RepoState = {
   initialized: boolean;
   current: string;
   branches: Record<string, Commit[]>;
-  remotes: { origin?: true };
+  remotes: { origin?: true | string };
 };
 
 // Define status message types
@@ -111,21 +111,17 @@ export function applyEffect(prev: RepoState,
     }
   }
 
-  if (/^git\s+checkout\s+-b?main$/i.test(cmd) || /^git\s+switch\s+main$/i.test(cmd)) {
+  if (
+    /^git\s+switch\s+main$/i.test(cmd) || // t.ex. "git switch main"
+    /^git\s+checkout\s+(?:-B\s*)?main$/i.test(cmd) // "git checkout main" eller "git checkout -B main"
+  ) {
     ensureInitialized();
-    next.branches.main ||= next.branches.main || [];
+    next.branches.main ||= [];
     next.current = 'main';
 
     return { repo: next, message: ok('Bytte till main') };
   }
 
-  if (/^git\s+checkout\s+-b?\s*main$/i.test(cmd) || /^git\s+checkout\s+-B\s+main$/i.test(cmd)) {
-    ensureInitialized();
-    next.branches.main ||= [];
-    next.current = 'main';
-
-    return { repo: next, message: ok('Bytte till main (ev. skapad).') };
-  }
 
   if (/^git\s+switch\s+-c\s+/i.test(cmd)) {
     ensureInitialized();

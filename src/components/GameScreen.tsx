@@ -4,7 +4,6 @@
 * The logic for gameplay and state updates is handled via the useGame and useProgress hooks.
 */
 
-
 import GameButtons from './GameButtons';
 import LevelHeader from './Game/LevelHeader';
 import TaskList from './Game/TaskList';
@@ -81,12 +80,6 @@ export default function GameScreen() {
   }, [levelParam, goToLevel]);
 
   const [mood, setMood] = useState<OctoMood>('idle');
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    setInput('');
-    setMood('idle');
-  }, [levelIndex, setInput]);
 
   const variant = useMemo(() => variantByLevel[levelIndex + 1] ?? 'base', [levelIndex]);
 
@@ -175,10 +168,7 @@ export default function GameScreen() {
     setShowSuccess(false);
   };
 
-  const snippetBelowInput =
-    (level.id === 12 && steps[taskIndex]?.snippetBelowInput) ||
-  steps[taskIndex]?.snippetBelowInput;
-
+  const snippetBelowInput = steps[taskIndex]?.snippetBelowInput;
 
   return (
     <>

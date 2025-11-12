@@ -35,6 +35,7 @@ export function useTimer(autoStart = false) {
   }
   function reset() {
     setSeconds(0);
+    setRunning(false);
   }
 
   // Return timer state and control functions
