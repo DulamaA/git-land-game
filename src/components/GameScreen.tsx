@@ -182,7 +182,7 @@ export default function GameScreen() {
       >
 
         <div className="mx-2 sm:mx-0 rounded-2xl border border-slate-200 bg-white p-5 md:p-7 lg:p-8 shadow-sm min-w-0">
-          <div className="pb-3 md:pb-4 mb-4 md:mb-6">
+          <div className="pb-4 md:pb-5 mb-6 md:mb-8">
             <LevelHeader
               levelId={level.id}
               title={level.title}
@@ -216,15 +216,18 @@ export default function GameScreen() {
             />
 
             {showSuccess && (
-              <div className="mt-2">
+              <div className="mt-4 md:mt-5">
                 <div
+                  id="next-hint"
                   className="rounded-md border border-emerald-300 bg-emerald-50 px-3 py-2 text-emerald-800
                             text-sm flex items-center gap-2"
                   role="status"
                   aria-live="polite"
                 >
-                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full
-                                  bg-emerald-600 text-white text-xs">✓</span>
+                  <span aria-hidden="true" className="inline-flex h-5 w-5 items-center justify-center rounded-full
+                                  bg-emerald-600 text-white text-xs">
+                    ✓
+                  </span>
                   <span>
                     Klart! Tryck <b>Nästa</b> när du är redo. <span aria-hidden>⬆️</span>
                   </span>
@@ -232,12 +235,12 @@ export default function GameScreen() {
               </div>
             )}
 
-            <div className="mt-4">
+            <div className="mt-6 md:mt-8">
               <TaskList steps={steps} activeIndex={taskIndex} />
             </div>
           </div>
 
-          <div className="max-w-[48rem] mx-auto border-t border-slate-200 pt-5 md:pt-6 space-y-5 md:space-y-6">
+          <div className="max-w-[48rem] mx-auto pt-4 md:pt-5 space-y-5 md:space-y-6">
             <CommandInput
               key={resetTick}
               value={input}
