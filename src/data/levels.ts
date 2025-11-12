@@ -341,8 +341,9 @@ export const LEVELS: TLevel[] = [
       {
         text:
           'Skapa filen **`.github/workflows/deploy.yml`** och klistra in exempelkoden nedan. ' +
-          'Workflowen bygger din app (Node 20) och deployar till **GitHub Pages** när du pushar till `main`.',
-        expects: [], // player press "kör" to mark done
+          'Workflowen bygger din app (Node 20) och deployar till **GitHub Pages** när du pushar till `main`.\n\n' +
+        'När du är klar: skriv **ok** i rutan och tryck **Enter**.',
+        expects: ['ok', 'OK'],
         hints: [
           'Filen ska heta deploy.yml och ligga under .github/workflows/.',
           'Node 20 + Pages funkar för många SPA-sidor.',
@@ -411,9 +412,15 @@ jobs:
         hints: ['Pusha till rätt gren.', 'Första push: använd -u.', 'Ex: git push'],
       },
       {
-        text: 'Verifiera i GitHub → Actions att jobben körs (build & deploy).',
-        expects: [],
-        hints: ['Öppna fliken “Actions”.', 'Kika på senaste run.', 'Se att build & deploy är gröna.'],
+        text:
+          'Verifiera i GitHub → Actions att jobben körs (build & deploy).\n' +
+          'När du är redo att gå vidare: skriv **ok** och tryck **Enter**.',
+        expects: ['ok', 'OK'],
+        hints: [
+          'Öppna fliken “Actions”.',
+          'Kika på senaste run.',
+          'Se att build & deploy är gröna.',
+        ],
       },
     ],
   },
