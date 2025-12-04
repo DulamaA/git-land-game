@@ -14,15 +14,18 @@ export default function GlobalFooter() {
         <div className="flex justify-end">
           <p className="text-right select-none">
             <span className="text-[11px] sm:text-xs italic text-emerald-700/90">Built with&nbsp;❤️&nbsp;by</span>{' '}
-            <span
+             <a
+              href="https://github.com/DulamaA"
+              target="_blank"
+              rel="noopener noreferrer"
               className="italic text-[12px] align-middle"
               style={{
                 WebkitTextStroke: '0.7px #065f46',
                 color: 'transparent',
               }}
             >
-              Antonina Dulama
-            </span>{' '}
+              @DulamaA
+            </a>{' '}
             <span className="text-[11px] sm:text-xs italic text-emerald-700/80">© {year}</span>
           </p>
         </div>
